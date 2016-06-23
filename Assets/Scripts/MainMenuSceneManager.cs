@@ -4,16 +4,18 @@ using System.Collections;
 
 public class MainMenuSceneManager : MonoBehaviour {
 
-    public NetworkManager networkManager;
     public MainMenuUIManager uiManager;
+
+    private NetworkManager networkManager;
+    private bool inJoinFlow = false;
 
 	// Use this for initialization
 	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
+        networkManager = NetworkManager.singleton;
+    }
+
+    // Update is called once per frame
+    void Update () {
 	
 	}
 
@@ -25,6 +27,18 @@ public class MainMenuSceneManager : MonoBehaviour {
         uiManager.SetActiveMenu(MainMenuUIManager.MENUS.LOCALGAMES);
     }
 
+    public void CancelStartGame()
+    {
+        if (!inJoinFlow)
+        {
+            DisplaySelectLevel();
+        }
+        else
+        {
+            DisplayLocalGame();
+        }
+    }
+
     public void DisplaySelectLevel()
     {
         uiManager.SetActiveMenu(MainMenuUIManager.MENUS.SELECTLEVEL);
@@ -32,6 +46,13 @@ public class MainMenuSceneManager : MonoBehaviour {
 
     public void DisplayConfirmation()
     {
+        inJoinFlow = false;
+        uiManager.SetActiveMenu(MainMenuUIManager.MENUS.CONFIRMATION);
+    }
+
+    public void DisplayJoinConfirmation()
+    {
+        inJoinFlow = true;
         uiManager.SetActiveMenu(MainMenuUIManager.MENUS.CONFIRMATION);
     }
 
@@ -40,6 +61,13 @@ public class MainMenuSceneManager : MonoBehaviour {
     public void DisplayCredits() { }
 
     public void ConfirmStartGame() {
-        networkManager.StartHost();
+        if (inJoinFlow)
+        {
+            networkManager.StartClient();
+        }
+        else
+        {
+            networkManager.StartHost();
+        }
     }
 }

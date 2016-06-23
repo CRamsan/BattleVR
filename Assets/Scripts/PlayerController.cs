@@ -10,15 +10,25 @@ public class PlayerController : NetworkBehaviour {
 	void Start () {
         if (isLocalPlayer)
         {
-
+            foreach (Transform child in transform)
+            {
+                child.gameObject.SetActive(true);
+            }
         }
         else
         {
+            foreach (Transform child in transform)
+            {
+                GameObject.Destroy(child.gameObject);
+            }
         }
 	}
 	
 	// Update is called once per frame
 	void Update () {
+        rigidBody.velocity = Vector3.zero;
+        rigidBody.angularVelocity = Vector3.zero;
+
         if (!isLocalPlayer)
         {
             return;

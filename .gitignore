@@ -21,3 +21,4 @@ obj/
 demo_Data/
 Library/ShaderCache/
 Temp/
+*.pdb
