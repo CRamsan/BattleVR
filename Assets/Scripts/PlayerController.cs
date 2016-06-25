@@ -5,22 +5,26 @@ using System.Collections;
 public class PlayerController : NetworkBehaviour {
 
     public Rigidbody rigidBody;
+    public GameObject cameraGameObject;
+    public GameObject canvasGameObject;
+
+    private GameLevelSceneManager sceneManager;
+    private bool isPause;
 
 	// Use this for initialization
 	void Start () {
         if (isLocalPlayer)
         {
-            foreach (Transform child in transform)
-            {
-                child.gameObject.SetActive(true);
-            }
+            cameraGameObject.SetActive(true);
+            canvasGameObject.SetActive(false);
+
+            sceneManager = canvasGameObject.GetComponent<GameLevelSceneManager>();
+            isPause = false;
         }
         else
         {
-            foreach (Transform child in transform)
-            {
-                GameObject.Destroy(child.gameObject);
-            }
+            GameObject.Destroy(cameraGameObject);
+            GameObject.Destroy(canvasGameObject);
         }
 	}
 	
@@ -31,6 +35,14 @@ public class PlayerController : NetworkBehaviour {
 
         if (!isLocalPlayer)
         {
+            return;
+        }
+
+        bool pausePressed = InputManager.IsPressed(InputManager.CONTROLLER_BUTTON.START);
+
+        if (pausePressed)
+        {
+            TogglePauseMenu();
             return;
         }
 
@@ -62,5 +74,18 @@ public class PlayerController : NetworkBehaviour {
             Vector3 dVector = new Vector3(dStrafe, dElevate, dForward) / 10;
             rigidBody.MovePosition(transform.position + transform.TransformDirection(dVector));
         }
+    }
+
+    private void TogglePauseMenu()
+    {
+        if (isPause)
+        {
+            sceneManager.HideAllMenus();
+        }
+        else
+        {
+            sceneManager.DisplayConfirmation();
+        }
+        isPause = !isPause;
     }
 }
