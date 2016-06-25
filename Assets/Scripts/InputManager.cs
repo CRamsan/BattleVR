@@ -117,7 +117,7 @@ public class InputManager : MonoBehaviour
 			    input = "CONTROLLER_BUTTON_START";
 #endif
 #if UNITY_EDITOR
-                input = "CONTROLLER_BUTTON_START_WIN";
+                input = "CONTROLLER_BUTTON_START";
 #endif
                 break;
             case CONTROLLER_BUTTON.SELECT:
@@ -146,7 +146,7 @@ public class InputManager : MonoBehaviour
         }
         if (result)
         {
-            Debug.Log("HI!");
+            Debug.Log("HIT: " + input);
         }
         return result;
     }

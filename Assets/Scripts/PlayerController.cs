@@ -16,7 +16,7 @@ public class PlayerController : NetworkBehaviour {
         if (isLocalPlayer)
         {
             cameraGameObject.SetActive(true);
-            canvasGameObject.SetActive(false);
+            canvasGameObject.SetActive(true);
 
             sceneManager = canvasGameObject.GetComponent<GameLevelSceneManager>();
             isPause = false;
