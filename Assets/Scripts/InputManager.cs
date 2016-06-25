@@ -37,7 +37,7 @@ public class InputManager : MonoBehaviour
                 break;
             case CONTROLLER_ANALOG.STICK_RIGHT_X:
 #if UNITY_ANDROID
-			state = Input.GetAxis ("CONTROLLER_ANALOG_STICK_RIGHT_X");
+			    state = Input.GetAxis ("CONTROLLER_ANALOG_STICK_RIGHT_X");
 #endif
 #if UNITY_EDITOR
                 state = -1f * Input.GetAxis("CONTROLLER_ANALOG_STICK_RIGHT_Y");
@@ -45,7 +45,7 @@ public class InputManager : MonoBehaviour
                 break;
             case CONTROLLER_ANALOG.STICK_RIGHT_Y:
 #if UNITY_ANDROID
-			state = Input.GetAxis ("CONTROLLER_ANALOG_STICK_RIGHT_Y");
+			    state = Input.GetAxis ("CONTROLLER_ANALOG_STICK_RIGHT_Y");
 #endif
 #if UNITY_EDITOR
                 state = -1f * Input.GetAxis("CONTROLLER_ANALOG_DPAD_X");
@@ -114,20 +114,19 @@ public class InputManager : MonoBehaviour
                 break;
             case CONTROLLER_BUTTON.START:
 #if UNITY_ANDROID
-			input = "CONTROLLER_BUTTON_START";
+			    input = "CONTROLLER_BUTTON_START";
 #endif
 #if UNITY_EDITOR
-                input = "CONTROLLER_BUTTON_START";
+                input = "CONTROLLER_BUTTON_START_WIN";
 #endif
                 break;
             case CONTROLLER_BUTTON.SELECT:
 #if UNITY_ANDROID
-			input = "CONTROLLER_BUTTON_SELECT";
+			    input = "CONTROLLER_BUTTON_SELECT";
 #endif
 #if UNITY_EDITOR
                 input = "CONTROLLER_BUTTON_SELECT";
 #endif
-
                 break;
             case CONTROLLER_BUTTON.HOME:
                 break;
