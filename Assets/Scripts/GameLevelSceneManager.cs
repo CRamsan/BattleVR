@@ -6,12 +6,12 @@ public class GameLevelSceneManager : MonoBehaviour {
 
     public GameLevelUIManager uiManager;
 
-    //private NetworkManager networkManager;
+    private ExtendedNetworkManager networkManager;
 
     // Use this for initialization
     void Start()
     {
-        //networkManager = NetworkManager.singleton;
+        networkManager = (ExtendedNetworkManager)NetworkManager.singleton;
     }
 
     public void HideAllMenus()
@@ -27,5 +27,17 @@ public class GameLevelSceneManager : MonoBehaviour {
     public void DisplayConfirmation()
     {
         uiManager.SetActiveMenu(GameLevelUIManager.MENUS.CONFIRMATION);
+    }
+
+    public void QuitGame()
+    {
+        if (ExtendedNetworkManager.isHost)
+        {
+            networkManager.StopHost();
+        }
+        else
+        {
+            networkManager.StopClient();
+        }
     }
 }

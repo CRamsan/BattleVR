@@ -69,5 +69,6 @@ public class MainMenuSceneManager : MonoBehaviour {
         {
             networkManager.StartHost();
         }
+        ExtendedNetworkManager.isHost = !inJoinFlow;
     }
 }

@@ -81,7 +81,7 @@ public class PlayerController : NetworkBehaviour {
         }
         else
         {
-            sceneManager.DisplayConfirmation();
+            sceneManager.DisplayPauseMenu();
         }
         isPause = !isPause;
     }
