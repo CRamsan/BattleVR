@@ -11,6 +11,7 @@ public class GameLevelUIManager : MonoBehaviour {
 
     public GameObject PauseGameMenu;
     public GameObject ConfirmationMenu;
+    public Vector3 canvasPosition;
 
     private bool isInitialized = false;
 
@@ -19,22 +20,14 @@ public class GameLevelUIManager : MonoBehaviour {
         Assert.IsFalse(isInitialized);
         isInitialized = true;
 
-        PauseGameMenu.SetActive(true);
-        PauseGameMenu.transform.position = Vector3.zero;
-        ConfirmationMenu.SetActive(false);
-        ConfirmationMenu.transform.position = Vector3.zero;
+        PauseGameMenu.transform.position = canvasPosition;
+        ConfirmationMenu.transform.position = canvasPosition;
     }
 
     // Use this for initialization
     void Start()
     {
         Setup();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     public void SetActiveMenu(MENUS selectedMenu)

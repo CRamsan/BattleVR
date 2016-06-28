@@ -15,16 +15,13 @@ public class PlayerController : NetworkBehaviour {
 	void Start () {
         if (isLocalPlayer)
         {
-            cameraGameObject.SetActive(true);
-            canvasGameObject.SetActive(true);
-
             sceneManager = canvasGameObject.GetComponent<GameLevelSceneManager>();
+            sceneManager.HideAllMenus();
             isPause = false;
         }
         else
         {
             GameObject.Destroy(cameraGameObject);
-            GameObject.Destroy(canvasGameObject);
         }
 	}
 	
@@ -38,7 +35,7 @@ public class PlayerController : NetworkBehaviour {
             return;
         }
 
-        bool pausePressed = InputManager.IsPressed(InputManager.CONTROLLER_BUTTON.START);
+        bool pausePressed = InputManager.WasPressed(InputManager.CONTROLLER_BUTTON.START);
 
         if (pausePressed)
         {

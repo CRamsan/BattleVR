@@ -6,12 +6,12 @@ public class GameLevelSceneManager : MonoBehaviour {
 
     public GameLevelUIManager uiManager;
 
-    private NetworkManager networkManager;
+    //private NetworkManager networkManager;
 
     // Use this for initialization
     void Start()
     {
-        networkManager = NetworkManager.singleton;
+        //networkManager = NetworkManager.singleton;
     }
 
     public void HideAllMenus()
