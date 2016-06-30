@@ -29,6 +29,7 @@ public class PlayerController : NetworkBehaviour, GameLevelSceneManagerDelegate,
         else
         {
             GameObject.Destroy(cameraGameObject);
+            GameObject.Destroy(canvasGameObject);
         }
 	}
 	
