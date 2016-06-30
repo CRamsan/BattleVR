@@ -14,9 +14,14 @@ public class LevelSceneManager : MonoBehaviour {
         networkDiscovery = networkManager.networkDiscovery;
         SetGameVisibility(true);
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    void OnDestroy()
+    {
+        SetGameVisibility(false);
+    }
+
+    // Update is called once per frame
+    void Update () {
 	
 	}
 

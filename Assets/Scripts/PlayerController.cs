@@ -1,14 +1,18 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
+using System;
 
-public class PlayerController : NetworkBehaviour {
+public class PlayerController : NetworkBehaviour, GameLevelSceneManagerDelegate, GunControllerDelegate {
 
     public Rigidbody rigidBody;
     public GameObject cameraGameObject;
     public GameObject canvasGameObject;
 
+    public GameObject projectilePrefab;
+
     private GameLevelSceneManager sceneManager;
+    private GunController gunController;
     private bool isPause;
 
 	// Use this for initialization
@@ -16,6 +20,9 @@ public class PlayerController : NetworkBehaviour {
         if (isLocalPlayer)
         {
             sceneManager = canvasGameObject.GetComponent<GameLevelSceneManager>();
+            gunController = GetComponent<GunController>();
+            gunController.SetGunControllerDelegate(this);
+            sceneManager.SetDelegate(this);
             sceneManager.HideAllMenus();
             isPause = false;
         }
@@ -43,10 +50,21 @@ public class PlayerController : NetworkBehaviour {
             return;
         }
 
+        if (isPause)
+        {
+            return;
+        }
+
         float dStrafe = InputManager.GetAxis(InputManager.CONTROLLER_ANALOG.STICK_LEFT_X);
         float dForward = InputManager.GetAxis(InputManager.CONTROLLER_ANALOG.STICK_LEFT_Y);
         float dElevate = InputManager.GetAxis(InputManager.CONTROLLER_ANALOG.STICK_RIGHT_Y);
         float dRotate = InputManager.GetAxis(InputManager.CONTROLLER_ANALOG.STICK_RIGHT_X) * 5;
+
+        bool fireTrigger = InputManager.GetAxis(InputManager.CONTROLLER_ANALOG.TRIGGER_R2) > 0.5f;
+        if (fireTrigger)
+        {
+            gunController.PressTriger();
+        }
 
         Vector2 leftStickVector = new Vector2(dForward, dStrafe);
         Vector2 rightStickVector = new Vector2(dElevate, dRotate);
@@ -84,5 +102,51 @@ public class PlayerController : NetworkBehaviour {
             sceneManager.DisplayPauseMenu();
         }
         isPause = !isPause;
+    }
+
+    public void OnMenuDismissed()
+    {
+        sceneManager.HideAllMenus();
+        isPause = false;
+    }
+
+    //Method that will fire a bullet.
+    private void DoFire()
+    {
+        Vector3 bulletOrigin = transform.position + transform.forward * 5;
+        Quaternion bulletOrientation = transform.rotation;
+        GameObject bullet = (GameObject)Instantiate(projectilePrefab, bulletOrigin, bulletOrientation);
+        bullet.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        Destroy(bullet, 1.5f);
+    }
+
+    // Make the server call the RPC so that it can send the message
+    // to all the remote instances.
+    [Command]
+    void CmdDoFire()
+    {
+        RpcDoFire();
+    }
+
+    // Do not fire if this comes from the server. All the shots for the local client
+    // Should be trigered by directly calling DoFie.
+    [ClientRpc]
+    void RpcDoFire()
+    {
+        if (isLocalPlayer)
+        {
+            return;
+        }
+        DoFire();
+    }
+
+    public void ShootBullet()
+    {
+        DoFire();
+        CmdDoFire();
+    }
+
+    public void StartReloading()
+    {
     }
 }

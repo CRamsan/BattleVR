@@ -56,10 +56,10 @@ public class InputManager : MonoBehaviour
                 break;
             case CONTROLLER_ANALOG.TRIGGER_R2:
 #if UNITY_ANDROID
-			state = Input.GetAxis ("CONTROLLER_ANALOG_TRIGGER_R2");
+			    state = Input.GetAxis ("CONTROLLER_ANALOG_TRIGGER_R2");
 #endif
 #if UNITY_EDITOR
-                state = Input.GetAxis("CONTROLLER_ANALOG_STICK_RIGHT_X");
+                state = Input.GetAxis("CONTROLLER_ANALOG_TRIGGER_R2_WIN");
 #endif
                 break;
             case CONTROLLER_ANALOG.DPAD_X:
