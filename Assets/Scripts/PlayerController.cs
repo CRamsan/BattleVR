@@ -3,7 +3,7 @@ using UnityEngine.Networking;
 using System.Collections;
 using System;
 
-public class PlayerController : NetworkBehaviour, GameLevelSceneManagerDelegate, GunControllerDelegate {
+public class PlayerController : NetworkBehaviour, GameLevelSceneManagerDelegate, GunControllerDelegate, DamageReceiver{
 
     public Rigidbody rigidBody;
     public GameObject cameraGameObject;
@@ -14,6 +14,7 @@ public class PlayerController : NetworkBehaviour, GameLevelSceneManagerDelegate,
     private GameLevelSceneManager sceneManager;
     private GunController gunController;
     private bool isPause;
+    private float health;
 
 	// Use this for initialization
 	void Start () {
@@ -25,6 +26,7 @@ public class PlayerController : NetworkBehaviour, GameLevelSceneManagerDelegate,
             sceneManager.SetDelegate(this);
             sceneManager.HideAllMenus();
             isPause = false;
+            health = 100f;
         }
         else
         {
@@ -149,5 +151,19 @@ public class PlayerController : NetworkBehaviour, GameLevelSceneManagerDelegate,
 
     public void StartReloading()
     {
+    }
+
+    public void RecievedDamage(float damage)
+    {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+        health -= damage;
+        if (health <= 0)
+        {
+            transform.position = Vector3.zero;
+            health = 100;
+        }
     }
 }

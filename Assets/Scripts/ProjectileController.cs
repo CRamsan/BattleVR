@@ -14,9 +14,9 @@ public class ProjectileController : MonoBehaviour {
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
 
-    void OnCollisionEnter(Collision col)
+    void OnTriggerEnter(Collider col)
     {
-        DamageReceiver cont = col.collider.gameObject.GetComponent<DamageReceiver>();
+        DamageReceiver cont = col.gameObject.GetComponent<DamageReceiver>();
         if (cont != null)
         {
             cont.RecievedDamage(10f);
