@@ -6,150 +6,137 @@ public class InputManager : MonoBehaviour
     public enum CONTROLLER_ACTION
     {
         THRUSTER, STRAFE, SHOOT_PRIMARY, SHOOT_SECONDARY,
-        LOOK_UP, LOOK_SIDE, ROTATE,
-        PAUSE
+        LOOK_UP, LOOK_SIDE, ROTATE, BOOST,
+        PAUSE, SELECT
     }
 
-    public enum CONTROLLER_BUTTON
-    {
-        BUTTON_L1, BUTTON_R1, TRIGGER_L2, TRIGGER_R2,
-        A, B, X, Y,
-        START, SELECT, HOME
-    }
-
-    public enum CONTROLLER_ANALOG
-    {
-        DPAD_X, DPAD_Y,
-        STICK_LEFT_X, STICK_LEFT_Y,
-        STICK_RIGHT_X, STICK_RIGHT_Y,
-        TRIGGER_L2, TRIGGER_R2
-    }
-
-    private enum CONTROLLER_BUTTON_EVENT
+    private enum CONTROLLER_ACTION_EVENT
     {
         DOWN, PRESSED, UP
     }
 
-    public static float GetAxis(CONTROLLER_ANALOG axis)
+    public static float GetAxis(CONTROLLER_ACTION action)
     {
         float state = 0.0f;
-        switch (axis)
+        switch (action)
         {
-            case CONTROLLER_ANALOG.STICK_LEFT_X:
-                state = Input.GetAxis("CONTROLLER_ANALOG_STICK_LEFT_X");
-                break;
-            case CONTROLLER_ANALOG.STICK_LEFT_Y:
-                state = Input.GetAxis("CONTROLLER_ANALOG_STICK_LEFT_Y");
-                break;
-            case CONTROLLER_ANALOG.STICK_RIGHT_X:
-#if UNITY_ANDROID
-			    state = Input.GetAxis ("CONTROLLER_ANALOG_STICK_RIGHT_X");
-#endif
-#if UNITY_EDITOR
-                state = -1f * Input.GetAxis("CONTROLLER_ANALOG_STICK_RIGHT_Y");
+            case CONTROLLER_ACTION.LOOK_SIDE:
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+                state = Input.GetAxis("CONTROLLER_AXIS_4");
+#elif UNITY_ANDROID
+                state = Input.GetAxis("CONTROLLER_AXIS_3");
 #endif
                 break;
-            case CONTROLLER_ANALOG.STICK_RIGHT_Y:
-#if UNITY_ANDROID
-			    state = Input.GetAxis ("CONTROLLER_ANALOG_STICK_RIGHT_Y");
-#endif
-#if UNITY_EDITOR
-                state = -1f * Input.GetAxis("CONTROLLER_ANALOG_DPAD_X");
-#endif
-                break;
-            case CONTROLLER_ANALOG.TRIGGER_L2:
-                state = Input.GetAxis("CONTROLLER_ANALOG_TRIGGER_L2");
-                break;
-            case CONTROLLER_ANALOG.TRIGGER_R2:
-#if UNITY_ANDROID
-			    state = Input.GetAxis ("CONTROLLER_ANALOG_TRIGGER_R2");
-#endif
-#if UNITY_EDITOR
-                state = Input.GetAxis("CONTROLLER_ANALOG_TRIGGER_R2_WIN");
+            case CONTROLLER_ACTION.LOOK_UP:
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+                state = Input.GetAxis("CONTROLLER_AXIS_5");
+#elif UNITY_ANDROID
+                state = Input.GetAxis("CONTROLLER_AXIS_4");
 #endif
                 break;
-            case CONTROLLER_ANALOG.DPAD_X:
-                state = Input.GetAxis("CONTROLLER_ANALOG_DPAD_X");
+            case CONTROLLER_ACTION.ROTATE:
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+                state = Input.GetAxis("CONTROLLER_AXIS_3");
+#elif UNITY_ANDROID
+                state = Input.GetAxis("CONTROLLER_AXIS_12") - Input.GetAxis("CONTROLLER_AXIS_13");
+#endif
                 break;
-            case CONTROLLER_ANALOG.DPAD_Y:
-                state = Input.GetAxis("CONTROLLER_ANALOG_DPAD_Y");
+            case CONTROLLER_ACTION.STRAFE:
+                state = Input.GetAxis("CONTROLLER_AXIS_1");
+                break;
+            case CONTROLLER_ACTION.THRUSTER:
+                state = Input.GetAxis("CONTROLLER_AXIS_2") * -1;
+                break;
+            case CONTROLLER_ACTION.BOOST:
+                state = Input.GetButtonDown("CONTROLLER_BUTTON_0") ? 1f : 0f ;
+                break;
+            case CONTROLLER_ACTION.SELECT:
+                state = Input.GetButtonDown("CONTROLLER_BUTTON_0") ? 1f : 0f;
+                break;
+            case CONTROLLER_ACTION.PAUSE:
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+                state = Input.GetButtonDown("CONTROLLER_BUTTON_7") ? 1f : 0f;
+#elif UNITY_ANDROID
+                state = Input.GetButtonDown("CONTROLLER_BUTTON_10") ? 1f : 0f;
+#endif
+                break;
+            case CONTROLLER_ACTION.SHOOT_PRIMARY:
+                state = Input.GetButtonDown("CONTROLLER_BUTTON_5") ? 1f : 0f;
+                break;
+            case CONTROLLER_ACTION.SHOOT_SECONDARY:
+                state = Input.GetButtonDown("CONTROLLER_BUTTON_4") ? 1f : 0f;
                 break;
         }
 
         return state;
     }
 
-    public static bool IsPressed(CONTROLLER_BUTTON button)
-    {
-        return ButtonHandler(button, CONTROLLER_BUTTON_EVENT.PRESSED);
-    }
-
-    public static bool WasPressed(CONTROLLER_BUTTON button)
-    {
-        return ButtonHandler(button, CONTROLLER_BUTTON_EVENT.DOWN);
-    }
-
-    public static bool WasReleased(CONTROLLER_BUTTON button)
-    {
-        return ButtonHandler(button, CONTROLLER_BUTTON_EVENT.UP);
-    }
-
-
-    private static bool ButtonHandler(CONTROLLER_BUTTON button, CONTROLLER_BUTTON_EVENT buttonEvent)
+    private static bool ActionHandler(CONTROLLER_ACTION button, CONTROLLER_ACTION_EVENT actionEvent)
     {
         bool result = false;
         string input = "";
 
         switch (button)
         {
-            case CONTROLLER_BUTTON.A:
+            case CONTROLLER_ACTION.BOOST:
+                input = "CONTROLLER_BUTTON_0";
                 break;
-            case CONTROLLER_BUTTON.B:
+            case CONTROLLER_ACTION.LOOK_SIDE:
                 break;
-            case CONTROLLER_BUTTON.X:
+            case CONTROLLER_ACTION.LOOK_UP:
                 break;
-            case CONTROLLER_BUTTON.Y:
-                break;
-            case CONTROLLER_BUTTON.BUTTON_L1:
-                break;
-            case CONTROLLER_BUTTON.BUTTON_R1:
-                break;
-            case CONTROLLER_BUTTON.TRIGGER_L2:
-                break;
-            case CONTROLLER_BUTTON.TRIGGER_R2:
-                break;
-            case CONTROLLER_BUTTON.START:
-#if UNITY_ANDROID
-			    input = "CONTROLLER_BUTTON_START";
+            case CONTROLLER_ACTION.PAUSE:
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+                input = "CONTROLLER_BUTTON_7";
+#else
+                input = "CONTROLLER_BUTTON_10";
 #endif
-#if UNITY_EDITOR
-                input = "CONTROLLER_BUTTON_START";
-#endif
+
                 break;
-            case CONTROLLER_BUTTON.SELECT:
-#if UNITY_ANDROID
-			    input = "CONTROLLER_BUTTON_SELECT";
-#endif
-#if UNITY_EDITOR
-                input = "CONTROLLER_BUTTON_SELECT";
-#endif
+            case CONTROLLER_ACTION.ROTATE:
                 break;
-            case CONTROLLER_BUTTON.HOME:
+            case CONTROLLER_ACTION.SELECT:
+                input = "CONTROLLER_BUTTON_0";
+                break;
+            case CONTROLLER_ACTION.SHOOT_PRIMARY:
+                input = "CONTROLLER_BUTTON_5";
+                break;
+            case CONTROLLER_ACTION.SHOOT_SECONDARY:
+                input = "CONTROLLER_BUTTON_4";
+                break;
+            case CONTROLLER_ACTION.STRAFE:
+                break;
+            case CONTROLLER_ACTION.THRUSTER:
                 break;
         }
 
-        switch (buttonEvent)
+        switch (actionEvent)
         {
-            case CONTROLLER_BUTTON_EVENT.DOWN:
+            case CONTROLLER_ACTION_EVENT.DOWN:
                 result = Input.GetButtonDown(input);
                 break;
-            case CONTROLLER_BUTTON_EVENT.PRESSED:
+            case CONTROLLER_ACTION_EVENT.PRESSED:
                 result = Input.GetButton(input);
                 break;
-            case CONTROLLER_BUTTON_EVENT.UP:
+            case CONTROLLER_ACTION_EVENT.UP:
                 result = Input.GetButtonUp(input);
                 break;
         }
         return result;
+    }
+
+    public static bool WasActionPressed(CONTROLLER_ACTION action)
+    {
+        return ActionHandler(action, CONTROLLER_ACTION_EVENT.PRESSED);
+    }
+
+    public static bool IsActionPressed(CONTROLLER_ACTION action)
+    {
+        return ActionHandler(action, CONTROLLER_ACTION_EVENT.DOWN);
+    }
+
+    public static bool WasActionReleased(CONTROLLER_ACTION action)
+    {
+        return ActionHandler(action, CONTROLLER_ACTION_EVENT.UP);
     }
 }

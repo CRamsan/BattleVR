@@ -16,8 +16,8 @@ public class PlayerController : NetworkBehaviour, GameLevelSceneManagerDelegate,
     private bool isPause;
     private float health;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         if (isLocalPlayer)
         {
             sceneManager = canvasGameObject.GetComponent<GameLevelSceneManager>();
@@ -45,7 +45,7 @@ public class PlayerController : NetworkBehaviour, GameLevelSceneManagerDelegate,
             return;
         }
 
-        bool pausePressed = InputManager.WasPressed(InputManager.CONTROLLER_BUTTON.START);
+        bool pausePressed = InputManager.WasActionPressed(InputManager.CONTROLLER_ACTION.PAUSE);
 
         if (pausePressed)
         {
@@ -58,47 +58,29 @@ public class PlayerController : NetworkBehaviour, GameLevelSceneManagerDelegate,
             return;
         }
 
-        float dStrafe = InputManager.GetAxis(InputManager.CONTROLLER_ANALOG.STICK_LEFT_X) * 10;
-        float dForward = InputManager.GetAxis(InputManager.CONTROLLER_ANALOG.STICK_LEFT_Y) * 10;
-        float dElevate = InputManager.GetAxis(InputManager.CONTROLLER_ANALOG.STICK_RIGHT_Y) * 10;
-        float dRotate = InputManager.GetAxis(InputManager.CONTROLLER_ANALOG.STICK_RIGHT_X) * 10;
+        float dStrafe = InputManager.GetAxis(InputManager.CONTROLLER_ACTION.STRAFE);
+        float dForward = InputManager.GetAxis(InputManager.CONTROLLER_ACTION.THRUSTER);
+        float dLookUp = InputManager.GetAxis(InputManager.CONTROLLER_ACTION.LOOK_UP);
+        float dLookSide = InputManager.GetAxis(InputManager.CONTROLLER_ACTION.LOOK_SIDE);
+        float dRotate = InputManager.GetAxis(InputManager.CONTROLLER_ACTION.ROTATE);
 
-        bool fireTrigger = InputManager.GetAxis(InputManager.CONTROLLER_ANALOG.TRIGGER_R2) > 0.5f;
+        bool fireTrigger = InputManager.WasActionPressed(InputManager.CONTROLLER_ACTION.SHOOT_PRIMARY);
         if (fireTrigger)
         {
             gunController.PressTriger();
         }
 
-        for (int i = 0; i <= 20; i++)
+        Vector3 leftStickVector = new Vector3(dStrafe, 0, dForward);
+        Vector3 rotationStickVector = new Vector3(dLookUp, dLookSide, dRotate);
+
+        if (rotationStickVector.magnitude >= 0.2)
         {
-            if (Input.GetButtonUp("CONTROLLER_BUTTON_" + i))
-            {
-                Debug.Log(i);
-            }
+            rigidBody.AddRelativeTorque(rotationStickVector * Time.deltaTime * 1000);
         }
 
-        Vector2 leftStickVector = new Vector2(dForward, dStrafe);
-        Vector2 rightStickVector = new Vector2(dElevate, dRotate);
-
-        if (rightStickVector.magnitude >= 0.2)
+        if (leftStickVector.magnitude >= 0.2)
         {
-            Quaternion newRotation = Quaternion.Euler(transform.rotation.eulerAngles + new Vector3(0, dRotate, 0));
-            rigidBody.MoveRotation(newRotation);
-        }
-        else
-        {
-            dElevate = 0;
-        }
-
-        if (leftStickVector.magnitude < 0.2)
-        {
-            dStrafe = 0;
-            dForward = 0;
-        }
-        if (dStrafe != 0 || dForward != 0 || dElevate != 0)
-        {
-            Vector3 dVector = new Vector3(dStrafe, dElevate, dForward) / 10;
-            rigidBody.MovePosition(transform.position + transform.TransformDirection(dVector));
+            rigidBody.AddRelativeForce(leftStickVector * Time.deltaTime * 100000);
         }
     }
 
