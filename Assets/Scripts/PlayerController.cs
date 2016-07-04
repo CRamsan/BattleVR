@@ -58,10 +58,10 @@ public class PlayerController : NetworkBehaviour, GameLevelSceneManagerDelegate,
             return;
         }
 
-        float dStrafe = InputManager.GetAxis(InputManager.CONTROLLER_ANALOG.STICK_LEFT_X);
-        float dForward = InputManager.GetAxis(InputManager.CONTROLLER_ANALOG.STICK_LEFT_Y);
-        float dElevate = InputManager.GetAxis(InputManager.CONTROLLER_ANALOG.STICK_RIGHT_Y);
-        float dRotate = InputManager.GetAxis(InputManager.CONTROLLER_ANALOG.STICK_RIGHT_X) * 5;
+        float dStrafe = InputManager.GetAxis(InputManager.CONTROLLER_ANALOG.STICK_LEFT_X) * 10;
+        float dForward = InputManager.GetAxis(InputManager.CONTROLLER_ANALOG.STICK_LEFT_Y) * 10;
+        float dElevate = InputManager.GetAxis(InputManager.CONTROLLER_ANALOG.STICK_RIGHT_Y) * 10;
+        float dRotate = InputManager.GetAxis(InputManager.CONTROLLER_ANALOG.STICK_RIGHT_X) * 10;
 
         bool fireTrigger = InputManager.GetAxis(InputManager.CONTROLLER_ANALOG.TRIGGER_R2) > 0.5f;
         if (fireTrigger)
