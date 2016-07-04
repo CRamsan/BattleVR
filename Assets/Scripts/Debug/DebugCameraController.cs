@@ -17,7 +17,6 @@ using System.Collections;
 [AddComponentMenu("Camera-Control/Mouse Look")]
 public class DebugCameraController : MonoBehaviour
 {
-
     public enum RotationAxes { MouseXAndY = 0, MouseX = 1, MouseY = 2 }
     public RotationAxes axes = RotationAxes.MouseXAndY;
     public float sensitivityX = 15F;
@@ -30,10 +29,6 @@ public class DebugCameraController : MonoBehaviour
     public float maximumY = 60F;
 
     float rotationY = 0F;
-
-
-
-
 
     void Update()
     {

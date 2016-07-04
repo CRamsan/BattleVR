@@ -69,6 +69,14 @@ public class PlayerController : NetworkBehaviour, GameLevelSceneManagerDelegate,
             gunController.PressTriger();
         }
 
+        for (int i = 0; i <= 20; i++)
+        {
+            if (Input.GetButtonUp("CONTROLLER_BUTTON_" + i))
+            {
+                Debug.Log(i);
+            }
+        }
+
         Vector2 leftStickVector = new Vector2(dForward, dStrafe);
         Vector2 rightStickVector = new Vector2(dElevate, dRotate);
 

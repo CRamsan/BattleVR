@@ -3,6 +3,12 @@ using System.Collections;
 
 public class InputManager : MonoBehaviour
 {
+    public enum CONTROLLER_ACTION
+    {
+        THRUSTER, STRAFE, SHOOT_PRIMARY, SHOOT_SECONDARY,
+        LOOK_UP, LOOK_SIDE, ROTATE,
+        PAUSE
+    }
 
     public enum CONTROLLER_BUTTON
     {
@@ -143,10 +149,6 @@ public class InputManager : MonoBehaviour
             case CONTROLLER_BUTTON_EVENT.UP:
                 result = Input.GetButtonUp(input);
                 break;
-        }
-        if (result)
-        {
-            Debug.Log("HIT: " + input);
         }
         return result;
     }
