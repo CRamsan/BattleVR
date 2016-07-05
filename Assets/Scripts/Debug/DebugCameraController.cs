@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.VR;
 using System.Collections;
  
 /// MouseLook rotates the transform based on the mouse delta.
@@ -32,6 +33,11 @@ public class DebugCameraController : MonoBehaviour
 
     void Update()
     {
+        if (VRSettings.enabled)
+        {
+            return;
+        }
+
         if (axes == RotationAxes.MouseXAndY)
         {
             float rotationX = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * sensitivityX;
