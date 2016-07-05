@@ -8,6 +8,7 @@ public class PlayerController : NetworkBehaviour, GameLevelSceneManagerDelegate,
     public Rigidbody rigidBody;
     public GameObject cameraGameObject;
     public GameObject canvasGameObject;
+    public GameObject rendererGameObject;
 
     public GameObject projectilePrefab;
 
@@ -32,14 +33,12 @@ public class PlayerController : NetworkBehaviour, GameLevelSceneManagerDelegate,
         {
             GameObject.Destroy(cameraGameObject);
             GameObject.Destroy(canvasGameObject);
+            GameObject.Destroy(rendererGameObject);
         }
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        rigidBody.velocity = Vector3.zero;
-        rigidBody.angularVelocity = Vector3.zero;
-
         if (!isLocalPlayer)
         {
             return;
@@ -75,12 +74,12 @@ public class PlayerController : NetworkBehaviour, GameLevelSceneManagerDelegate,
 
         if (rotationStickVector.magnitude >= 0.2)
         {
-            rigidBody.AddRelativeTorque(rotationStickVector * Time.deltaTime * 1000);
+            rigidBody.AddRelativeTorque(rotationStickVector * Time.deltaTime * 10);
         }
 
         if (leftStickVector.magnitude >= 0.2)
         {
-            rigidBody.AddRelativeForce(leftStickVector * Time.deltaTime * 100000);
+            rigidBody.AddRelativeForce(leftStickVector * Time.deltaTime * 1000);
         }
     }
 

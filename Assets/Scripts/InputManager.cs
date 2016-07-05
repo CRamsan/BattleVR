@@ -37,15 +37,31 @@ public class InputManager : MonoBehaviour
             case CONTROLLER_ACTION.ROTATE:
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
                 state = Input.GetAxis("CONTROLLER_AXIS_3");
+                if (state == 0)
+                {
+                    state = (Input.GetKey("q") ? 1 : 0) - (Input.GetKey("e") ? 1 : 0);
+                }
 #elif UNITY_ANDROID
                 state = Input.GetAxis("CONTROLLER_AXIS_12") - Input.GetAxis("CONTROLLER_AXIS_13");
 #endif
                 break;
             case CONTROLLER_ACTION.STRAFE:
                 state = Input.GetAxis("CONTROLLER_AXIS_1");
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+                if (state == 0)
+                {
+                    state = (Input.GetKey("d") ? 1 : 0) - (Input.GetKey("a") ? 1 : 0);
+                }
+#endif
                 break;
             case CONTROLLER_ACTION.THRUSTER:
                 state = Input.GetAxis("CONTROLLER_AXIS_2") * -1;
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+                if (state == 0)
+                {
+                    state = (Input.GetKey("w") ? 1 : 0) - (Input.GetKey("s") ? 1 : 0);
+                }
+#endif
                 break;
             case CONTROLLER_ACTION.BOOST:
                 state = Input.GetButtonDown("CONTROLLER_BUTTON_0") ? 1f : 0f ;
