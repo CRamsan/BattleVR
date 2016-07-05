@@ -143,12 +143,12 @@ public class InputManager : MonoBehaviour
 
     public static bool WasActionPressed(CONTROLLER_ACTION action)
     {
-        return ActionHandler(action, CONTROLLER_ACTION_EVENT.PRESSED);
+        return ActionHandler(action, CONTROLLER_ACTION_EVENT.DOWN);
     }
 
     public static bool IsActionPressed(CONTROLLER_ACTION action)
     {
-        return ActionHandler(action, CONTROLLER_ACTION_EVENT.DOWN);
+        return ActionHandler(action, CONTROLLER_ACTION_EVENT.PRESSED);
     }
 
     public static bool WasActionReleased(CONTROLLER_ACTION action)

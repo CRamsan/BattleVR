@@ -63,7 +63,7 @@ public class PlayerController : NetworkBehaviour, GameLevelSceneManagerDelegate,
         float dLookSide = InputManager.GetAxis(InputManager.CONTROLLER_ACTION.LOOK_SIDE);
         float dRotate = InputManager.GetAxis(InputManager.CONTROLLER_ACTION.ROTATE);
 
-        bool fireTrigger = InputManager.WasActionPressed(InputManager.CONTROLLER_ACTION.SHOOT_PRIMARY);
+        bool fireTrigger = InputManager.IsActionPressed(InputManager.CONTROLLER_ACTION.SHOOT_PRIMARY);
         if (fireTrigger)
         {
             gunController.PressTriger();

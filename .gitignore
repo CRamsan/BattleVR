@@ -22,3 +22,5 @@ demo_Data/
 Library/ShaderCache/
 Temp/
 *.pdb
+Assets/Stagit/
+Assets/Stagit.meta
