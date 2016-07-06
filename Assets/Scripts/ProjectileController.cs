@@ -7,11 +7,12 @@ public class ProjectileController : MonoBehaviour {
 
     void Start()
     {
+        Rigidbody rb = GetComponent<Rigidbody>();
+        rb.AddRelativeForce(Vector3.forward * Time.deltaTime * speed, ForceMode.Impulse);
     }
 
     void Update()
     {
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
 
     void OnTriggerEnter(Collider col)

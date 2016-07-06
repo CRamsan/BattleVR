@@ -42,7 +42,7 @@ public class InputManager : MonoBehaviour
                     state = (Input.GetKey("q") ? 1 : 0) - (Input.GetKey("e") ? 1 : 0);
                 }
 #elif UNITY_ANDROID
-                state = Input.GetAxis("CONTROLLER_AXIS_12") - Input.GetAxis("CONTROLLER_AXIS_13");
+                state = Input.GetAxis("CONTROLLER_AXIS_13") - Input.GetAxis("CONTROLLER_AXIS_12");
 #endif
                 break;
             case CONTROLLER_ACTION.STRAFE:

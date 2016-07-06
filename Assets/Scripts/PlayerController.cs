@@ -11,11 +11,13 @@ public class PlayerController : NetworkBehaviour, GameLevelSceneManagerDelegate,
     public GameObject rendererGameObject;
 
     public GameObject projectilePrefab;
+    public Vector3[] bulletSpawn;
 
     private GameLevelSceneManager sceneManager;
     private GunController gunController;
     private bool isPause;
     private float health;
+    private int bulletSpawnIndex;
 
     // Use this for initialization
     void Start () {
@@ -74,12 +76,12 @@ public class PlayerController : NetworkBehaviour, GameLevelSceneManagerDelegate,
 
         if (rotationStickVector.magnitude >= 0.2)
         {
-            rigidBody.AddRelativeTorque(rotationStickVector * Time.deltaTime * 10);
+            rigidBody.AddRelativeTorque(rotationStickVector * Time.deltaTime * 15);
         }
 
         if (leftStickVector.magnitude >= 0.2)
         {
-            rigidBody.AddRelativeForce(leftStickVector * Time.deltaTime * 1000);
+            rigidBody.AddRelativeForce(leftStickVector * Time.deltaTime * 2000);
         }
     }
 
@@ -105,7 +107,12 @@ public class PlayerController : NetworkBehaviour, GameLevelSceneManagerDelegate,
     //Method that will fire a bullet.
     private void DoFire()
     {
-        Vector3 bulletOrigin = transform.position + transform.forward * 5;
+        Vector3 bulletOrigin = transform.TransformPoint(bulletSpawn[bulletSpawnIndex]);
+        bulletSpawnIndex++;
+        if (bulletSpawnIndex >= bulletSpawn.Length)
+        {
+            bulletSpawnIndex = 0;
+        }
         Quaternion bulletOrientation = transform.rotation;
         GameObject bullet = (GameObject)Instantiate(projectilePrefab, bulletOrigin, bulletOrientation);
         bullet.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
