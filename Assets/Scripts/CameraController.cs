@@ -47,7 +47,7 @@ public class CameraController : MonoBehaviour {
         }
         else
         {
-            //originPosition = transform.localPosition;
+            originPosition = transform.localPosition;
             originDirection = Vector3.forward;
         }
 
