@@ -42,8 +42,8 @@ public class CameraController : MonoBehaviour {
         }*/
         if (VRSettings.enabled)
         {
-            //originPosition = transform.TransformPoint(InputTracking.GetLocalPosition(VRNode.CenterEye));
-            originDirection = InputTracking.GetLocalRotation(VRNode.CenterEye).eulerAngles.normalized;
+            originPosition = InputTracking.GetLocalPosition(VRNode.CenterEye);
+            originDirection = Vector3.forward;//InputTracking.GetLocalRotation(VRNode.CenterEye).eulerAngles.normalized;
         }
         else
         {
