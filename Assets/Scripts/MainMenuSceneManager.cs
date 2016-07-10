@@ -61,6 +61,7 @@ public class MainMenuSceneManager : MonoBehaviour {
     public void DisplayCredits() { }
 
     public void ConfirmStartGame() {
+        uiManager.SetActiveMenu(MainMenuUIManager.MENUS.NONE);
         if (inJoinFlow)
         {
             networkManager.StartClient();

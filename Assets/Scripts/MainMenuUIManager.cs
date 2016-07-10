@@ -6,7 +6,7 @@ public class MainMenuUIManager : MonoBehaviour {
 
     public enum MENUS
     {
-        MAINMENU, LOCALGAMES, SELECTLEVEL, CONFIRMATION
+        MAINMENU, LOCALGAMES, SELECTLEVEL, CONFIRMATION, NONE
     }
 
     public GameObject StartGameMenu;
