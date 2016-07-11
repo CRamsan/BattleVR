@@ -24,5 +24,5 @@ Temp/
 *.pdb
 Assets/Stagit/
 Assets/Stagit.meta
-*.ogg
-*.ogg.meta
+Assets/Music/
+Assets/Music.meta
