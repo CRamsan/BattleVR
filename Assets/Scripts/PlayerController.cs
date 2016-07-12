@@ -161,4 +161,11 @@ public class PlayerController : NetworkBehaviour, GameLevelSceneManagerDelegate,
             health = 100;
         }
     }
+
+    void OnTriggerEnter(Collider other)
+    {
+        WeaponController controller = other.gameObject.GetComponent<WeaponController>();
+        if (controller != null)
+        { }
+    }
 }
