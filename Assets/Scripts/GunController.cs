@@ -74,4 +74,11 @@ public class GunController : MonoBehaviour {
 			}
 		}
 	}
+
+    public void SetWeapon(WeaponController controller)
+    {
+        rechamberTime = controller.rechamberTime;
+        reloadTime = controller.reloadTime;
+        magSize = controller.magSize;
+    }
 }

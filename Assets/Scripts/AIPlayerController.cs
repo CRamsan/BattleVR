@@ -3,55 +3,29 @@ using UnityEngine.Networking;
 using System.Collections;
 using System;
 
-public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
+public class AIPlayerController : ShipController{
 
-    public GameObject cameraGameObject;
-    public GameObject canvasGameObject;
-
-    private GameLevelSceneManager sceneManager;
-    private bool isPause;
+    public Vector3 targetPosition;
 
     // Use this for initialization
     void Start () {
         if (isLocalPlayer)
         {
-            sceneManager = canvasGameObject.GetComponent<GameLevelSceneManager>();
             gunController = GetComponent<GunController>();
             gunController.SetGunControllerDelegate(this);
-            sceneManager.SetDelegate(this);
-            sceneManager.HideAllMenus();
-            isPause = false;
             health = 100f;
-        }
-        else
-        {
-            GameObject.Destroy(cameraGameObject);
-            GameObject.Destroy(canvasGameObject);
         }
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (!isLocalPlayer)
-        {
-            return;
-        }
-
-        bool pausePressed = InputManager.WasActionPressed(InputManager.CONTROLLER_ACTION.PAUSE);
-
-        if (pausePressed)
-        {
-            TogglePauseMenu();
-            return;
-        }
-
-        if (isPause)
+        if (!isServer)
         {
             return;
         }
 
         float dStrafe = InputManager.GetAxis(InputManager.CONTROLLER_ACTION.STRAFE);
-        float dForward = InputManager.GetAxis(InputManager.CONTROLLER_ACTION.THRUSTER);
+        float dForward = 1;
         float dLookUp = InputManager.GetAxis(InputManager.CONTROLLER_ACTION.LOOK_UP);
         float dLookSide = InputManager.GetAxis(InputManager.CONTROLLER_ACTION.LOOK_SIDE);
         float dRotate = InputManager.GetAxis(InputManager.CONTROLLER_ACTION.ROTATE);
@@ -74,24 +48,5 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         {
             rigidBody.AddRelativeForce(leftStickVector * Time.deltaTime * 2000);
         }
-    }
-
-    private void TogglePauseMenu()
-    {
-        if (isPause)
-        {
-            sceneManager.HideAllMenus();
-        }
-        else
-        {
-            sceneManager.DisplayPauseMenu();
-        }
-        isPause = !isPause;
-    }
-
-    public void OnMenuDismissed()
-    {
-        sceneManager.HideAllMenus();
-        isPause = false;
     }
 }

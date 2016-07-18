@@ -5,6 +5,8 @@ using System.Collections;
 
 public class LevelSceneManager : MonoBehaviour {
 
+    public GameObject aiPrefab;
+
     private ExtendedNetworkManager networkManager;
     private NetworkDiscovery networkDiscovery;
 
@@ -13,6 +15,11 @@ public class LevelSceneManager : MonoBehaviour {
         networkManager = (ExtendedNetworkManager)NetworkManager.singleton;
         networkDiscovery = networkManager.networkDiscovery;
         SetGameVisibility(true);
+
+        for (int i = 0; i < 3; i++)
+        {
+            NetworkServer.Spawn(aiPrefab);
+        }
 	}
 
     void OnDestroy()
