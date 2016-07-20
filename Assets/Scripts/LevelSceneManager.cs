@@ -18,7 +18,23 @@ public class LevelSceneManager : MonoBehaviour {
 
         for (int i = 0; i < 3; i++)
         {
-            NetworkServer.Spawn(aiPrefab);
+            GameObject aiPlayer = Instantiate(aiPrefab);
+            //aiPlayer.transform.position = new Vector3(Random.Range(-50f, 50f), Random.Range(-50f, 50f), Random.Range(-50f, 50f));
+            switch (i)
+            {
+                case 0:
+                    aiPlayer.transform.position = new Vector3(100, 0, 0);
+                    break;
+                case 1:
+                    aiPlayer.transform.position = new Vector3(0, 100, 0);
+                    break;
+                case 2:
+                    aiPlayer.transform.position = new Vector3(0, 0, 100);
+                    break;
+                default:
+                    break;
+            }
+            NetworkServer.Spawn(aiPlayer);
         }
 	}
 

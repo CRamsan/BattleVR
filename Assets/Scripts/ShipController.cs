@@ -77,7 +77,7 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
     void OnTriggerEnter(Collider other)
     {
         WeaponController controller = other.gameObject.GetComponent<WeaponController>();
-        if (controller != null)
+        if (controller != null && gunController != null)
         {
             gunController.SetWeapon(controller);
             Destroy(controller.gameObject);
