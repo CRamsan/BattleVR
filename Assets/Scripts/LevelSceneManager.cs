@@ -16,7 +16,7 @@ public class LevelSceneManager : MonoBehaviour {
         networkDiscovery = networkManager.networkDiscovery;
         SetGameVisibility(true);
 
-        for (int i = 0; i < 6; i++)
+        /*for (int i = 0; i < 6; i++)
         {
             GameObject aiPlayer = Instantiate(aiPrefab);
             //aiPlayer.transform.position = new Vector3(Random.Range(-50f, 50f), Random.Range(-50f, 50f), Random.Range(-50f, 50f));
@@ -44,7 +44,7 @@ public class LevelSceneManager : MonoBehaviour {
                     break;
             }
             NetworkServer.Spawn(aiPlayer);
-        }
+        }*/
 	}
 
     void OnDestroy()
