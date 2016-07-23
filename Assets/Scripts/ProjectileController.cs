@@ -8,7 +8,7 @@ public class ProjectileController : MonoBehaviour {
     void Start()
     {
         Rigidbody rb = GetComponent<Rigidbody>();
-        rb.AddRelativeForce(Vector3.forward * Time.deltaTime * speed, ForceMode.Impulse);
+        rb.AddRelativeForce(Vector3.forward * speed, ForceMode.Impulse);
     }
 
     void Update()

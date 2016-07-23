@@ -5,24 +5,27 @@ using System;
 
 public class AIPlayerController : ShipController{
 
-    public Vector3 targetPosition;
-    public Vector3 targetDirection;
+    public GameObject targetObject;
 
     private GameObject targetReticle;
 
+    private float counter;
+    public float safeDistance;
+    public float shootDistance;
+
     // Use this for initialization
     void Start () {
+        Init();
         if (isLocalPlayer)
         {
-            gunController = GetComponent<GunController>();
-            gunController.SetGunControllerDelegate(this);
-            health = 100f;
         }
-        targetPosition = Vector3.zero;
+
         targetReticle = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         targetReticle.transform.SetParent(transform);
         targetReticle.transform.localPosition = Vector3.forward;
         targetReticle.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+
+        isAI = true;
     }
 
     // Update is called once per frame
@@ -32,46 +35,60 @@ public class AIPlayerController : ShipController{
             return;
         }
 
+        counter += Time.deltaTime;
+        if (counter > 5)
+        {
+            targetObject = GameObject.FindGameObjectWithTag("Player");
+            counter = 0;
+        }
 
-        targetDirection = (targetPosition - transform.position).normalized;
+        Vector3 targetPosition;
+        if (targetObject != null)
+        {
+            targetPosition = targetObject.transform.position;
+        }
+        else
+        {
+            targetPosition = Vector3.zero;
+        }
+
+        //Get the normalized vector that points towards our target
+        Vector3 targetDirection = (targetPosition - transform.position).normalized;
         targetReticle.transform.position = transform.position + targetDirection;
 
-        Debug.DrawLine(transform.position, (transform.position + (targetDirection * 100)), Color.cyan);
-
+        // Get the direction on our local space
         Vector3 aimDirection = targetReticle.transform.localPosition;
-        float dStrafe = 0;
+        // Only move forward when we are facing our target
         float dForward = (aimDirection.z > 0 ? aimDirection.z : 0);
-        float targetDistance = (targetPosition - transform.position).magnitude;
-        if (targetDistance < 25)
-        {
-            dForward /= (25 - targetDistance);
-        }
-
         float dLookUp = aimDirection.y * -1;
-        Debug.DrawLine(transform.position, (new Vector3(transform.position.x, transform.position.y + (dLookUp * 5), transform.position.z)), Color.green);
-
+        if (dLookUp == 0)
+        { dLookUp = 1f; }
         float dLookSide = aimDirection.x;
-        Debug.DrawLine(transform.position, (new Vector3(transform.position.x + (dLookSide * 5), transform.position.y, transform.position.z)), Color.red);
+        if (dLookSide == 0)
+        { dLookSide = 1f; }
+        float targetDistance = (targetPosition - transform.position).magnitude;
+        Debug.DrawLine(transform.position, (transform.position + (targetDirection * targetDistance)), Color.cyan);
 
-        float dRotate = 0;
+        if (Mathf.Sqrt((dLookSide*dLookSide) + (dLookUp*dLookSide)) > dForward ||
+            (targetDistance < safeDistance))
+        { dForward /= 1 + (safeDistance - targetDistance); }
 
-        /*bool fireTrigger = InputManager.IsActionPressed(InputManager.CONTROLLER_ACTION.SHOOT_PRIMARY);
-        if (fireTrigger)
+        if (targetDistance < shootDistance || true)
         {
-            gunController.PressTriger();
-        }*/
-
-        Vector3 leftStickVector = new Vector3(dStrafe, 0, dForward);
-        Vector3 rotationStickVector = new Vector3(dLookUp, dLookSide, dRotate);
-
-        if (rotationStickVector.magnitude >= 0.2)
-        {
-            rigidBody.AddRelativeTorque(rotationStickVector * Time.deltaTime * 15);
+            //if (dForward >= 0.9f)
+            {
+                gunController.PressTriger();
+            }
         }
 
-        if (leftStickVector.magnitude >= 0.2)
-        {
-            rigidBody.AddRelativeForce(leftStickVector * Time.deltaTime * 2000);
-        }
+        Debug.DrawLine(transform.position, transform.TransformPoint(new Vector3(0, 0, aimDirection.z + (dForward * 5))), Color.blue);
+        Debug.DrawLine(transform.position, transform.TransformPoint(new Vector3(0, aimDirection.y - (dLookUp * 5), 0)), Color.green);
+        Debug.DrawLine(transform.position, transform.TransformPoint(new Vector3(aimDirection.x + (dLookSide * 5), 0, 0)), Color.red);
+
+        Vector3 leftStickVector = new Vector3(0, 0, dForward);
+        Vector3 rotationStickVector = new Vector3(dLookUp, dLookSide, 0f);
+
+        rigidBody.AddRelativeTorque(rotationStickVector * Time.deltaTime * 15);
+        rigidBody.AddRelativeForce(leftStickVector * Time.deltaTime * 2000);
     }
 }

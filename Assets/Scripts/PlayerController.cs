@@ -13,22 +13,20 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
 
     // Use this for initialization
     void Start () {
+        Init();
         if (isLocalPlayer)
         {
             sceneManager = canvasGameObject.GetComponent<GameLevelSceneManager>();
-            gunController = GetComponent<GunController>();
-            gunController.SetGunControllerDelegate(this);
             sceneManager.SetDelegate(this);
             sceneManager.HideAllMenus();
             isPause = false;
-            health = 100f;
         }
         else
         {
             GameObject.Destroy(cameraGameObject);
             GameObject.Destroy(canvasGameObject);
         }
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {

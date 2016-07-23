@@ -16,7 +16,7 @@ public class LevelSceneManager : MonoBehaviour {
         networkDiscovery = networkManager.networkDiscovery;
         SetGameVisibility(true);
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 6; i++)
         {
             GameObject aiPlayer = Instantiate(aiPrefab);
             //aiPlayer.transform.position = new Vector3(Random.Range(-50f, 50f), Random.Range(-50f, 50f), Random.Range(-50f, 50f));
@@ -30,6 +30,15 @@ public class LevelSceneManager : MonoBehaviour {
                     break;
                 case 2:
                     aiPlayer.transform.position = new Vector3(0, 0, 100);
+                    break;
+                case 3:
+                    aiPlayer.transform.position = new Vector3(-100, 0, 0);
+                    break;
+                case 4:
+                    aiPlayer.transform.position = new Vector3(0, -100, 0);
+                    break;
+                case 5:
+                    aiPlayer.transform.position = new Vector3(0, 0, -100);
                     break;
                 default:
                     break;

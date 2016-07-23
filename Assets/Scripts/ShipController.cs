@@ -14,6 +14,26 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
     protected GunController gunController;
     protected float health;
     protected int bulletSpawnIndex;
+    protected Renderer gameRenderer;
+
+    protected Color tempColor;
+    protected bool isAI;
+
+    protected void Init()
+    {
+        if (isLocalPlayer)
+        {
+        }
+        else
+        {
+        }
+
+        gunController = GetComponent<GunController>();
+        gunController.SetGunControllerDelegate(this);
+
+        health = 100f;
+        gameRenderer = GetComponentInChildren<Renderer>();
+    }
 
     //Method that will fire a bullet.
     private void DoFire()
@@ -43,7 +63,7 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
     [ClientRpc]
     void RpcDoFire()
     {
-        if (isLocalPlayer)
+        if (isLocalPlayer || isAI)
         {
             return;
         }
@@ -62,10 +82,8 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
 
     public void RecievedDamage(float damage)
     {
-        if (!isLocalPlayer)
-        {
-            return;
-        }
+        StartCoroutine(TakeDamageEnumerator());
+
         health -= damage;
         if (health <= 0)
         {
@@ -82,5 +100,13 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
             gunController.SetWeapon(controller);
             Destroy(controller.gameObject);
         }
+    }
+
+    IEnumerator TakeDamageEnumerator()
+    {
+        tempColor = gameRenderer.material.color;
+        gameRenderer.material.color = Color.blue;
+        yield return new WaitForSeconds(.1f);
+        gameRenderer.material.color = tempColor;
     }
 }
