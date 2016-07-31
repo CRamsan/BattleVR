@@ -19,7 +19,7 @@ public class ShipSpawner : MonoBehaviour {
             aiPlayer.transform.position = transform.TransformPoint(new Vector3(0,05));
             NetworkServer.Spawn(aiPlayer);
         }
-        StartCoroutine(SpawnFunction());
+        //StartCoroutine(SpawnFunction());
     }
 	
 	// Update is called once per frame

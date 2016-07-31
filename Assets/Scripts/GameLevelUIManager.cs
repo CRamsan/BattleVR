@@ -20,8 +20,8 @@ public class GameLevelUIManager : MonoBehaviour {
         Assert.IsFalse(isInitialized);
         isInitialized = true;
 
-        PauseGameMenu.transform.position = canvasPosition;
-        ConfirmationMenu.transform.position = canvasPosition;
+        PauseGameMenu.transform.localPosition = canvasPosition;
+        ConfirmationMenu.transform.localPosition = canvasPosition;
     }
 
     // Use this for initialization

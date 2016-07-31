@@ -5,6 +5,12 @@ using System;
 
 public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageReceiver{
 
+    public enum ShipType {
+        FIGHTER,
+        FRIGATE,
+        BATTLECRUISER
+    }
+
     public Rigidbody rigidBody;
     public GameObject rendererGameObject;
 
@@ -18,6 +24,9 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
 
     protected Color tempColor;
     protected bool isAI;
+    public ShipType type;
+
+    private Vector3 throttle;
 
     protected void Init()
     {
@@ -33,6 +42,23 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
 
         health = 100f;
         gameRenderer = GetComponentInChildren<Renderer>();
+        type = ShipType.FIGHTER;
+    }
+
+    protected void HandleInput(Vector3 dTranslation, Vector3 dRotation)
+    {
+        if (type == ShipType.FIGHTER)
+        {
+            float throttleZ = throttle.z + dTranslation.z;
+
+            throttle.z = throttleZ > 0 ? Mathf.Min(throttleZ, 1f) : 0;
+            rigidBody.AddRelativeForce(throttle * Time.deltaTime * 2000);
+        }
+        else
+        {
+            rigidBody.AddRelativeForce(dTranslation * Time.deltaTime * 2000);
+        }
+        rigidBody.AddRelativeTorque(dRotation * Time.deltaTime * 15);
     }
 
     //Method that will fire a bullet.

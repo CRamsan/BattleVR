@@ -6,9 +6,10 @@ using System;
 public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
 
     public GameObject cameraGameObject;
-    public GameObject canvasGameObject;
+    public GameObject canvasPrefab;
 
     private GameLevelSceneManager sceneManager;
+    private GameObject canvasGameObject;
     private bool isPause;
 
     // Use this for initialization
@@ -16,15 +17,11 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         Init();
         if (isLocalPlayer)
         {
-            sceneManager = canvasGameObject.GetComponent<GameLevelSceneManager>();
-            sceneManager.SetDelegate(this);
-            sceneManager.HideAllMenus();
             isPause = false;
         }
         else
         {
             GameObject.Destroy(cameraGameObject);
-            GameObject.Destroy(canvasGameObject);
         }
     }
 	
@@ -36,6 +33,12 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         }
 
         bool pausePressed = InputManager.WasActionPressed(InputManager.CONTROLLER_ACTION.PAUSE);
+
+        if (canvasGameObject != null)
+        {
+            canvasGameObject.transform.position = transform.TransformPoint(new Vector3(0, 1, 5));
+            canvasGameObject.transform.rotation = transform.rotation;
+        }
 
         if (pausePressed)
         {
@@ -63,15 +66,8 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         Vector3 leftStickVector = new Vector3(dStrafe, 0, dForward);
         Vector3 rotationStickVector = new Vector3(dLookUp, dLookSide, dRotate);
 
-        if (rotationStickVector.magnitude >= 0.2)
-        {
-            rigidBody.AddRelativeTorque(rotationStickVector * Time.deltaTime * 15);
-        }
-
-        if (leftStickVector.magnitude >= 0.2)
-        {
-            rigidBody.AddRelativeForce(leftStickVector * Time.deltaTime * 2000);
-        }
+        HandleInput(leftStickVector.magnitude >= 0.2 ? leftStickVector : Vector3.zero,
+                    rotationStickVector.magnitude >= 0.2 ? rotationStickVector : Vector3.zero);
     }
 
     private void TogglePauseMenu()
@@ -79,9 +75,14 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         if (isPause)
         {
             sceneManager.HideAllMenus();
+            Destroy(canvasGameObject);
+            canvasGameObject = null;
         }
         else
         {
+            canvasGameObject = Instantiate(canvasPrefab);
+            sceneManager = canvasGameObject.GetComponent<GameLevelSceneManager>();
+            sceneManager.SetDelegate(this);
             sceneManager.DisplayPauseMenu();
         }
         isPause = !isPause;

@@ -99,7 +99,6 @@ public class AIPlayerController : ShipController{
         Vector3 leftStickVector = new Vector3(0, 0, dForward);
         Vector3 rotationStickVector = new Vector3(dLookUp, dLookSide, 0f);
 
-        rigidBody.AddRelativeTorque(rotationStickVector * Time.deltaTime * 15);
-        rigidBody.AddRelativeForce(leftStickVector * Time.deltaTime * 2000);
+        HandleInput(leftStickVector, rotationStickVector);
     }
 }
