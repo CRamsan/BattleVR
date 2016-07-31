@@ -8,7 +8,7 @@ Battle VR Project
 This project has been tested with Unity 5.3, MonoDevelop and Vistual Studio Community 2015 under Windows 10.
 
 - Clone the project
-```git clone URL```
+```git clone https://github.com/CRamsan/BattleVR.git```
 - Now download the external assets needed:
 	- In the AssetStore download Curved UI
 
