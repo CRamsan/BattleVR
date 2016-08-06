@@ -5,15 +5,4 @@ Battle VR Project
 
 ##Prerequisites
 
-This project has been tested with Unity 5.3, MonoDevelop and Vistual Studio Community 2015 under Windows 10.
-
-- Clone the project
-```git clone https://github.com/CRamsan/BattleVR.git```
-- Now download the external assets needed:
-	- In the AssetStore download Curved UI
-
->**Note:**
-> CurvedUI requires a license for it to be used.
-
-##Current Status
-So far there is a main menu and an almost empty first level. 
+BattleVR is a project to develop a 6-degrees of freedom space combat game. Currently it is still in developments with little to show, for more information please visit the [Wiki](https://github.com/CRamsan/BattleVR/wiki).
