@@ -26,7 +26,7 @@ public class GameLevelSceneManager : MonoBehaviour {
         Assert.IsNotNull(sceneManagerDelegate);
         if (sceneManagerDelegate != null)
         {
-            sceneManagerDelegate.OnMenuDismissed();
+            sceneManagerDelegate.OnPauseMenuDismissed();
         }
     }
 
@@ -54,6 +54,47 @@ public class GameLevelSceneManager : MonoBehaviour {
         else
         {
             networkManager.StopClient();
+        }
+    }
+
+    public void DisplayShipSelectMenu()
+    {
+        uiManager.SetActiveMenu(GameLevelUIManager.MENUS.SHIPSELECT);
+    }
+
+    public void SelectFighterShip()
+    {
+        Assert.IsNotNull(sceneManagerDelegate);
+        if (sceneManagerDelegate != null)
+        {
+            sceneManagerDelegate.OnShipConfigMenuDismissed();
+        }
+    }
+
+    public void SelectFrigateShip()
+    {
+        Assert.IsNotNull(sceneManagerDelegate);
+        if (sceneManagerDelegate != null)
+        {
+            sceneManagerDelegate.OnShipConfigMenuDismissed();
+        }
+    }
+
+    public void SelectTeamRed()
+    {
+        Assert.IsNotNull(sceneManagerDelegate);
+        if (sceneManagerDelegate != null)
+        {
+            sceneManagerDelegate.OnTeamSelectMenuDismissed(LevelSceneManager.TEAMTAG.RED);
+        }
+    }
+
+    public void SelectTeamBlue()
+    {
+        Assert.IsNotNull(sceneManagerDelegate);
+        if (sceneManagerDelegate != null)
+        {
+            sceneManagerDelegate.OnTeamSelectMenuDismissed(LevelSceneManager.TEAMTAG.BLUE);
         }
     }
 }

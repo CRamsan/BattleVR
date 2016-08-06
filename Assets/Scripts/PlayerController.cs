@@ -6,14 +6,17 @@ using System;
 public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
 
     public GameObject cameraGameObject;
-    public GameObject canvasPrefab;
+    public GameObject pauseCanvasPrefab;
+    public GameObject shipConfigCanvasPrefab;
 
+    private new Collider collider;
     private GameLevelSceneManager sceneManager;
     private GameObject canvasGameObject;
     private bool isPause;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         Init();
         if (isLocalPlayer)
         {
@@ -23,6 +26,9 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         {
             GameObject.Destroy(cameraGameObject);
         }
+        collider = GetComponent<SphereCollider>();
+
+        DisplayShipConfigMenu();
     }
 	
 	// Update is called once per frame
@@ -70,6 +76,30 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
                     rotationStickVector.magnitude >= 0.2 ? rotationStickVector : Vector3.zero);
     }
 
+    private void DisplayShipConfigMenu()
+    {
+        collider.enabled = false;
+        gameRenderer.enabled = false;
+        canvasGameObject = Instantiate(shipConfigCanvasPrefab);
+        sceneManager = canvasGameObject.GetComponent<GameLevelSceneManager>();
+        sceneManager.SetDelegate(this);
+        sceneManager.DisplayShipSelectMenu();
+    }
+
+    private void DismissShipConfigMenu()
+    {
+        sceneManager.HideAllMenus();
+        Destroy(canvasGameObject);
+        canvasGameObject = null;
+        collider.enabled = true;
+        gameRenderer.enabled = true;
+    }
+
+    public void OnShipConfigMenuDismissed()
+    {
+        DismissShipConfigMenu();
+    }
+
     private void TogglePauseMenu()
     {
         if (isPause)
@@ -80,7 +110,7 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         }
         else
         {
-            canvasGameObject = Instantiate(canvasPrefab);
+            canvasGameObject = Instantiate(pauseCanvasPrefab);
             sceneManager = canvasGameObject.GetComponent<GameLevelSceneManager>();
             sceneManager.SetDelegate(this);
             sceneManager.DisplayPauseMenu();
@@ -88,9 +118,14 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         isPause = !isPause;
     }
 
-    public void OnMenuDismissed()
+    public void OnPauseMenuDismissed()
     {
         sceneManager.HideAllMenus();
         isPause = false;
+    }
+
+    public void OnTeamSelectMenuDismissed(LevelSceneManager.TEAMTAG teamTag)
+    {
+        setTeam(teamTag);
     }
 }

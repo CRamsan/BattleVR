@@ -17,6 +17,9 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
     public GameObject projectilePrefab;
     public Vector3[] bulletSpawn;
 
+    public Material teamRed;
+    public Material teamBlue;
+
     protected GunController gunController;
     protected float health;
     protected int bulletSpawnIndex;
@@ -24,6 +27,8 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
 
     protected Color tempColor;
     protected bool isAI;
+    protected LevelSceneManager.TEAMTAG teamTag;
+
     public ShipType type;
 
     private Vector3 throttle;
@@ -45,6 +50,19 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
         type = ShipType.FIGHTER;
     }
 
+    public void setTeam(LevelSceneManager.TEAMTAG teamTag)
+    {
+        this.teamTag = teamTag;
+        if (this.teamTag == LevelSceneManager.TEAMTAG.RED)
+        {
+            GetComponentInChildren<MeshRenderer>().material = teamRed;
+        }
+        else if (this.teamTag == LevelSceneManager.TEAMTAG.BLUE)
+        {
+            GetComponentInChildren<MeshRenderer>().material = teamBlue;
+        }
+    }
+
     protected void HandleInput(Vector3 dTranslation, Vector3 dRotation)
     {
         if (type == ShipType.FIGHTER)
@@ -52,7 +70,7 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
             float throttleZ = throttle.z + dTranslation.z;
 
             throttle.z = throttleZ > 0 ? Mathf.Min(throttleZ, 1f) : 0;
-            rigidBody.AddRelativeForce(throttle * Time.deltaTime * 2000);
+            rigidBody.AddRelativeForce(throttle * Time.deltaTime * 4000);
         }
         else
         {

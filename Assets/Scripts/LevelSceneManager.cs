@@ -5,7 +5,10 @@ using System.Collections;
 
 public class LevelSceneManager : MonoBehaviour {
 
-    public GameObject aiPrefab;
+    public GameObject capitalShipBlue;
+    public GameObject capitalShipRed;
+
+    public enum TEAMTAG { RED, BLUE };
 
     private ExtendedNetworkManager networkManager;
     private NetworkDiscovery networkDiscovery;
@@ -15,36 +18,6 @@ public class LevelSceneManager : MonoBehaviour {
         networkManager = (ExtendedNetworkManager)NetworkManager.singleton;
         networkDiscovery = networkManager.networkDiscovery;
         SetGameVisibility(true);
-
-        /*for (int i = 0; i < 6; i++)
-        {
-            GameObject aiPlayer = Instantiate(aiPrefab);
-            //aiPlayer.transform.position = new Vector3(Random.Range(-50f, 50f), Random.Range(-50f, 50f), Random.Range(-50f, 50f));
-            switch (i)
-            {
-                case 0:
-                    aiPlayer.transform.position = new Vector3(100, 0, 0);
-                    break;
-                case 1:
-                    aiPlayer.transform.position = new Vector3(0, 100, 0);
-                    break;
-                case 2:
-                    aiPlayer.transform.position = new Vector3(0, 0, 100);
-                    break;
-                case 3:
-                    aiPlayer.transform.position = new Vector3(-100, 0, 0);
-                    break;
-                case 4:
-                    aiPlayer.transform.position = new Vector3(0, -100, 0);
-                    break;
-                case 5:
-                    aiPlayer.transform.position = new Vector3(0, 0, -100);
-                    break;
-                default:
-                    break;
-            }
-            NetworkServer.Spawn(aiPlayer);
-        }*/
 	}
 
     void OnDestroy()

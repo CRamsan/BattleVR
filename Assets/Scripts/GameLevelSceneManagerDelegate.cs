@@ -5,5 +5,7 @@ using System.Text;
 
 public interface GameLevelSceneManagerDelegate
 {
-    void OnMenuDismissed();
+    void OnPauseMenuDismissed();
+    void OnShipConfigMenuDismissed();
+    void OnTeamSelectMenuDismissed(LevelSceneManager.TEAMTAG teamTag);
 }

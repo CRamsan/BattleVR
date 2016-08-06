@@ -37,19 +37,19 @@ public class AIPlayerController : ShipController{
 
         counter += Time.deltaTime;
 
-        string enemyTag;
-        if (this.tag == "TeamRed")
+        LevelSceneManager.TEAMTAG enemyTag;
+        if (this.teamTag == LevelSceneManager.TEAMTAG.RED)
         {
-            enemyTag = "TeamWhite";
+            enemyTag = LevelSceneManager.TEAMTAG.BLUE;
         }
         else
         {
-            enemyTag = "TeamRed";
+            enemyTag = LevelSceneManager.TEAMTAG.RED;
         }
 
         if (counter > 5)
         {
-            targetObject = GameObject.FindGameObjectWithTag(enemyTag);
+            //targetObject = GameObject.FindGameObjectWithTag(enemyTag);
             counter = 0;
         }
 
