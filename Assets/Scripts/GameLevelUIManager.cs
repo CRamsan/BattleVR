@@ -15,6 +15,8 @@ public class GameLevelUIManager : MonoBehaviour {
     public GameObject TeamSelectMenu;
     public Vector3 canvasPosition;
 
+    public GameLevelUIManagerDelegate uiManagerDelegate;
+
     private bool isInitialized = false;
 
     private void Setup()
@@ -22,10 +24,10 @@ public class GameLevelUIManager : MonoBehaviour {
         Assert.IsFalse(isInitialized);
         isInitialized = true;
 
-        PauseGameMenu.transform.localPosition = canvasPosition;
-        ConfirmationMenu.transform.localPosition = canvasPosition;
-        ShipSelectMenu.transform.localPosition = canvasPosition;
-        TeamSelectMenu.transform.localPosition = canvasPosition;
+        if (PauseGameMenu) PauseGameMenu.transform.localPosition = canvasPosition;
+        if (ConfirmationMenu) ConfirmationMenu.transform.localPosition = canvasPosition;
+        if (ShipSelectMenu) ShipSelectMenu.transform.localPosition = canvasPosition;
+        if (TeamSelectMenu) TeamSelectMenu.transform.localPosition = canvasPosition;
     }
 
     // Use this for initialization
@@ -38,7 +40,71 @@ public class GameLevelUIManager : MonoBehaviour {
     {
         if (PauseGameMenu) PauseGameMenu.SetActive(selectedMenu == MENUS.PAUSEMENU);
         if (ConfirmationMenu) ConfirmationMenu.SetActive(selectedMenu == MENUS.CONFIRMATION);
-        if (ShipSelectMenu)  ShipSelectMenu.SetActive(selectedMenu == MENUS.SHIPSELECT);
+        if (ShipSelectMenu) ShipSelectMenu.SetActive(selectedMenu == MENUS.SHIPSELECT);
         if (TeamSelectMenu) TeamSelectMenu.SetActive(selectedMenu == MENUS.TEAMSELECT);
+    }
+
+    public void PauseMenuResume()
+    {
+        if (uiManagerDelegate != null)
+        {
+            uiManagerDelegate.OnPauseMenuResumeSelected();
+        }
+    }
+
+    public void PauseMenuQuit()
+    {
+        if (uiManagerDelegate != null)
+        {
+            uiManagerDelegate.OnPauseMenuQuitSelected();
+        }
+    }
+
+    public void PauseMenuConfirmBack()
+    {
+        if (uiManagerDelegate != null)
+        {
+            uiManagerDelegate.OnPauseMenuConfirmBackSelected();
+        }
+    }
+
+    public void PauseMenuConfirmQuit()
+    {
+        if (uiManagerDelegate != null)
+        {
+            uiManagerDelegate.OnPauseMenuConfirmQuitSelected();
+        }
+    }
+
+    public void TeamSelectMenuBlue()
+    {
+        if (uiManagerDelegate != null)
+        {
+            uiManagerDelegate.OnTeamSelectMenuBlueSelected();
+        }
+    }
+
+    public void TeamSelectMenuRed()
+    {
+        if (uiManagerDelegate != null)
+        {
+            uiManagerDelegate.OnTeamSelectMenuRedSelected();
+        }
+    }
+
+    public void ShipConfigMenuFigther()
+    {
+        if (uiManagerDelegate != null)
+        {
+            uiManagerDelegate.OnShipConfigMenuFigtherSelected();
+        }
+    }
+
+    public void ShipConfigMenuFrigate()
+    {
+        if (uiManagerDelegate != null)
+        {
+            uiManagerDelegate.OnShipConfigMenuFrigateSelected();
+        }
     }
 }

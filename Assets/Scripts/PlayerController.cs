@@ -13,6 +13,7 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     private GameLevelSceneManager sceneManager;
     private GameObject canvasGameObject;
     private bool isPause;
+    private bool isTeamSelected;
 
     // Use this for initialization
     void Start()
@@ -21,12 +22,14 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         if (isLocalPlayer)
         {
             isPause = false;
+            isTeamSelected = false;
         }
         else
         {
             GameObject.Destroy(cameraGameObject);
         }
         collider = GetComponent<SphereCollider>();
+        sceneManager = GameLevelSceneManager.instance;
 
         DisplayShipConfigMenu();
     }
@@ -81,9 +84,16 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         collider.enabled = false;
         gameRenderer.enabled = false;
         canvasGameObject = Instantiate(shipConfigCanvasPrefab);
-        sceneManager = canvasGameObject.GetComponent<GameLevelSceneManager>();
+        sceneManager.SetUIManager(canvasGameObject.GetComponent<GameLevelUIManager>());
         sceneManager.SetDelegate(this);
-        sceneManager.DisplayShipSelectMenu();
+        if (!isTeamSelected)
+        {
+            sceneManager.DisplayTeamSelectMenu();
+        }
+        else
+        {
+            sceneManager.DisplayShipSelectMenu();
+        }
     }
 
     private void DismissShipConfigMenu()
@@ -98,6 +108,7 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     public void OnShipConfigMenuDismissed()
     {
         DismissShipConfigMenu();
+        transform.position = Vector3.zero;
     }
 
     private void TogglePauseMenu()
@@ -111,7 +122,7 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         else
         {
             canvasGameObject = Instantiate(pauseCanvasPrefab);
-            sceneManager = canvasGameObject.GetComponent<GameLevelSceneManager>();
+            sceneManager.SetUIManager(canvasGameObject.GetComponent<GameLevelUIManager>());
             sceneManager.SetDelegate(this);
             sceneManager.DisplayPauseMenu();
         }
@@ -127,5 +138,7 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     public void OnTeamSelectMenuDismissed(LevelSceneManager.TEAMTAG teamTag)
     {
         setTeam(teamTag);
+        isTeamSelected = true;
+        sceneManager.DisplayShipSelectMenu();
     }
 }
