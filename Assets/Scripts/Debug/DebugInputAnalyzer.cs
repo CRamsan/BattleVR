@@ -1,15 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DebugInputAnalyzer : MonoBehaviour {
+public class DebugInputAnalyzer : MonoBehaviour
+{
 
     private string buttonState;
     private string axisState;
 
     // Use this for initialization
-    void Start () {
-	
-	}
+    void Start()
+    {
+
+    }
 
     void OnGUI()
     {
@@ -18,7 +20,8 @@ public class DebugInputAnalyzer : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update () {
+    void Update()
+    {
         buttonState = "";
         for (int i = 0; i <= 20; i++)
         {

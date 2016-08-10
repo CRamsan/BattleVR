@@ -3,7 +3,8 @@
 /// <summary>
 /// This controller will provide the logic for handling a projectile. 
 /// </summary>
-public class ProjectileController : MonoBehaviour {
+public class ProjectileController : MonoBehaviour
+{
 
     public float speed;
 

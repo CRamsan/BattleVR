@@ -7,9 +7,11 @@ using System.Collections;
 /// This controller is the base controller for any ship, either AI or human controlled. It is independant from the
 /// input, but it will handle the phisycs and weapon controll.
 /// </summary>
-public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageReceiver{
+public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageReceiver
+{
 
-    public enum ShipType {
+    public enum ShipType
+    {
         FIGHTER,
         FRIGATE,
         BATTLECRUISER
@@ -18,7 +20,7 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
     // This should be moved out of here and into the GunController
     public GameObject projectilePrefab;
 
-    protected LevelSceneManager.TEAMTAG teamTag;
+    protected GameLevelSceneManager.TEAMTAG teamTag;
     protected GunController gunController;
     protected GameObject rendererGameObject;
     protected Renderer gameRenderer;
@@ -50,14 +52,14 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
     }
 
     // Set the team for this ship and apply any logic needed
-    public void setTeam(LevelSceneManager.TEAMTAG teamTag)
+    public void setTeam(GameLevelSceneManager.TEAMTAG teamTag)
     {
         this.teamTag = teamTag;
-        if (this.teamTag == LevelSceneManager.TEAMTAG.RED)
+        if (this.teamTag == GameLevelSceneManager.TEAMTAG.RED)
         {
             //GetComponentInChildren<MeshRenderer>().material = teamRed;
         }
-        else if (this.teamTag == LevelSceneManager.TEAMTAG.BLUE)
+        else if (this.teamTag == GameLevelSceneManager.TEAMTAG.BLUE)
         {
             //GetComponentInChildren<MeshRenderer>().material = teamBlue;
         }

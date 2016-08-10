@@ -3,7 +3,8 @@ using UnityEngine.Assertions;
 
 /// <summary>
 /// </summary>
-public class GunController : MonoBehaviour {
+public class GunController : MonoBehaviour
+{
 
     public enum GUN_MODE
     {
@@ -18,16 +19,17 @@ public class GunController : MonoBehaviour {
 
     private GUN_MODE firing = GUN_MODE.IDLE;
     private float counter = 0f;
-	private int currentMagsize;
+    private int currentMagsize;
     private int currentReserveSize;
 
-	void Start(){
-		currentMagsize = defaultMagSize;
+    void Start()
+    {
+        currentMagsize = defaultMagSize;
         currentReserveSize = defaultReserveSize;
-	}
+    }
 
-	// Update is called once per frame
-	void Update ()
+    // Update is called once per frame
+    void Update()
     {
         counter += Time.deltaTime;
         if (firing == GUN_MODE.FIRING)
@@ -50,8 +52,9 @@ public class GunController : MonoBehaviour {
         }
     }
 
-	// This method is equivalent to have the trigger pressed.
-	public void PressTriger() {
+    // This method is equivalent to have the trigger pressed.
+    public void PressTriger()
+    {
 #if UNITY_EDITOR
         Assert.IsNotNull(gunControllerDelegate);
         if (gunControllerDelegate == null)
@@ -59,24 +62,31 @@ public class GunController : MonoBehaviour {
             return;
         }
 #endif
-        if (firing == GUN_MODE.IDLE) {
-			if(currentMagsize > 0 ){
+        if (firing == GUN_MODE.IDLE)
+        {
+            if (currentMagsize > 0)
+            {
                 gunControllerDelegate.onShootProjectile();
-				firing = GUN_MODE.FIRING;
-				currentMagsize--;
-			} else {
+                firing = GUN_MODE.FIRING;
+                currentMagsize--;
+            }
+            else
+            {
                 gunControllerDelegate.onStartReloading();
                 firing = GUN_MODE.RELOADING;
             }
-			counter = 0f;
-		} else {
-            if (firing != GUN_MODE.IDLE){
-				// We can use this spot to play some sound, you
-				// are pressing the trigger but the gun is doing 
-				// something right now, maybe firing or reloading
-			}
-		}
-	}
+            counter = 0f;
+        }
+        else
+        {
+            if (firing != GUN_MODE.IDLE)
+            {
+                // We can use this spot to play some sound, you
+                // are pressing the trigger but the gun is doing 
+                // something right now, maybe firing or reloading
+            }
+        }
+    }
 
     /// <summary>
     /// Set the values to that of the provided WeaponController.

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿/// <summary>
+/// This delegate declares all the methods that will be called after selecting any of the UI elements.
+/// </summary>
 public interface GameLevelUIManagerDelegate
 {
     // Pause menu delegate methods

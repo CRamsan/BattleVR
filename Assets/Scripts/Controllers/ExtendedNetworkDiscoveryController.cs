@@ -5,7 +5,8 @@ using UnityEngine.Networking;
 /// This manager will recieve notifications when a new game is discovered in the local network and 
 /// then the OnReceivedBroadcast method will be called in the discoveryDelegate.
 /// </summary>
-public class ExtendedNetworkDiscoveryController : NetworkDiscovery {
+public class ExtendedNetworkDiscoveryController : NetworkDiscovery
+{
 
     /// <summary>
     /// Public delegate that will be called whenever OnReceivedBroadcast is called.

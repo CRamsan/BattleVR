@@ -1,29 +1,37 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
-using System.Collections;
 
-public class MainMenuSceneManager : MonoBehaviour {
-
+/// <summary>
+/// This manager will provide high level UI and network actions for the MainMenu scene.
+/// </summary>
+public class MainMenuSceneManager : MonoBehaviour
+{
     public MainMenuUIManager uiManager;
 
     private NetworkManager networkManager;
     private bool inJoinFlow = false;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         networkManager = NetworkManager.singleton;
     }
 
     // Update is called once per frame
-    void Update () {
-	
-	}
+    void Update()
+    {
 
-    public void DisplayMainMenu() {
+    }
+
+    //Methods that will be called by the buttons in the MainMenu
+
+    public void DisplayMainMenu()
+    {
         uiManager.SetActiveMenu(MainMenuUIManager.MENUS.MAINMENU);
     }
 
-    public void DisplayLocalGame() {
+    public void DisplayLocalGame()
+    {
         uiManager.SetActiveMenu(MainMenuUIManager.MENUS.LOCALGAMES);
     }
 
@@ -60,7 +68,8 @@ public class MainMenuSceneManager : MonoBehaviour {
 
     public void DisplayCredits() { }
 
-    public void ConfirmStartGame() {
+    public void ConfirmStartGame()
+    {
         uiManager.SetActiveMenu(MainMenuUIManager.MENUS.NONE);
         if (inJoinFlow)
         {

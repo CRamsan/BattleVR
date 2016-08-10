@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SkyboxManager : MonoBehaviour {
+public class SkyboxManager : MonoBehaviour
+{
 
     public Material[] skyBoxList;
     private int selectedIndex;

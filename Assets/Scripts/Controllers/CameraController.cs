@@ -4,22 +4,25 @@ using UnityEngine.VR;
 /// <summary>
 /// This controller provides functionality for the camera in both VR and non-VR enviroments. 
 /// </summary>
-public class CameraController : MonoBehaviour {
+public class CameraController : MonoBehaviour
+{
 
     public float reticleMaxDistance = 20f;
     public GameObject reticlePrefab;
 
     private GameObject reticleOject;
-    private RaycastHit hit; 
+    private RaycastHit hit;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         reticleOject = Instantiate(reticlePrefab);
         reticleOject.transform.SetParent(transform);
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         Vector3 originPosition;
 
         if (VRSettings.enabled)

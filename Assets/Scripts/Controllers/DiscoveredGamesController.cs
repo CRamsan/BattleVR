@@ -8,7 +8,8 @@ using UnityEngine.UI;
 /// This controller implements the NetworkDiscoveryDelegate and can be set as the delegate for the ExtendedNetworkDiscoveryController.
 /// When the ExtendedNetworkDiscoveryController find a new game then OnReceivedBroadcast will be called.
 /// </summary>
-public class DiscoveredGamesController : MonoBehaviour, NetworkDiscoveryDelegate {
+public class DiscoveredGamesController : MonoBehaviour, NetworkDiscoveryDelegate
+{
 
     public GameObject uiLayout;
     public GameObject buttonPrefab;
@@ -29,14 +30,16 @@ public class DiscoveredGamesController : MonoBehaviour, NetworkDiscoveryDelegate
     }
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
 
     }
 
     // Update is called once per frame
-    void Update () {
-	
-	}
+    void Update()
+    {
+
+    }
 
     void Stop()
     {
@@ -124,9 +127,10 @@ public class DiscoveredGamesController : MonoBehaviour, NetworkDiscoveryDelegate
                 GameObject roomButton = Instantiate(buttonPrefab);
                 roomButton.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
                 roomButton.GetComponentsInChildren<Text>()[0].text = address;
-                roomButton.GetComponent<Button>().onClick.AddListener(() => {
+                roomButton.GetComponent<Button>().onClick.AddListener(() =>
+                {
                     SetNetworkManagerAddress(address);
-                    });
+                });
                 roomButton.transform.SetParent(uiLayout.transform);
             }
         }

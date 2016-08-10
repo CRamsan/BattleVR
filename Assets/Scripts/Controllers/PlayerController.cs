@@ -116,7 +116,7 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     /// This method will be called when the user selects a team. Here the player should be configured to match the team settings.
     /// </summary>
     /// <param name="teamTag"></param>
-    public void OnTeamSelectMenuDismissed(LevelSceneManager.TEAMTAG teamTag)
+    public void OnTeamSelectMenuTeamSelected(GameLevelSceneManager.TEAMTAG teamTag)
     {
         setTeam(teamTag);
         isTeamSelected = true;
@@ -127,7 +127,7 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     /// This method will be called when the user selected a ship from the UI. This method will set the variables 
     /// and spawn the player in the correct position.
     /// </summary>
-    public void OnShipConfigMenuDismissed()
+    public void OnShipConfigMenuShipSelected()
     {
         DismissShipConfigMenu();
         transform.position = Vector3.zero;
@@ -157,7 +157,7 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     /// <summary>
     /// This method will be called when the player selected the "Resume" 
     /// </summary>
-    public void OnPauseMenuDismissed()
+    public void OnPauseMenuResumeSelected()
     {
         sceneManager.HideAllMenus();
         isPause = false;

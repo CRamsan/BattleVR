@@ -1,24 +1,27 @@
 ﻿using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Networking;
-using System.Collections;
 
+/// <summary>
+/// This manager will take care of several kinds of UI and network related code. There should only be one instance of
+/// this script for each Game Level Scene. 
+/// </summary>
 public class GameLevelSceneManager : MonoBehaviour, GameLevelUIManagerDelegate
 {
+    public enum TEAMTAG { RED, BLUE };
 
+    //This should be a reference to the ONLY instance of this scripts
     public static GameLevelSceneManager instance;
-
-    private GameLevelUIManager uiManager;
-    private ExtendedNetworkManager networkManager;
-    private GameLevelSceneManagerDelegate sceneManagerDelegate;
 
     public GameObject capitalShipBlue;
     public GameObject capitalShipRed;
 
-    public enum TEAMTAG { RED, BLUE };
-
+    private GameLevelUIManager uiManager;
+    private ExtendedNetworkManager networkManager;
+    private GameLevelSceneManagerDelegate sceneManagerDelegate;
     private NetworkDiscovery networkDiscovery;
 
+    //
     public void SetUIManager(GameLevelUIManager uiManager)
     {
         Assert.IsNotNull(uiManager);
@@ -85,7 +88,7 @@ public class GameLevelSceneManager : MonoBehaviour, GameLevelUIManagerDelegate
     {
         if (sceneManagerDelegate != null)
         {
-            sceneManagerDelegate.OnPauseMenuDismissed();
+            sceneManagerDelegate.OnPauseMenuResumeSelected();
         }
     }
 
@@ -115,7 +118,7 @@ public class GameLevelSceneManager : MonoBehaviour, GameLevelUIManagerDelegate
     {
         if (sceneManagerDelegate != null)
         {
-            sceneManagerDelegate.OnTeamSelectMenuDismissed(LevelSceneManager.TEAMTAG.BLUE);
+            sceneManagerDelegate.OnTeamSelectMenuTeamSelected(GameLevelSceneManager.TEAMTAG.BLUE);
         }
     }
 
@@ -123,7 +126,7 @@ public class GameLevelSceneManager : MonoBehaviour, GameLevelUIManagerDelegate
     {
         if (sceneManagerDelegate != null)
         {
-            sceneManagerDelegate.OnTeamSelectMenuDismissed(LevelSceneManager.TEAMTAG.RED);
+            sceneManagerDelegate.OnTeamSelectMenuTeamSelected(GameLevelSceneManager.TEAMTAG.RED);
         }
     }
 
@@ -131,7 +134,7 @@ public class GameLevelSceneManager : MonoBehaviour, GameLevelUIManagerDelegate
     {
         if (sceneManagerDelegate != null)
         {
-            sceneManagerDelegate.OnShipConfigMenuDismissed();
+            sceneManagerDelegate.OnShipConfigMenuShipSelected();
         }
     }
 
@@ -139,7 +142,7 @@ public class GameLevelSceneManager : MonoBehaviour, GameLevelUIManagerDelegate
     {
         if (sceneManagerDelegate != null)
         {
-            sceneManagerDelegate.OnShipConfigMenuDismissed();
+            sceneManagerDelegate.OnShipConfigMenuShipSelected();
         }
     }
 }

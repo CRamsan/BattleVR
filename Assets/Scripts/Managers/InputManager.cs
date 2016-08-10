@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
 
+/// <summary>
+/// This script provides an abstraction layer from the in-game actions(turn, move forward, shoot, etc) into
+/// platform-specific inputs to be read by the native Unity APIs.
+/// </summary>
 public class InputManager : MonoBehaviour
 {
     public enum CONTROLLER_ACTION
@@ -15,6 +18,12 @@ public class InputManager : MonoBehaviour
         DOWN, PRESSED, UP
     }
 
+    /// <summary>
+    /// Returns the analog value of the requested action. If the action belongs to a
+    /// button then the return value will be -1, 0 or 1.
+    /// </summary>
+    /// <param name="action"></param>
+    /// <returns></returns>
     public static float GetAxis(CONTROLLER_ACTION action)
     {
         float state = 0.0f;
@@ -64,7 +73,7 @@ public class InputManager : MonoBehaviour
 #endif
                 break;
             case CONTROLLER_ACTION.BOOST:
-                state = Input.GetButtonDown("CONTROLLER_BUTTON_0") ? 1f : 0f ;
+                state = Input.GetButtonDown("CONTROLLER_BUTTON_0") ? 1f : 0f;
                 break;
             case CONTROLLER_ACTION.SELECT:
                 state = Input.GetButtonDown("CONTROLLER_BUTTON_0") ? 1f : 0f;
@@ -141,16 +150,31 @@ public class InputManager : MonoBehaviour
         return result;
     }
 
+    /// <summary>
+    /// Detect if the action was trigered during the last frame
+    /// </summary>
+    /// <param name="action"></param>
+    /// <returns></returns>
     public static bool WasActionPressed(CONTROLLER_ACTION action)
     {
         return ActionHandler(action, CONTROLLER_ACTION_EVENT.DOWN);
     }
 
+    /// <summary>
+    /// Detect if the action is currently being pressed
+    /// </summary>
+    /// <param name="action"></param>
+    /// <returns></returns>
     public static bool IsActionPressed(CONTROLLER_ACTION action)
     {
         return ActionHandler(action, CONTROLLER_ACTION_EVENT.PRESSED);
     }
 
+    /// <summary>
+    /// Detect if the action was released during the last frame
+    /// </summary>
+    /// <param name="action"></param>
+    /// <returns></returns>
     public static bool WasActionReleased(CONTROLLER_ACTION action)
     {
         return ActionHandler(action, CONTROLLER_ACTION_EVENT.UP);

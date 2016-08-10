@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.Assertions;
-using System.Collections;
 
-public class GameLevelUIManager : MonoBehaviour {
+/// <summary>
+/// Manager class to handle the UI during in-game. This script needs to have a uiManagerDelegate to delegate the actions.
+/// </summary>
+public class GameLevelUIManager : MonoBehaviour
+{
 
     public enum MENUS
     {

@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.Assertions;
 
-public class MainMenuUIManager : MonoBehaviour {
-
+/// <summary>
+/// Manager class to handle the Main Menu UI.
+/// </summary>
+public class MainMenuUIManager : MonoBehaviour
+{
     public enum MENUS
     {
         MAINMENU, LOCALGAMES, SELECTLEVEL, CONFIRMATION, NONE
@@ -15,7 +17,7 @@ public class MainMenuUIManager : MonoBehaviour {
     public GameObject ConfirmationMenu;
 
     private bool isInitialized = false;
-    
+
     private void Setup()
     {
         Assert.IsFalse(isInitialized);
@@ -31,17 +33,11 @@ public class MainMenuUIManager : MonoBehaviour {
         ConfirmationMenu.transform.position = Vector3.zero;
     }
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start()
     {
         Setup();
     }
-	
-	// Update is called once per frame
-	void Update ()
-    {
-	
-	}
 
     public void SetActiveMenu(MENUS selectedMenu)
     {

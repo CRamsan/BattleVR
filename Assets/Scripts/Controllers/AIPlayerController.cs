@@ -6,7 +6,8 @@ using System;
 /// <summary>
 /// This controller will provide the behaviour for AI controlled agents.
 /// </summary>
-public class AIPlayerController : ShipController{
+public class AIPlayerController : ShipController
+{
 
     public GameObject targetObject;
     public float safeDistance;
@@ -15,7 +16,8 @@ public class AIPlayerController : ShipController{
     private GameObject targetReticle;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         Init();
 
         targetReticle = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -27,7 +29,8 @@ public class AIPlayerController : ShipController{
     }
 
     // Update is called once per frame
-    void Update () {
+    void Update()
+    {
         if (!isServer)
         {
             return;
@@ -62,7 +65,7 @@ public class AIPlayerController : ShipController{
         float targetDistance = (targetPosition - transform.position).magnitude;
         Debug.DrawLine(transform.position, (transform.position + (targetDirection * targetDistance)), Color.cyan);
 
-        if (Mathf.Sqrt((dLookSide*dLookSide) + (dLookUp*dLookSide)) > dForward ||
+        if (Mathf.Sqrt((dLookSide * dLookSide) + (dLookUp * dLookSide)) > dForward ||
             (targetDistance < safeDistance))
         { dForward /= 1 + (safeDistance - targetDistance); }
 

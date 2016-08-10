@@ -5,7 +5,8 @@ using System.Collections;
 /// <summary>
 /// This controller provides logic to spawn AI ships after a specific time interval.
 /// </summary>
-public class ShipSpawnController : MonoBehaviour {
+public class ShipSpawnController : MonoBehaviour
+{
 
     public GameObject aiShipPrefab;
     public float timeWait = 10;
@@ -18,12 +19,12 @@ public class ShipSpawnController : MonoBehaviour {
     {
         StartSpawning();
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update()
     {
-	
-	}
+
+    }
 
     /// <summary>
     /// Start the coroutine to spawn AI ships
