@@ -34,14 +34,15 @@ public class CameraController : MonoBehaviour
             originPosition = transform.localPosition;
         }
 
+        Ray ray3D = new Ray(originPosition, transform.TransformDirection(Vector3.forward));
+        bool reticleHit = Physics.Raycast(ray3D, out hit, reticleMaxDistance);
 
-        if (Physics.Raycast(Vector3.zero, Vector3.forward, out hit, reticleMaxDistance))
-        {
-            reticleOject.transform.localPosition = (Vector3.forward * hit.distance);
-        }
-        else
-        {
-            reticleOject.transform.localPosition = (Vector3.forward * reticleMaxDistance);
-        }
+        float reticleDistance = reticleHit ? hit.distance : reticleMaxDistance;
+        reticleOject.transform.position = transform.TransformPoint(new Vector3(0, 0, reticleDistance));
+
+#if UNITY_EDITOR
+        if (reticleHit)
+            Debug.DrawLine(originPosition, reticleOject.transform.position, Color.cyan);
+#endif
     }
 }

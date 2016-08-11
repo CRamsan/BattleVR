@@ -102,7 +102,8 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
     private void DoFire()
     {
         Quaternion bulletOrientation = transform.rotation;
-        GameObject bullet = (GameObject)Instantiate(projectilePrefab, Vector3.forward * 2, bulletOrientation);
+        Vector3 bulletOrigin = transform.TransformPoint(Vector3.forward * 2);
+        GameObject bullet = (GameObject)Instantiate(projectilePrefab, bulletOrigin, bulletOrientation);
         bullet.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         Destroy(bullet, 1.5f);
     }
