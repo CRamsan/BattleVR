@@ -27,11 +27,11 @@ public class CameraController : MonoBehaviour
 
         if (VRSettings.enabled)
         {
-            originPosition = InputTracking.GetLocalPosition(VRNode.CenterEye);
+            originPosition = transform.TransformPoint(InputTracking.GetLocalPosition(VRNode.CenterEye));
         }
         else
         {
-            originPosition = transform.localPosition;
+            originPosition = transform.position;
         }
 
         Ray ray3D = new Ray(originPosition, transform.TransformDirection(Vector3.forward));
