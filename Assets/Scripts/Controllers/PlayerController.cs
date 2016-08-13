@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 
 /// <summary>
 /// This controller will provide the input management for movement and UI for an agent controlled by a human player.
@@ -127,8 +128,9 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     /// This method will be called when the user selected a ship from the UI. This method will set the variables 
     /// and spawn the player in the correct position.
     /// </summary>
-    public void OnShipConfigMenuShipSelected()
+    public void OnShipConfigMenuShipSelected(ShipController.ShipType type)
     {
+        setShipType(type);
         DismissShipConfigMenu();
         transform.position = Vector3.zero;
     }
@@ -159,7 +161,8 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     /// </summary>
     public void OnPauseMenuResumeSelected()
     {
-        sceneManager.HideAllMenus();
-        isPause = false;
+        Assert.IsTrue(isPause);
+        Assert.IsNotNull(canvasGameObject);
+        TogglePauseMenu();
     }
 }

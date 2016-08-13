@@ -8,9 +8,9 @@ public interface GameLevelSceneManagerDelegate
     /// </summary>
     void OnPauseMenuResumeSelected();
     /// <summary>
-    /// This method will be called when the user selects a ship type to use.
+    /// This method will be called when the user selects a ship type to use. The ShipeType is passed as a parameter.
     /// </summary>
-    void OnShipConfigMenuShipSelected();
+    void OnShipConfigMenuShipSelected(ShipController.ShipType type);
     /// <summary>
     /// This method will be called when the user selects a team.
     /// </summary>

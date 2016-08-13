@@ -134,7 +134,7 @@ public class GameLevelSceneManager : MonoBehaviour, GameLevelUIManagerDelegate
     {
         if (sceneManagerDelegate != null)
         {
-            sceneManagerDelegate.OnShipConfigMenuShipSelected();
+            sceneManagerDelegate.OnShipConfigMenuShipSelected(ShipController.ShipType.FIGHTER);
         }
     }
 
@@ -142,7 +142,7 @@ public class GameLevelSceneManager : MonoBehaviour, GameLevelUIManagerDelegate
     {
         if (sceneManagerDelegate != null)
         {
-            sceneManagerDelegate.OnShipConfigMenuShipSelected();
+            sceneManagerDelegate.OnShipConfigMenuShipSelected(ShipController.ShipType.FRIGATE);
         }
     }
 }

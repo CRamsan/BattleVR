@@ -24,6 +24,7 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
     protected GunController gunController;
     protected GameObject rendererGameObject;
     protected Renderer gameRenderer;
+    protected MeshFilter gameMeshFilter;
     protected Rigidbody gameRigidBody;
     protected float health;
     protected bool isAI;
@@ -48,22 +49,44 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
 
         health = 100f;
         gameRenderer = GetComponentInChildren<Renderer>();
-        type = ShipType.FIGHTER;
+        gameMeshFilter = GetComponentInChildren<MeshFilter>();
+        type = ShipType.FRIGATE;
     }
 
     // Set the team for this ship and apply any logic needed
     public void setTeam(GameLevelSceneManager.TEAMTAG teamTag)
     {
         this.teamTag = teamTag;
-        if (this.teamTag == GameLevelSceneManager.TEAMTAG.RED)
+        switch (this.teamTag)
         {
-            //GetComponentInChildren<MeshRenderer>().material = teamRed;
-        }
-        else if (this.teamTag == GameLevelSceneManager.TEAMTAG.BLUE)
-        {
-            //GetComponentInChildren<MeshRenderer>().material = teamBlue;
+            case GameLevelSceneManager.TEAMTAG.BLUE:
+                gameRenderer.material = (Material)AssetManager.instance.GetAsset(AssetManager.ASSET.TEAM_BLUE_MATERIAL);
+                break;
+            case GameLevelSceneManager.TEAMTAG.RED:
+                gameRenderer.material = (Material)AssetManager.instance.GetAsset(AssetManager.ASSET.TEAM_RED_MATERIAL);
+                break;
+            default:
+                throw new UnityException();
         }
     }
+
+    // 
+    public void setShipType(ShipType type)
+    {
+        this.type = type;
+        switch (this.type)
+        {
+            case ShipType.FIGHTER:
+                gameMeshFilter.mesh = (Mesh)AssetManager.instance.GetAsset(AssetManager.ASSET.FIGHTER_MODEL);
+                break;
+            case ShipType.FRIGATE:
+                gameMeshFilter.mesh = (Mesh)AssetManager.instance.GetAsset(AssetManager.ASSET.FRIGATE_MODEL);
+                break;
+            default:
+                throw new UnityException();
+        }
+    }
+
 
     /// <summary>
     /// This method will transform the input vectors into forces. All vectors should have a magitude MAX of 1.0f.
