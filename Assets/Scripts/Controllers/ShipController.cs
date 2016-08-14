@@ -32,10 +32,13 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
 
     private Color tempColor;
     private Vector3 throttle;
+    private bool hasInit;
 
-    // This method should only be called once and it should be called before any other method.
+    // This method should only be called once and it should be called before any other method. 
+    // As a precausion this method will only assert if called multiple times.
     protected void Init()
     {
+        Assert.IsFalse(hasInit);
         if (isLocalPlayer)
         {
         }
@@ -51,11 +54,15 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
         gameRenderer = GetComponentInChildren<Renderer>();
         gameMeshFilter = GetComponentInChildren<MeshFilter>();
         type = ShipType.FRIGATE;
+        hasInit = true;
     }
 
     // Set the team for this ship and apply any logic needed
     public void setTeam(GameLevelSceneManager.TEAMTAG teamTag)
     {
+        if (!hasInit)
+            Init();
+
         this.teamTag = teamTag;
         switch (this.teamTag)
         {
@@ -73,6 +80,9 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
     // 
     public void setShipType(ShipType type)
     {
+        if (!hasInit)
+            Init();
+
         this.type = type;
         switch (this.type)
         {

@@ -29,13 +29,7 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         }
         else
         {
-            foreach (Transform child in transform)
-            {
-                if (child.name == "MainPlayerCamera")
-                {
-                    GameObject.Destroy(child.gameObject);
-                }
-            }
+            GameObject.Destroy(transform.Find("MainPlayerCamera"));
         }
     }
 	
@@ -137,7 +131,7 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     {
         setShipType(type);
         DismissShipConfigMenu();
-        transform.position = Vector3.zero;
+        transform.position = sceneManager.GetSpawnPosition(this.teamTag);
     }
 
     /// <summary>

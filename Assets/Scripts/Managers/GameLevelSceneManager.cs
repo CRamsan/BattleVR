@@ -13,8 +13,8 @@ public class GameLevelSceneManager : MonoBehaviour, GameLevelUIManagerDelegate
     //This should be a reference to the ONLY instance of this scripts
     public static GameLevelSceneManager instance;
 
-    public GameObject capitalShipBlue;
-    public GameObject capitalShipRed;
+    private GameObject capitalShipBlue;
+    private GameObject capitalShipRed;
 
     private GameLevelUIManager uiManager;
     private ExtendedNetworkManager networkManager;
@@ -145,5 +145,48 @@ public class GameLevelSceneManager : MonoBehaviour, GameLevelUIManagerDelegate
         {
             sceneManagerDelegate.OnShipConfigMenuShipSelected(ShipController.ShipType.FRIGATE);
         }
+    }
+
+    /// <summary>
+    /// Set the target gameObject as the capital ship of the specified team.
+    /// </summary>
+    /// <param name="tag"></param>
+    /// <param name="target"></param>
+    public void RegisterCapitalShip(TEAMTAG tag, GameObject target)
+    {
+        switch (tag)
+        {
+            case TEAMTAG.RED:
+                capitalShipRed = target;
+                break;
+            case TEAMTAG.BLUE:
+                capitalShipBlue = target;
+                break;
+            default:
+                throw new UnityException();
+        }
+    }
+
+    /// <summary>
+    /// Returns a Vector3 that should be used as the spawn point for the next ship. The spawn location
+    /// will be based on the location of the game objects registered as capital ship for each team;
+    /// </summary>
+    /// <param name="tag"></param>
+    /// <returns></returns>
+    public Vector3 GetSpawnPosition(TEAMTAG tag)
+    {
+        GameObject capitalShip;
+        switch (tag)
+        {
+            case TEAMTAG.RED:
+                capitalShip = capitalShipRed;
+                break;
+            case TEAMTAG.BLUE:
+                capitalShip = capitalShipBlue;
+                break;
+            default:
+                throw new UnityException();
+        }
+        return (capitalShip.transform.position) + (capitalShip.transform.forward * 150);
     }
 }

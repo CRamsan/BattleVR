@@ -5,18 +5,23 @@ using System.Collections;
 /// <summary>
 /// This controller provides logic to spawn AI ships after a specific time interval.
 /// </summary>
+[RequireComponent(typeof(TeamController))]
 public class ShipSpawnController : MonoBehaviour
 {
-
     public GameObject aiShipPrefab;
     public float timeWait = 10;
     public int maxTeamCount = 15;
 
     private int teamCount;
+    private TeamController teamController;
+    private GameLevelSceneManager.TEAMTAG team;
 
     // Use this for initialization
     void Start()
     {
+        teamController = transform.GetComponentInChildren<TeamController>();
+        team = teamController.team;
+
         if (ExtendedNetworkManager.isHost)
         {
             StartSpawning();
@@ -49,16 +54,18 @@ public class ShipSpawnController : MonoBehaviour
     /// Private method that will handle spawning an AI ship. This method should only be called 
     /// by the spawn coroutine.
     /// </summary>
-    /// <param name="prefab"></param>
-    /// <param name="position"></param>
-    private void SpawnShip(GameObject prefab, Vector3 position)
+    private void SpawnShip()
     {
         if (teamCount >= maxTeamCount)
         {
             throw new UnityException();
         }
-        GameObject aiPlayer = Instantiate(prefab);
-        aiPlayer.transform.position = transform.TransformPoint(position);
+        GameObject aiPlayer = Instantiate(aiShipPrefab);
+        ShipController controller = aiPlayer.GetComponent<ShipController>();
+        controller.setTeam(team);
+        controller.setShipType(ShipController.ShipType.FRIGATE);
+        Vector3 spawnPosition = GameLevelSceneManager.instance.GetSpawnPosition(team);
+        aiPlayer.transform.position = spawnPosition;
         NetworkServer.Spawn(aiPlayer);
         teamCount++;
     }
@@ -73,7 +80,7 @@ public class ShipSpawnController : MonoBehaviour
         {
             if (teamCount < maxTeamCount)
             {
-                SpawnShip(aiShipPrefab, new Vector3(0, 0, 5));
+                SpawnShip();
             }
             else
             {
