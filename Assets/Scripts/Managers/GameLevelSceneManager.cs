@@ -106,6 +106,7 @@ public class GameLevelSceneManager : MonoBehaviour, GameLevelUIManagerDelegate
     {
         if (ExtendedNetworkManager.isHost)
         {
+            ExtendedNetworkManager.isHost = false;
             networkManager.StopHost();
         }
         else

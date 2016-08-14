@@ -23,15 +23,20 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         {
             isPause = false;
             isTeamSelected = false;
+            sceneManager = GameLevelSceneManager.instance;
+            playerCollider = GetComponent<SphereCollider>();
+            DisplayShipConfigMenu();
         }
         else
         {
-            GameObject.Destroy(GameObject.Find("MainPlayerCamera"));
+            foreach (Transform child in transform)
+            {
+                if (child.name == "MainPlayerCamera")
+                {
+                    GameObject.Destroy(child.gameObject);
+                }
+            }
         }
-        playerCollider = GetComponent<SphereCollider>();
-        sceneManager = GameLevelSceneManager.instance;
-
-        DisplayShipConfigMenu();
     }
 	
 	// Update is called once per frame

@@ -17,7 +17,10 @@ public class ShipSpawnController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        StartSpawning();
+        if (ExtendedNetworkManager.isHost)
+        {
+            StartSpawning();
+        }
     }
 
     // Update is called once per frame
