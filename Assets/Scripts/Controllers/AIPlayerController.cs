@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 using System.Collections;
+using System.Collections.Generic;
 using System;
 
 /// <summary>
@@ -26,6 +27,7 @@ public class AIPlayerController : ShipController
         targetReticle.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
 
         isAI = true;
+        InvokeRepeating("ConfigureTarget", 1, 5);
     }
 
     // Update is called once per frame
@@ -35,8 +37,6 @@ public class AIPlayerController : ShipController
         {
             return;
         }
-
-        // TODO Let's add some code to set the target
 
         Vector3 targetPosition;
         if (targetObject != null)
@@ -85,5 +85,48 @@ public class AIPlayerController : ShipController
         Vector3 rotationStickVector = new Vector3(dLookUp, dLookSide, 0f);
 
         HandleInput(leftStickVector, rotationStickVector);
+    }
+
+    /// <summary>
+    /// This method will handle deciding if target needs to be updated, and if it does then it will call FindTarget().
+    /// </summary>
+    private void ConfigureTarget()
+    {
+        if (targetObject == null)
+        {
+            targetObject = FindTarget(300f);
+        }
+    }
+
+    /// <summary>
+    /// This method will use Physics.OverlapSphere to find an enemy within the provided radius.
+    /// This method will return null when no valid target was found.
+    /// </summary>
+    /// <param name="radius"></param>
+    /// <returns>The selected target</returns>
+    private GameObject FindTarget(float radius)
+    {
+        GameObject target = null, next = null;
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius);
+        List<GameObject> enemyList = new List<GameObject>();
+        int i = 0;
+        while (i < hitColliders.Length)
+        {
+            next = hitColliders[i].gameObject;
+            if (next.CompareTag("Player"))
+            {
+                if (next.GetComponent<ShipController>().GetTeam() != this.GetTeam())
+                {
+                    enemyList.Add(next);
+                }
+            }
+            i++;
+        }
+        if (enemyList.Count > 0)
+        {
+            target = enemyList[0];
+        }
+        // For now just return the first element found. Ideally the enemy we are going to target is the one that is closest to us.
+        return target;
     }
 }

@@ -77,7 +77,13 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
         }
     }
 
-    // 
+    // Get the team value
+    public GameLevelSceneManager.TEAMTAG GetTeam()
+    {
+        return this.teamTag;
+    }
+
+    // Set the ShipType value
     public void setShipType(ShipType type)
     {
         if (!hasInit)
@@ -97,6 +103,11 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
         }
     }
 
+    // Get the ShipType value
+    public ShipType getShipType()
+    {
+        return this.type;
+    }
 
     /// <summary>
     /// This method will transform the input vectors into forces. All vectors should have a magitude MAX of 1.0f.
