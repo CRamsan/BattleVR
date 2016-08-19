@@ -18,7 +18,7 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     // Use this for initialization
     void Start()
     {
-        Init();
+        SafeInit();
         if (isLocalPlayer)
         {
             isPause = false;

@@ -7,6 +7,11 @@ using System.Collections;
 /// This controller is the base controller for any ship, either AI or human controlled. It is independant from the
 /// input, but it will handle the phisycs and weapon controll.
 /// </summary>
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(GunController))]
+[RequireComponent(typeof(MeshFilter))]
+[RequireComponent(typeof(MeshRenderer))]
+[RequireComponent(typeof(TrailRenderer))]
 public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageReceiver
 {
 
@@ -26,6 +31,7 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
     protected Renderer gameRenderer;
     protected MeshFilter gameMeshFilter;
     protected Rigidbody gameRigidBody;
+    protected TrailRenderer trailRenderer;
     protected float health;
     protected bool isAI;
     protected ShipType type;
@@ -36,7 +42,7 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
 
     // This method should only be called once and it should be called before any other method. 
     // As a precausion this method will only assert if called multiple times.
-    protected void Init()
+    private void Init()
     {
         Assert.IsFalse(hasInit);
         if (isLocalPlayer)
@@ -49,12 +55,19 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
         gameRigidBody = GetComponent<Rigidbody>();
         gunController = GetComponent<GunController>();
         gunController.gunControllerDelegate = this;
+        trailRenderer = GetComponent<TrailRenderer>();
 
         health = 100f;
         gameRenderer = GetComponentInChildren<Renderer>();
         gameMeshFilter = GetComponentInChildren<MeshFilter>();
         type = ShipType.FRIGATE;
         hasInit = true;
+    }
+
+    protected void SafeInit()
+    {
+        if (!hasInit)
+            Init();
     }
 
     // Set the team for this ship and apply any logic needed
@@ -64,17 +77,20 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
             Init();
 
         this.teamTag = teamTag;
+        Material teamMaterial;
         switch (this.teamTag)
         {
             case GameLevelSceneManager.TEAMTAG.BLUE:
-                gameRenderer.material = (Material)AssetManager.instance.GetAsset(AssetManager.ASSET.TEAM_BLUE_MATERIAL);
+                teamMaterial = (Material)AssetManager.instance.GetAsset(AssetManager.ASSET.TEAM_BLUE_MATERIAL);
                 break;
             case GameLevelSceneManager.TEAMTAG.RED:
-                gameRenderer.material = (Material)AssetManager.instance.GetAsset(AssetManager.ASSET.TEAM_RED_MATERIAL);
+                teamMaterial = (Material)AssetManager.instance.GetAsset(AssetManager.ASSET.TEAM_RED_MATERIAL);
                 break;
             default:
                 throw new UnityException();
         }
+        trailRenderer.material = teamMaterial;
+        gameRenderer.material = teamMaterial;
     }
 
     // Get the team value
@@ -117,20 +133,17 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
     protected void HandleInput(Vector3 dTranslation, Vector3 dRotation)
     {
 #if UNITY_EDITOR
-        if (dTranslation.x > 1.0f || dTranslation.y > 1.0f || dTranslation.z > 1.0f)
-        {
-            Assert.IsTrue(false);
-            throw new AssertionException("Invalid vector", "dTranslation has one of it't components greater than 1");
-        }
-        if (dRotation.x > 1.0f || dRotation.y > 1.0f || dRotation.z > 1.0f)
-        {
-            Assert.IsTrue(false);
-            throw new AssertionException("Invalid vector", "dRotation has one of it't components greater than 1");
-        }
+        Assert.IsTrue(dTranslation.y == 0); //Currently there is no support for ascending and descending
+        // Verify all other vectors are less or equal to 1f
+        Assert.IsTrue(Mathf.Abs(dTranslation.x) <= 1);
+        Assert.IsTrue(Mathf.Abs(dTranslation.z) <= 1);
+        Assert.IsTrue(Mathf.Abs(dRotation.x) <= 1);
+        Assert.IsTrue(Mathf.Abs(dRotation.y) <= 1);
+        Assert.IsTrue(Mathf.Abs(dRotation.z) <= 1);
 #endif
         if (type == ShipType.FIGHTER)
         {
-            float throttleZ = throttle.z + dTranslation.z;
+            float throttleZ = throttle.z + (dTranslation.z / 1000);
 
             throttle.z = throttleZ > 0 ? Mathf.Min(throttleZ, 1f) : 0;
             gameRigidBody.AddRelativeForce(throttle * Time.deltaTime * 4000);

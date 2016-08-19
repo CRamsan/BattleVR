@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.Networking;
-using System.Collections;
 using System.Collections.Generic;
-using System;
 
 /// <summary>
 /// This controller will provide the behaviour for AI controlled agents.
@@ -14,20 +11,15 @@ public class AIPlayerController : ShipController
     public float safeDistance;
     public float shootDistance;
 
-    private GameObject targetReticle;
+    private Vector3 targetPosition;
 
     // Use this for initialization
     void Start()
     {
-        Init();
-
-        targetReticle = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        targetReticle.transform.SetParent(transform);
-        targetReticle.transform.localPosition = Vector3.forward;
-        targetReticle.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-
+        SafeInit();
         isAI = true;
-        InvokeRepeating("ConfigureTarget", 1, 5);
+        // Lets disable this for now until we can improve the movement system
+        // InvokeRepeating("ConfigureTarget", 1, 5);
     }
 
     // Update is called once per frame
@@ -38,48 +30,57 @@ public class AIPlayerController : ShipController
             return;
         }
 
-        Vector3 targetPosition;
         if (targetObject != null)
         {
             targetPosition = targetObject.transform.position;
         }
         else
         {
-            targetPosition = Vector3.zero;
+            if (targetPosition.Equals(Vector3.zero) || Vector3.Distance(transform.position, targetPosition) < 15f)
+            {
+                targetPosition = new Vector3(Random.Range(-400, 400), Random.Range(-100, 100), Random.Range(-250, 250));
+            }
         }
 
         //Get the normalized vector that points towards our target
         Vector3 targetDirection = (targetPosition - transform.position).normalized;
-        targetReticle.transform.position = transform.position + targetDirection;
 
         // Get the direction on our local space
-        Vector3 aimDirection = targetReticle.transform.localPosition;
+        Vector3 aimDirection = transform.InverseTransformDirection(targetDirection);
+
         // Only move forward when we are facing our target
-        float dForward = (aimDirection.z > 0 ? aimDirection.z : 0);
+        float dForward = (aimDirection.z > 0.2f ? aimDirection.z : 0);
+
         float dLookUp = aimDirection.y * -1;
-        if (dLookUp == 0)
-        { dLookUp = 1f; }
+
         float dLookSide = aimDirection.x;
-        if (dLookSide == 0)
-        { dLookSide = 1f; }
-        float targetDistance = (targetPosition - transform.position).magnitude;
-        Debug.DrawLine(transform.position, (transform.position + (targetDirection * targetDistance)), Color.cyan);
 
-        if (Mathf.Sqrt((dLookSide * dLookSide) + (dLookUp * dLookSide)) > dForward ||
-            (targetDistance < safeDistance))
-        { dForward /= 1 + (safeDistance - targetDistance); }
+        float targetDistance = Vector3.Distance(targetPosition, transform.position);
 
-        if (targetDistance < shootDistance || true)
+#if UNITY_EDITOR
+        Color targetRayColor;
+        if (targetObject == null)
+            targetRayColor = Color.green;
+        else
+            targetRayColor = Color.red;
+        Debug.DrawLine(transform.position, (transform.position + (targetDirection * targetDistance)), targetRayColor);
+#endif
+
+        if (targetDistance <= safeDistance)
         {
-            //if (dForward >= 0.9f)
-            {
-                gunController.PressTriger();
-            }
+            dForward /= 1 + (safeDistance - targetDistance);
         }
 
+        if (targetDistance < shootDistance)
+        {
+            gunController.PressTriger();
+        }
+
+#if UNITY_EDITOR
         Debug.DrawLine(transform.position, transform.TransformPoint(new Vector3(0, 0, aimDirection.z + (dForward * 5))), Color.blue);
         Debug.DrawLine(transform.position, transform.TransformPoint(new Vector3(0, aimDirection.y - (dLookUp * 5), 0)), Color.green);
         Debug.DrawLine(transform.position, transform.TransformPoint(new Vector3(aimDirection.x + (dLookSide * 5), 0, 0)), Color.red);
+#endif
 
         Vector3 leftStickVector = new Vector3(0, 0, dForward);
         Vector3 rotationStickVector = new Vector3(dLookUp, dLookSide, 0f);
