@@ -25,6 +25,13 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
     // This should be moved out of here and into the GunController
     public GameObject projectilePrefab;
 
+    public float roll = 10;
+    public float pitch = 10;
+    public float yawn = 10;
+    public float strafe = 10;
+    public float thrust = 10;
+    public float acceleration = 10;
+
     protected GameLevelSceneManager.TEAMTAG teamTag;
     protected GunController gunController;
     protected GameObject rendererGameObject;
@@ -141,18 +148,23 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
         Assert.IsTrue(Mathf.Abs(dRotation.y) <= 1);
         Assert.IsTrue(Mathf.Abs(dRotation.z) <= 1);
 #endif
+        // TODO Refactor this code to make it more organized and optimized.
+        // This code was modified to quickly test the variables for 
+        // yawn, pitch, roll, etc.
         if (type == ShipType.FIGHTER)
         {
-            float throttleZ = throttle.z + (dTranslation.z / 1000);
+            float throttleZ = throttle.z + (acceleration * dTranslation.z / 100);
 
             throttle.z = throttleZ > 0 ? Mathf.Min(throttleZ, 1f) : 0;
-            gameRigidBody.AddRelativeForce(throttle * Time.deltaTime * 4000);
+            gameRigidBody.AddRelativeForce(throttle * thrust * Time.deltaTime, ForceMode.VelocityChange);
         }
         else
         {
-            gameRigidBody.AddRelativeForce(dTranslation * Time.deltaTime * 2000);
+            Vector3 modifiedForce = new Vector3(dTranslation.x * strafe, 0, dTranslation.z * thrust);
+            gameRigidBody.AddRelativeForce(modifiedForce * Time.deltaTime, ForceMode.VelocityChange);
         }
-        gameRigidBody.AddRelativeTorque(dRotation * Time.deltaTime * 15);
+        Vector3 modifiedRotation = new Vector3(dRotation.x * pitch, dRotation.y * yawn, dRotation.z * roll);
+        gameRigidBody.AddRelativeTorque(modifiedRotation * Time.deltaTime, ForceMode.VelocityChange);
     }
 
     //Method that will fire a bullet.

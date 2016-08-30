@@ -10,6 +10,7 @@ public class CameraController : MonoBehaviour
     public float reticleMaxDistance = 20f;
     public GameObject reticlePrefab;
 
+    private Camera playerCamera;
     private GameObject reticleOject;
     private RaycastHit hit;
 
@@ -18,6 +19,10 @@ public class CameraController : MonoBehaviour
     {
         reticleOject = Instantiate(reticlePrefab);
         reticleOject.transform.SetParent(transform);
+        playerCamera = GetComponent<Camera>();
+
+        // Configure camera
+        playerCamera.farClipPlane = 5000;
     }
 
     // Update is called once per frame
