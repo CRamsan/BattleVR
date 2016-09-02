@@ -8,6 +8,8 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
 
     public GameObject pauseCanvasPrefab;
     public GameObject shipConfigCanvasPrefab;
+    public AudioClip impactSound;
+    public AudioClip projectileSound;
 
     private Collider playerCollider;
     private GameLevelSceneManager sceneManager;
@@ -163,5 +165,31 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         Assert.IsTrue(isPause);
         Assert.IsNotNull(canvasGameObject);
         TogglePauseMenu();
+    }
+
+    // Override the onShooProjectile to provide sounds when shots are fired.
+    public override void onShootProjectile()
+    {
+        base.onShootProjectile();
+        AudioSource.PlayClipAtPoint(projectileSound, transform.forward + transform.position);
+    }
+
+    // Override onStartReloading to provide reload sounds
+    public override void onStartReloading()
+    {
+        base.onStartReloading();
+    }
+
+    // Override onDamageRecieved to provide positional audio of the impact
+    public override void onDamageReceived(float damage, Vector3 position)
+    {
+        base.onDamageReceived(damage, position);
+        AudioSource.PlayClipAtPoint(impactSound, position);
+    }
+
+    // Override this method to provide extra functionality when the player enters a trigger.
+    public override void OnTriggerEnter(Collider other)
+    {
+        base.OnTriggerEnter(other);
     }
 }

@@ -12,8 +12,8 @@
 *.blend1.meta
 LightingData.asset
 LightingData.asset.meta
-Assets/CurvedUI/
-Assets/CurvedUI.meta
+Assets/External/
+Assets/External.meta
 .vs/
 Build/
 Library/
@@ -22,9 +22,3 @@ demo_Data/
 Library/ShaderCache/
 Temp/
 *.pdb
-Assets/Stagit/
-Assets/Stagit.meta
-Assets/Music/
-Assets/Music.meta
-Assets/SkyBox Volume 2/
-Assets/SkyBox Volume 2.meta

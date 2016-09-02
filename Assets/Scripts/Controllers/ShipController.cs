@@ -12,7 +12,7 @@ using System.Collections;
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(TrailRenderer))]
-public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageReceiver
+public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, DamageReceiver
 {
 
     public enum ShipType
@@ -198,19 +198,19 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
     }
 
     //Shoot a projectile locally and send a message to the server to trigger a shot on the other clients.
-    public void onShootProjectile()
+    public virtual void onShootProjectile()
     {
         DoFire();
         CmdDoFire();
     }
 
     // This method will be called when the gun needs to start reloading.
-    public void onStartReloading()
+    public virtual void onStartReloading()
     {
     }
 
     //This nethod will be called when this ship takes some damage
-    public void onDamageReceived(float damage)
+    public virtual void onDamageReceived(float damage, Vector3 position)
     {
         StartCoroutine(TakeDamageEnumerator());
 
@@ -222,7 +222,8 @@ public class ShipController : NetworkBehaviour, GunControllerDelegate, DamageRec
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    // This method will be called when the ship colliders with other interactable objects such as weapons or items.
+    public virtual void OnTriggerEnter(Collider other)
     {
         WeaponController controller = other.gameObject.GetComponent<WeaponController>();
         if (controller != null && gunController != null)

@@ -1,4 +1,6 @@
-﻿/// <summary>
+﻿using UnityEngine;
+
+/// <summary>
 /// This interface allows a controller to do something when they recieve damage.
 /// </summary>
 public interface DamageReceiver
@@ -7,5 +9,6 @@ public interface DamageReceiver
     /// This method will be called when damage is taken.
     /// </summary>
     /// <param name="damage"></param>
-    void onDamageReceived(float damage);
+    /// <param name="location"></param>
+    void onDamageReceived(float damage, Vector3 location);
 }
