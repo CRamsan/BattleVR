@@ -17,6 +17,7 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
 
     public enum ShipType
     {
+        NONE,
         FIGHTER,
         FRIGATE,
         BATTLECRUISER
@@ -32,7 +33,6 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
     public float thrust = 10;
     public float acceleration = 10;
 
-    protected GameLevelSceneManager.TEAMTAG teamTag;
     protected GunController gunController;
     protected GameObject rendererGameObject;
     protected Renderer gameRenderer;
@@ -41,6 +41,11 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
     protected TrailRenderer trailRenderer;
     protected float health;
     protected bool isAI;
+
+    [SyncVar(hook = "SetTeam")]
+    protected GameLevelSceneManager.TEAMTAG teamTag;
+
+    [SyncVar(hook = "SetShipType")]
     protected ShipType type;
 
     private Color tempColor;
@@ -67,7 +72,6 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
         health = 100f;
         gameRenderer = GetComponentInChildren<Renderer>();
         gameMeshFilter = GetComponentInChildren<MeshFilter>();
-        type = ShipType.FRIGATE;
         hasInit = true;
     }
 
@@ -78,12 +82,22 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
     }
 
     // Set the team for this ship and apply any logic needed
-    public void setTeam(GameLevelSceneManager.TEAMTAG teamTag)
+    public void SetTeam(GameLevelSceneManager.TEAMTAG teamTag)
+    {
+
+        this.teamTag = teamTag;
+        RefreshTeamState();
+    }
+
+    /// <summary>
+    /// Call the team variable and update the gameobjects accordingly.
+    /// This has to be separate setTeam() because the team variable can be 
+    /// synced over the network. 
+    /// </summary>
+    public void RefreshTeamState()
     {
         if (!hasInit)
             Init();
-
-        this.teamTag = teamTag;
         Material teamMaterial;
         switch (this.teamTag)
         {
@@ -107,12 +121,20 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
     }
 
     // Set the ShipType value
-    public void setShipType(ShipType type)
+    public void SetShipType(ShipType type)
+    {
+        this.type = type;
+        RefreshShipType();
+    }
+
+    /// <summary>
+    /// Call this method tp update the gameObject to behave as
+    /// the correct ship type.
+    /// </summary>
+    public void RefreshShipType()
     {
         if (!hasInit)
             Init();
-
-        this.type = type;
         switch (this.type)
         {
             case ShipType.FIGHTER:
@@ -127,7 +149,7 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
     }
 
     // Get the ShipType value
-    public ShipType getShipType()
+    public ShipType GetShipType()
     {
         return this.type;
     }

@@ -8,7 +8,7 @@ using UnityEngine.Networking;
 /// </summary>
 public class GameLevelSceneManager : MonoBehaviour, GameLevelUIManagerDelegate
 {
-    public enum TEAMTAG { RED, BLUE };
+    public enum TEAMTAG { NONE, RED, BLUE };
 
     //This should be a reference to the ONLY instance of this scripts
     public static GameLevelSceneManager instance;

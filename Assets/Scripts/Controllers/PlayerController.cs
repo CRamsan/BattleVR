@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Networking;
 
 /// <summary>
 /// This controller will provide the input management for movement and UI for an agent controlled by a human player.
@@ -17,6 +18,9 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     private bool isPause;
     private bool isTeamSelected;
 
+    [SyncVar]
+    private bool isReadyForGame;
+
     // Use this for initialization
     void Start()
     {
@@ -25,6 +29,7 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         {
             isPause = false;
             isTeamSelected = false;
+            isReadyForGame = false;
             sceneManager = GameLevelSceneManager.instance;
             playerCollider = GetComponent<SphereCollider>();
             DisplayShipConfigMenu();
@@ -38,6 +43,11 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
                 {
                     GameObject.Destroy(child.gameObject);
                 }
+            }
+            if (isReadyForGame)
+            {
+                RefreshTeamState();
+                RefreshShipType();
             }
         }
     }
@@ -127,7 +137,7 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     /// <param name="teamTag"></param>
     public void OnTeamSelectMenuTeamSelected(GameLevelSceneManager.TEAMTAG teamTag)
     {
-        setTeam(teamTag);
+        SetTeam(teamTag);
         isTeamSelected = true;
         sceneManager.DisplayShipSelectMenu();
     }
@@ -138,9 +148,10 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     /// </summary>
     public void OnShipConfigMenuShipSelected(ShipController.ShipType type)
     {
-        setShipType(type);
+        SetShipType(type);
         DismissShipConfigMenu();
         transform.position = sceneManager.GetSpawnPosition(this.teamTag);
+        isReadyForGame = true;
     }
 
     /// <summary>
