@@ -31,7 +31,14 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         }
         else
         {
-            GameObject.Destroy(transform.Find("MainPlayerCamera"));
+            //TODO Investigate this and lets make it compact
+            foreach (Transform child in transform)
+            {
+                if (child.name == "MainPlayerCamera" || child.name == "HUD")
+                {
+                    GameObject.Destroy(child.gameObject);
+                }
+            }
         }
     }
 	
