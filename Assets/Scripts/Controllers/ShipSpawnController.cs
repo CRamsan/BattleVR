@@ -64,6 +64,7 @@ public class ShipSpawnController : MonoBehaviour
         ShipController controller = aiPlayer.GetComponent<ShipController>();
         controller.SetTeam(team);
         controller.SetShipType(ShipController.ShipType.FRIGATE);
+        controller.SetReadyForGame(true);
         Vector3 spawnPosition = GameLevelSceneManager.instance.GetSpawnPosition(team);
         aiPlayer.transform.position = spawnPosition;
         NetworkServer.Spawn(aiPlayer);

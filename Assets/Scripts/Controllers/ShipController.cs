@@ -48,6 +48,9 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
     [SyncVar(hook = "SetShipType")]
     protected ShipType type;
 
+    [SyncVar(hook = "onReadyForGameChanged")]
+    protected bool isReadyForGame;
+
     private Color tempColor;
     private Vector3 throttle;
     private bool hasInit;
@@ -82,10 +85,9 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
     }
 
     // Set the team for this ship and apply any logic needed
-    public virtual void SetTeam(GameLevelSceneManager.TEAMTAG teamTag)
+    public void SetTeam(GameLevelSceneManager.TEAMTAG teamTag)
     {
         this.teamTag = teamTag;
-        RefreshTeamState();
     }
 
     /// <summary>
@@ -120,10 +122,9 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
     }
 
     // Set the ShipType value
-    public virtual void SetShipType(ShipType type)
+    public void SetShipType(ShipType type)
     {
         this.type = type;
-        RefreshShipType();
     }
 
     /// <summary>
@@ -151,6 +152,27 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
     public ShipType GetShipType()
     {
         return this.type;
+    }
+
+    public bool IsReadyForGame()
+    {
+        return isReadyForGame;
+    }
+
+    public void SetReadyForGame(bool readyForGame)
+    {
+        isReadyForGame = readyForGame;
+    }
+
+    // This method will be called when the isReadyForGame variable changes.
+    public void onReadyForGameChanged(bool readyForGame)
+    {
+        isReadyForGame = readyForGame;
+        if (isReadyForGame)
+        {
+            RefreshTeamState();
+            RefreshShipType();
+        }
     }
 
     /// <summary>

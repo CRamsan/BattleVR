@@ -18,9 +18,6 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     private bool isPause;
     private bool isTeamSelected;
 
-    [SyncVar(hook = "onReadyForGameChanged")]
-    protected bool isReadyForGame;
-
     // Use this for initialization
     void Start()
     {
@@ -215,31 +212,6 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         Assert.IsTrue(isPause);
         Assert.IsNotNull(canvasGameObject);
         TogglePauseMenu();
-    }
-
-    // Overrride for SetTeam. This allows this controller to change the team variable 
-    // without trigering a refresh of the whole game object.
-    public override void SetTeam(GameLevelSceneManager.TEAMTAG teamTag)
-    {
-        this.teamTag = teamTag;
-    }
-    
-    // Override for SetShipType that allows this controller to change the ship type
-    // variable without trigering a refresh of the whole game object.
-    public override void SetShipType(ShipType type)
-    {
-        this.type = type;
-    }
-
-    // This method will be called when the isReadyForGame variable changes.
-    public void onReadyForGameChanged(bool readyForGame)
-    {
-        isReadyForGame = readyForGame;
-        if (isReadyForGame)
-        {
-            RefreshTeamState();
-            RefreshShipType();
-        }
     }
 
     // Override the onShooProjectile to provide sounds when shots are fired.

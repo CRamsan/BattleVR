@@ -20,6 +20,11 @@ public class AIPlayerController : ShipController
         isAI = true;
         // Lets disable this for now until we can improve the movement system
         // InvokeRepeating("ConfigureTarget", 1, 5);
+        if (isReadyForGame)
+        {
+            RefreshTeamState();
+            RefreshShipType();
+        }
     }
 
     // Update is called once per frame
