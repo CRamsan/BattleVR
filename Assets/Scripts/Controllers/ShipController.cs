@@ -82,9 +82,8 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
     }
 
     // Set the team for this ship and apply any logic needed
-    public void SetTeam(GameLevelSceneManager.TEAMTAG teamTag)
+    public virtual void SetTeam(GameLevelSceneManager.TEAMTAG teamTag)
     {
-
         this.teamTag = teamTag;
         RefreshTeamState();
     }
@@ -121,7 +120,7 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
     }
 
     // Set the ShipType value
-    public void SetShipType(ShipType type)
+    public virtual void SetShipType(ShipType type)
     {
         this.type = type;
         RefreshShipType();

@@ -18,8 +18,8 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     private bool isPause;
     private bool isTeamSelected;
 
-    [SyncVar]
-    private bool isReadyForGame;
+    [SyncVar(hook = "onReadyForGameChanged")]
+    protected bool isReadyForGame;
 
     // Use this for initialization
     void Start()
@@ -137,7 +137,7 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     /// <param name="teamTag"></param>
     public void OnTeamSelectMenuTeamSelected(GameLevelSceneManager.TEAMTAG teamTag)
     {
-        SetTeam(teamTag);
+        CmdDoSetTeam(teamTag);
         isTeamSelected = true;
         sceneManager.DisplayShipSelectMenu();
     }
@@ -148,10 +148,42 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     /// </summary>
     public void OnShipConfigMenuShipSelected(ShipController.ShipType type)
     {
-        SetShipType(type);
+        CmdDoSetShipType(type);
         DismissShipConfigMenu();
-        transform.position = sceneManager.GetSpawnPosition(this.teamTag);
-        isReadyForGame = true;
+        transform.position = sceneManager.GetSpawnPosition(teamTag);
+        CmdDoSetReadyForGame(true);
+    }
+
+    /// <summary>
+    /// Set the isReadyForGame variable on the server. We need to do this because SyncVars
+    /// hooks only work from the server to the client. So this method will update the variable 
+    /// in the server and then the hook will propagate the change to the clients.
+    /// </summary>
+    /// <param name="readyForGame"></param>
+    [Command]
+    public void CmdDoSetReadyForGame(bool readyForGame)
+    {
+        isReadyForGame = readyForGame;
+    }
+
+    /// <summary>
+    /// Update the teamTag variable in the server so the hook can update the clients.
+    /// </summary>
+    /// <param name="teamTag"></param>
+    [Command]
+    public void CmdDoSetTeam(GameLevelSceneManager.TEAMTAG teamTag)
+    {
+        this.teamTag = teamTag;
+    }
+
+    /// <summary>
+    /// Update the ship type variable in the server so the hook can update the clients.
+    /// </summary>
+    /// <param name="type"></param>
+    [Command]
+    public void CmdDoSetShipType(ShipType type)
+    {
+        this.type = type;
     }
 
     /// <summary>
@@ -183,6 +215,31 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         Assert.IsTrue(isPause);
         Assert.IsNotNull(canvasGameObject);
         TogglePauseMenu();
+    }
+
+    // Overrride for SetTeam. This allows this controller to change the team variable 
+    // without trigering a refresh of the whole game object.
+    public override void SetTeam(GameLevelSceneManager.TEAMTAG teamTag)
+    {
+        this.teamTag = teamTag;
+    }
+    
+    // Override for SetShipType that allows this controller to change the ship type
+    // variable without trigering a refresh of the whole game object.
+    public override void SetShipType(ShipType type)
+    {
+        this.type = type;
+    }
+
+    // This method will be called when the isReadyForGame variable changes.
+    public void onReadyForGameChanged(bool readyForGame)
+    {
+        isReadyForGame = readyForGame;
+        if (isReadyForGame)
+        {
+            RefreshTeamState();
+            RefreshShipType();
+        }
     }
 
     // Override the onShooProjectile to provide sounds when shots are fired.
