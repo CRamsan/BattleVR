@@ -19,8 +19,8 @@ public class AssetManager : MonoBehaviour
 
     private void Init()
     {
-        frigateModel = ((GameObject)Resources.Load("Frigate")).GetComponent<MeshFilter>().sharedMesh;
-        fighterModel = ((GameObject)Resources.Load("Fighter")).GetComponent<MeshFilter>().sharedMesh;
+        frigateModel = ((GameObject)Resources.Load("Fighter2")).GetComponent<MeshFilter>().sharedMesh;
+        fighterModel = ((GameObject)Resources.Load("Fighter2")).GetComponent<MeshFilter>().sharedMesh;
         redTeamMaterial = (Material)Resources.Load("TeamRed");
         blueTeamMaterial = (Material)Resources.Load("TeamBlue");
     }
