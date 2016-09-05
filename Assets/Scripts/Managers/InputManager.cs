@@ -113,6 +113,11 @@ public class InputManager : MonoBehaviour
             case CONTROLLER_ACTION.PAUSE:
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
                 input = "CONTROLLER_BUTTON_7";
+                // TODO Remove this hack to enable Pause in a keyboard
+                if (Input.GetKeyUp("p"))
+                {
+                    return true;
+                }
 #else
                 input = "CONTROLLER_BUTTON_10";
 #endif
