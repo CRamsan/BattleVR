@@ -217,6 +217,10 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
         Vector3 bulletOrigin = transform.TransformPoint(Vector3.forward * 2);
         GameObject bullet = (GameObject)Instantiate(projectilePrefab, bulletOrigin, bulletOrientation);
         bullet.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
+        if (isLocalPlayer)
+        {
+            bullet.GetComponent<Rigidbody>().interpolation = RigidbodyInterpolation.Extrapolate;
+        }
         Destroy(bullet, 1.5f);
     }
 
