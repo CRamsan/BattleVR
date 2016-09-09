@@ -135,4 +135,14 @@ public class AIPlayerController : ShipController
         // For now just return the first element found. Ideally the enemy we are going to target is the one that is closest to us.
         return target;
     }
+
+    //This nethod will be called when this ship takes some damage
+    public override void onDamageReceived(float damage, Vector3 position)
+    {
+        base.onDamageReceived(damage, position);
+        if (health <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
 }

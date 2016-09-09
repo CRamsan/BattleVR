@@ -12,7 +12,6 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     public AudioClip impactSound;
     public AudioClip projectileSound;
 
-    private Collider playerCollider;
     private GameLevelSceneManager sceneManager;
     private GameObject canvasGameObject;
     private bool isPause;
@@ -28,7 +27,6 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
             isTeamSelected = false;
             isReadyForGame = false;
             sceneManager = GameLevelSceneManager.instance;
-            playerCollider = GetComponent<SphereCollider>();
             DisplayShipConfigMenu();
         }
         else
@@ -101,7 +99,7 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     /// </summary>
     private void DisplayShipConfigMenu()
     {
-        playerCollider.enabled = false;
+        gameCollider.enabled = false;
         gameRenderer.enabled = false;
         canvasGameObject = Instantiate(shipConfigCanvasPrefab);
         sceneManager.SetUIManager(canvasGameObject.GetComponent<GameLevelUIManager>());
@@ -124,7 +122,7 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         sceneManager.HideAllMenus();
         Destroy(canvasGameObject);
         canvasGameObject = null;
-        playerCollider.enabled = true;
+        gameCollider.enabled = true;
         gameRenderer.enabled = true;
     }
 
@@ -215,10 +213,10 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     }
 
     // Override the onShooProjectile to provide sounds when shots are fired.
-    public override void onShootProjectile()
+    public override void onShootProjectile(Vector3 projectileOrigin)
     {
-        base.onShootProjectile();
-        AudioSource.PlayClipAtPoint(projectileSound, transform.forward + transform.position);
+        base.onShootProjectile(projectileOrigin);
+        AudioSource.PlayClipAtPoint(projectileSound, transform.TransformPoint(projectileOrigin));
     }
 
     // Override onStartReloading to provide reload sounds
@@ -232,6 +230,10 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     {
         base.onDamageReceived(damage, position);
         AudioSource.PlayClipAtPoint(impactSound, position);
+        if (health <= 0)
+        {
+            transform.position = sceneManager.GetSpawnPosition(teamTag);
+        }
     }
 
     // Override this method to provide extra functionality when the player enters a trigger.

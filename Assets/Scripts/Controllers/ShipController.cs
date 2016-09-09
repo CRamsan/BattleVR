@@ -11,7 +11,7 @@ using System.Collections;
 [RequireComponent(typeof(GunController))]
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
-[RequireComponent(typeof(TrailRenderer))]
+[RequireComponent(typeof(MeshCollider))]
 public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, DamageReceiver
 {
 
@@ -37,8 +37,8 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
     protected GameObject rendererGameObject;
     protected Renderer gameRenderer;
     protected MeshFilter gameMeshFilter;
+    protected MeshCollider gameCollider;
     protected Rigidbody gameRigidBody;
-    protected TrailRenderer trailRenderer;
     protected float health;
     protected bool isAI;
 
@@ -70,7 +70,7 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
         gameRigidBody = GetComponent<Rigidbody>();
         gunController = GetComponent<GunController>();
         gunController.gunControllerDelegate = this;
-        trailRenderer = GetComponent<TrailRenderer>();
+        gameCollider = GetComponent<MeshCollider>();
 
         health = 100f;
         gameRenderer = GetComponentInChildren<Renderer>();
@@ -111,7 +111,6 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
             default:
                 throw new UnityException();
         }
-        trailRenderer.material = teamMaterial;
         gameRenderer.material = teamMaterial;
     }
 
@@ -146,6 +145,7 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
             default:
                 throw new UnityException();
         }
+        gameCollider.sharedMesh = gameMeshFilter.mesh;
     }
 
     // Get the ShipType value
@@ -211,10 +211,10 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
     }
 
     //Method that will fire a bullet.
-    private void DoFire()
+    private void DoFire(Vector3 projectileOrigin)
     {
         Quaternion bulletOrientation = transform.rotation;
-        Vector3 bulletOrigin = transform.TransformPoint(Vector3.forward * 2);
+        Vector3 bulletOrigin = transform.TransformPoint(projectileOrigin);
         GameObject bullet = (GameObject)Instantiate(projectilePrefab, bulletOrigin, bulletOrientation);
         bullet.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         if (isLocalPlayer)
@@ -227,28 +227,28 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
     // Make the server call the RPC so that it can send the message
     // to all the remote instances.
     [Command]
-    void CmdDoFire()
+    void CmdDoFire(Vector3 projectileOrigin)
     {
-        RpcDoFire();
+        RpcDoFire(projectileOrigin);
     }
 
     // Do not fire if this comes from the server. All the shots for the local client
     // Should be trigered by directly calling DoFie.
     [ClientRpc]
-    void RpcDoFire()
+    void RpcDoFire(Vector3 projectileOrigin)
     {
         if (isLocalPlayer || isAI)
         {
             return;
         }
-        DoFire();
+        DoFire(projectileOrigin);
     }
 
     //Shoot a projectile locally and send a message to the server to trigger a shot on the other clients.
-    public virtual void onShootProjectile()
+    public virtual void onShootProjectile(Vector3 projectileOrigin)
     {
-        DoFire();
-        CmdDoFire();
+        DoFire(projectileOrigin);
+        CmdDoFire(projectileOrigin);
     }
 
     // This method will be called when the gun needs to start reloading.
@@ -262,11 +262,6 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
         StartCoroutine(TakeDamageEnumerator());
 
         health -= damage;
-        if (health <= 0)
-        {
-            transform.position = Vector3.zero;
-            health = 100;
-        }
     }
 
     // This method will be called when the ship colliders with other interactable objects such as weapons or items.

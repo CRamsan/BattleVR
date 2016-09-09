@@ -187,6 +187,8 @@ public class GameLevelSceneManager : MonoBehaviour, GameLevelUIManagerDelegate
             default:
                 throw new UnityException();
         }
-        return (capitalShip.transform.position) + (capitalShip.transform.forward * 150);
+
+        // This is just a hack to get spawn points in a spherical shape around the capital ship
+        return (capitalShip.transform.position) + (new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1) * 200));
     }
 }
