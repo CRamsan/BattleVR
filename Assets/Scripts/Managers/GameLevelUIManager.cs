@@ -9,13 +9,14 @@ public class GameLevelUIManager : MonoBehaviour
 
     public enum MENUS
     {
-        PAUSEMENU, CONFIRMATION, SHIPSELECT, TEAMSELECT, NONE
+        PAUSEMENU, CONFIRMATION, SHIPSELECT, TEAMSELECT, GAMEEND, NONE
     }
 
     public GameObject PauseGameMenu;
     public GameObject ConfirmationMenu;
     public GameObject ShipSelectMenu;
     public GameObject TeamSelectMenu;
+    public GameObject GameEndMenu;
     public Vector3 canvasPosition;
 
     public GameLevelUIManagerDelegate uiManagerDelegate;
@@ -31,6 +32,7 @@ public class GameLevelUIManager : MonoBehaviour
         if (ConfirmationMenu) ConfirmationMenu.transform.localPosition = canvasPosition;
         if (ShipSelectMenu) ShipSelectMenu.transform.localPosition = canvasPosition;
         if (TeamSelectMenu) TeamSelectMenu.transform.localPosition = canvasPosition;
+        if (GameEndMenu) GameEndMenu.transform.localPosition = canvasPosition;
     }
 
     // Use this for initialization
@@ -45,6 +47,7 @@ public class GameLevelUIManager : MonoBehaviour
         if (ConfirmationMenu) ConfirmationMenu.SetActive(selectedMenu == MENUS.CONFIRMATION);
         if (ShipSelectMenu) ShipSelectMenu.SetActive(selectedMenu == MENUS.SHIPSELECT);
         if (TeamSelectMenu) TeamSelectMenu.SetActive(selectedMenu == MENUS.TEAMSELECT);
+        if (GameEndMenu) GameEndMenu.SetActive(selectedMenu == MENUS.GAMEEND);
     }
 
     public void PauseMenuResume()

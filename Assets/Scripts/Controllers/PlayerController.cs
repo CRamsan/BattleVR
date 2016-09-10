@@ -58,35 +58,35 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
 
         if (canvasGameObject != null)
         {
-            canvasGameObject.transform.position = transform.TransformPoint(new Vector3(0, 1, 5));
+            canvasGameObject.transform.position = transform.TransformPoint(new Vector3(0, 2, 5));
             canvasGameObject.transform.rotation = transform.rotation;
         }
 
-        if (pausePressed)
+        if (pausePressed && !gameEnded)
         {
             TogglePauseMenu();
             return;
         }
 
-        if (isPause)
-        {
-            return;
+        Vector3 leftStickVector = Vector3.zero, rotationStickVector = Vector3.zero;
+
+        if (!isPause && !gameEnded)
+        { 
+            float dStrafe = InputManager.GetAxis(InputManager.CONTROLLER_ACTION.STRAFE);
+            float dForward = InputManager.GetAxis(InputManager.CONTROLLER_ACTION.THRUSTER);
+            float dLookUp = InputManager.GetAxis(InputManager.CONTROLLER_ACTION.LOOK_UP);
+            float dLookSide = InputManager.GetAxis(InputManager.CONTROLLER_ACTION.LOOK_SIDE);
+            float dRotate = InputManager.GetAxis(InputManager.CONTROLLER_ACTION.ROTATE);
+
+            bool fireTrigger = InputManager.IsActionPressed(InputManager.CONTROLLER_ACTION.SHOOT_PRIMARY);
+            if (fireTrigger)
+            {
+                gunController.PressTriger();
+            }
+
+            leftStickVector = new Vector3(dStrafe, 0, dForward);
+            rotationStickVector = new Vector3(dLookUp, dLookSide, dRotate);
         }
-
-        float dStrafe = InputManager.GetAxis(InputManager.CONTROLLER_ACTION.STRAFE);
-        float dForward = InputManager.GetAxis(InputManager.CONTROLLER_ACTION.THRUSTER);
-        float dLookUp = InputManager.GetAxis(InputManager.CONTROLLER_ACTION.LOOK_UP);
-        float dLookSide = InputManager.GetAxis(InputManager.CONTROLLER_ACTION.LOOK_SIDE);
-        float dRotate = InputManager.GetAxis(InputManager.CONTROLLER_ACTION.ROTATE);
-
-        bool fireTrigger = InputManager.IsActionPressed(InputManager.CONTROLLER_ACTION.SHOOT_PRIMARY);
-        if (fireTrigger)
-        {
-            gunController.PressTriger();
-        }
-
-        Vector3 leftStickVector = new Vector3(dStrafe, 0, dForward);
-        Vector3 rotationStickVector = new Vector3(dLookUp, dLookSide, dRotate);
 
         HandleInput(leftStickVector.magnitude >= 0.2 ? leftStickVector : Vector3.zero,
                     rotationStickVector.magnitude >= 0.2 ? rotationStickVector : Vector3.zero);
@@ -134,6 +134,8 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     {
         CmdDoSetTeam(teamTag);
         isTeamSelected = true;
+        TeamController controller = sceneManager.GetTeamController(teamTag);
+        controller.RegisterUnit(gameObject);
         sceneManager.DisplayShipSelectMenu();
     }
 
@@ -191,9 +193,11 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
             sceneManager.HideAllMenus();
             Destroy(canvasGameObject);
             canvasGameObject = null;
+            Physics.IgnoreLayerCollision(8, 5, false);
         }
         else
         {
+            Physics.IgnoreLayerCollision(8, 5, true);
             canvasGameObject = Instantiate(pauseCanvasPrefab);
             sceneManager.SetUIManager(canvasGameObject.GetComponent<GameLevelUIManager>());
             sceneManager.SetDelegate(this);
@@ -234,6 +238,21 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         {
             transform.position = sceneManager.GetSpawnPosition(teamTag);
         }
+    }
+
+    /// <summary>
+    /// Recieve this message when the ends by either winning or losing
+    /// This is used to show the win/lose dialog
+    /// </summary>
+    /// <param name="win"></param>
+    public override void OnGameEnded(bool win)
+    {
+        gameEnded = true;
+        Physics.IgnoreLayerCollision(8, 5, true);
+        canvasGameObject = Instantiate(pauseCanvasPrefab);
+        sceneManager.SetUIManager(canvasGameObject.GetComponent<GameLevelUIManager>());
+        sceneManager.SetDelegate(this);
+        sceneManager.DisplayGameEndMenu();
     }
 
     // Override this method to provide extra functionality when the player enters a trigger.

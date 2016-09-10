@@ -83,6 +83,10 @@ public class GameLevelSceneManager : MonoBehaviour, GameLevelUIManagerDelegate
         uiManager.SetActiveMenu(GameLevelUIManager.MENUS.TEAMSELECT);
     }
 
+    public void DisplayGameEndMenu()
+    {
+        uiManager.SetActiveMenu(GameLevelUIManager.MENUS.GAMEEND);
+    }
 
     public void OnPauseMenuResumeSelected()
     {
@@ -167,6 +171,27 @@ public class GameLevelSceneManager : MonoBehaviour, GameLevelUIManagerDelegate
         }
     }
 
+    public void OnCapitalShipDestroyed(TEAMTAG tag)
+    {
+        GameObject winner;
+        GameObject loser;
+        switch (tag)
+        {
+            case TEAMTAG.RED:
+                loser = capitalShipRed;
+                winner = capitalShipBlue;
+                break;
+            case TEAMTAG.BLUE:
+                loser = capitalShipBlue;
+                winner = capitalShipRed;
+                break;
+            default:
+                throw new UnityException();
+        }
+        winner.GetComponent<TeamController>().OnGameEnded(true);
+        loser.GetComponent<TeamController>().OnGameEnded(false);
+    }
+
     /// <summary>
     /// Returns a Vector3 that should be used as the spawn point for the next ship. The spawn location
     /// will be based on the location of the game objects registered as capital ship for each team;
@@ -190,5 +215,25 @@ public class GameLevelSceneManager : MonoBehaviour, GameLevelUIManagerDelegate
 
         // This is just a hack to get spawn points in a spherical shape around the capital ship
         return (capitalShip.transform.position) + (new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1) * 200));
+    }
+
+    public TeamController GetTeamController(TEAMTAG tag)
+    {
+        GameObject capitalShip;
+        switch (tag)
+        {
+            case TEAMTAG.RED:
+                capitalShip = capitalShipRed;
+                break;
+            case TEAMTAG.BLUE:
+                capitalShip = capitalShipBlue;
+                break;
+            default:
+                throw new UnityException();
+        }
+
+        TeamController controller = capitalShip.GetComponent<TeamController>();
+        Assert.IsNotNull(controller);
+        return controller;
     }
 }

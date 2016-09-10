@@ -39,8 +39,10 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
     protected MeshFilter gameMeshFilter;
     protected MeshCollider gameCollider;
     protected Rigidbody gameRigidBody;
+    protected TeamController teamController;
     protected float health;
     protected bool isAI;
+    protected bool gameEnded;
 
     [SyncVar(hook = "SetTeam")]
     protected GameLevelSceneManager.TEAMTAG teamTag;
@@ -76,6 +78,7 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
         gameRenderer = GetComponentInChildren<Renderer>();
         gameMeshFilter = GetComponentInChildren<MeshFilter>();
         hasInit = true;
+        gameEnded = false;
     }
 
     protected void SafeInit()
@@ -88,6 +91,16 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
     public void SetTeam(GameLevelSceneManager.TEAMTAG teamTag)
     {
         this.teamTag = teamTag;
+    }
+
+    /// <summary>
+    /// Set the team controller so this ship can communicate
+    /// with the rest of the team
+    /// </summary>
+    /// <param name="controller"></param>
+    public void SetTeamController(TeamController controller)
+    {
+        teamController = controller;
     }
 
     /// <summary>
@@ -216,7 +229,6 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
         Quaternion bulletOrientation = transform.rotation;
         Vector3 bulletOrigin = transform.TransformPoint(projectileOrigin);
         GameObject bullet = (GameObject)Instantiate(projectilePrefab, bulletOrigin, bulletOrientation);
-        bullet.transform.localScale = new Vector3(0.1f, 0.1f, 0.1f);
         if (isLocalPlayer)
         {
             bullet.GetComponent<Rigidbody>().interpolation = RigidbodyInterpolation.Extrapolate;
@@ -262,6 +274,10 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
         StartCoroutine(TakeDamageEnumerator());
 
         health -= damage;
+        if (health <= 0)
+        {
+            teamController.OnUnitDestroyed(gameObject);
+        }
     }
 
     // This method will be called when the ship colliders with other interactable objects such as weapons or items.
@@ -273,6 +289,14 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
             gunController.SetWeapon(controller);
             Destroy(controller.gameObject);
         }
+    }
+
+    /// <summary>
+    /// Recieve this message when the ends by either winning or losing
+    /// </summary>
+    /// <param name="win"></param>
+    public virtual void OnGameEnded(bool win)
+    {
     }
 
     //Corouitine to flash the renderer when the ship takes damage.
