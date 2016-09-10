@@ -45,7 +45,7 @@ public class ShipSpawnController : MonoBehaviour
     /// <summary>
     /// Stop the coroutine to spawn AI ships
     /// </summary>
-    private void StopSpawning()
+    public void StopSpawning()
     {
         StopCoroutine(SpawnFunction());
     }

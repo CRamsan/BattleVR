@@ -24,6 +24,7 @@ public class CapitalShipController : MonoBehaviour, DamageReceiver
         if (health <= 0)
         {
             teamController.OnUnitDestroyed(gameObject);
+            GetComponent<ShipSpawnController>().StopSpawning();
         }
     }
 
