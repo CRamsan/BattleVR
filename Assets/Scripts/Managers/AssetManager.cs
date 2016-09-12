@@ -6,11 +6,11 @@ public class AssetManager : MonoBehaviour
 {
     public enum ASSET
     {
-        FIGHTER_MODEL, FRIGATE_MODEL, TEAM_RED_MATERIAL, TEAM_BLUE_MATERIAL
+        NONE, FIGHTER_LODGROUP, FRIGATE_LODGROUP, TEAM_RED_MATERIAL, TEAM_BLUE_MATERIAL
     }
 
-    private Mesh fighterModel;
-    private Mesh frigateModel;
+    private GameObject fighterLODGroup;
+    private GameObject frigateLODGroup;
 
     private Material redTeamMaterial;
     private Material blueTeamMaterial;
@@ -19,8 +19,8 @@ public class AssetManager : MonoBehaviour
 
     private void Init()
     {
-        frigateModel = ((GameObject)Resources.Load("Fighter2")).GetComponent<MeshFilter>().sharedMesh;
-        fighterModel = ((GameObject)Resources.Load("Fighter2")).GetComponent<MeshFilter>().sharedMesh;
+        fighterLODGroup = ((GameObject)Resources.Load("Fighter1"));
+        frigateLODGroup = ((GameObject)Resources.Load("Fighter1"));
         redTeamMaterial = (Material)Resources.Load("TeamRed");
         blueTeamMaterial = (Material)Resources.Load("TeamBlue");
     }
@@ -42,10 +42,10 @@ public class AssetManager : MonoBehaviour
     {
         switch (resource)
         {
-            case ASSET.FIGHTER_MODEL:
-                return fighterModel;
-            case ASSET.FRIGATE_MODEL:
-                return frigateModel;
+            case ASSET.FIGHTER_LODGROUP:
+                return fighterLODGroup;
+            case ASSET.FRIGATE_LODGROUP:
+                return frigateLODGroup;
             case ASSET.TEAM_BLUE_MATERIAL:
                 return blueTeamMaterial;
             case ASSET.TEAM_RED_MATERIAL:

@@ -99,7 +99,11 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     /// </summary>
     private void DisplayShipConfigMenu()
     {
-        gameCollider.enabled = false;
+        // This can be null and it is not an issue. LODGroup will not be set until the player selects a ship.
+        if (gameLODGroup != null)
+        {
+            gameLODGroup.SetActive(false);
+        }
         gameRenderer.enabled = false;
         canvasGameObject = Instantiate(shipConfigCanvasPrefab);
         sceneManager.SetUIManager(canvasGameObject.GetComponent<GameLevelUIManager>());
@@ -122,7 +126,6 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         sceneManager.HideAllMenus();
         Destroy(canvasGameObject);
         canvasGameObject = null;
-        gameCollider.enabled = true;
         gameRenderer.enabled = true;
     }
 

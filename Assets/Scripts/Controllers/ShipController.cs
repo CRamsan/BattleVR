@@ -9,9 +9,7 @@ using System.Collections;
 /// </summary>
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(GunController))]
-[RequireComponent(typeof(MeshFilter))]
-[RequireComponent(typeof(MeshRenderer))]
-[RequireComponent(typeof(MeshCollider))]
+[RequireComponent(typeof(LODGroup))]
 public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, DamageReceiver
 {
 
@@ -36,8 +34,7 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
     protected GunController gunController;
     protected GameObject rendererGameObject;
     protected Renderer gameRenderer;
-    protected MeshFilter gameMeshFilter;
-    protected MeshCollider gameCollider;
+    protected GameObject gameLODGroup;
     protected Rigidbody gameRigidBody;
     protected TeamController teamController;
     protected float health;
@@ -72,11 +69,9 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
         gameRigidBody = GetComponent<Rigidbody>();
         gunController = GetComponent<GunController>();
         gunController.gunControllerDelegate = this;
-        gameCollider = GetComponent<MeshCollider>();
 
         health = 100f;
         gameRenderer = GetComponentInChildren<Renderer>();
-        gameMeshFilter = GetComponentInChildren<MeshFilter>();
         hasInit = true;
         gameEnded = false;
     }
@@ -150,15 +145,19 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
         switch (this.type)
         {
             case ShipType.FIGHTER:
-                gameMeshFilter.mesh = (Mesh)AssetManager.instance.GetAsset(AssetManager.ASSET.FIGHTER_MODEL);
+                gameLODGroup = (GameObject)Instantiate(AssetManager.instance.GetAsset(AssetManager.ASSET.FIGHTER_LODGROUP),
+                    transform.position, 
+                    transform.rotation);
                 break;
             case ShipType.FRIGATE:
-                gameMeshFilter.mesh = (Mesh)AssetManager.instance.GetAsset(AssetManager.ASSET.FRIGATE_MODEL);
+                gameLODGroup = (GameObject)Instantiate(AssetManager.instance.GetAsset(AssetManager.ASSET.FRIGATE_LODGROUP),
+                    transform.position,
+                    transform.rotation);
                 break;
             default:
                 throw new UnityException();
         }
-        gameCollider.sharedMesh = gameMeshFilter.mesh;
+        gameLODGroup.transform.SetParent(transform);
     }
 
     // Get the ShipType value
