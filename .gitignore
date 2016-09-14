@@ -12,6 +12,8 @@
 *.blend1.meta
 LightingData.asset
 LightingData.asset.meta
+Thumbs.db
+Thumbs.db.meta
 Assets/External/
 Assets/External.meta
 .vs/
