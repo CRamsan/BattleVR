@@ -32,6 +32,10 @@ public class InputManager : MonoBehaviour
             case CONTROLLER_ACTION.LOOK_SIDE:
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
                 state = Input.GetAxis("CONTROLLER_AXIS_4");
+                if (state == 0)
+                {
+                    state = (Input.GetKey("right") ? 1 : 0) - (Input.GetKey("left") ? 1 : 0);
+                }
 #elif UNITY_ANDROID
                 state = Input.GetAxis("CONTROLLER_AXIS_3");
 #endif
@@ -39,6 +43,10 @@ public class InputManager : MonoBehaviour
             case CONTROLLER_ACTION.LOOK_UP:
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
                 state = Input.GetAxis("CONTROLLER_AXIS_5");
+                if (state == 0)
+                {
+                    state = (Input.GetKey("up") ? 1 : 0) - (Input.GetKey("down") ? 1 : 0);
+                }
 #elif UNITY_ANDROID
                 state = Input.GetAxis("CONTROLLER_AXIS_4");
 #endif
