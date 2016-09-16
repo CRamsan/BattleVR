@@ -10,7 +10,6 @@ GameObject:
   - 4: {fileID: 431784}
   - 33: {fileID: 3376674}
   - 23: {fileID: 2354748}
-  - 64: {fileID: 6430214}
   m_Layer: 0
   m_Name: SpaceStation_2
   m_TagString: Untagged
@@ -28,7 +27,6 @@ GameObject:
   - 4: {fileID: 468884}
   - 33: {fileID: 3339908}
   - 23: {fileID: 2363690}
-  - 64: {fileID: 6478174}
   m_Layer: 0
   m_Name: SpaceStation_1
   m_TagString: Untagged
@@ -45,6 +43,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 417148}
   - 205: {fileID: 20513706}
+  - 64: {fileID: 6478512}
   m_Layer: 0
   m_Name: SpaceStation
   m_TagString: Untagged
@@ -159,24 +158,12 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 153648}
   m_Mesh: {fileID: 4300000, guid: 3850d4814b9fca2458ff2c4ed378bd2d, type: 3}
---- !u!64 &6430214
+--- !u!64 &6478512
 MeshCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 153648}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Convex: 0
-  m_Mesh: {fileID: 4300000, guid: 3850d4814b9fca2458ff2c4ed378bd2d, type: 3}
---- !u!64 &6478174
-MeshCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 156850}
+  m_GameObject: {fileID: 188762}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1

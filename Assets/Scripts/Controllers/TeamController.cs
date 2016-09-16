@@ -15,7 +15,7 @@ public class TeamController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         Assert.IsNotNull(capitalShip);
-        capitalShip.GetComponent<CapitalShipController>().SetTeamController(this);
+        capitalShip.GetComponentInChildren<CapitalShipController>().SetTeamController(this);
         GameLevelSceneManager.instance.RegisterCapitalShip(team, capitalShip);
         teamUnits = new List<GameObject>();
         gameEnded = false;

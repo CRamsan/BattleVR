@@ -9,6 +9,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 453394}
   - 205: {fileID: 20528356}
+  - 64: {fileID: 6452586}
   m_Layer: 0
   m_Name: Fighter1
   m_TagString: Untagged
@@ -221,6 +222,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 134526}
   m_Mesh: {fileID: 4300000, guid: 7b109315f97407644b7428cc3cbdf9df, type: 3}
+--- !u!64 &6452586
+MeshCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 129182}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Convex: 1
+  m_Mesh: {fileID: 4300000, guid: cf4c196377139314c936af0966230013, type: 3}
 --- !u!205 &20528356
 LODGroup:
   m_ObjectHideFlags: 1
