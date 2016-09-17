@@ -6,7 +6,7 @@
 [RequireComponent(typeof(Rigidbody))]
 public class ProjectileController : MonoBehaviour
 {
-
+    public GameObject collisionPrefab;
     public float speed;
 
     void Start()
@@ -19,7 +19,7 @@ public class ProjectileController : MonoBehaviour
     {
     }
 
-    void OnTriggerEnter(Collider col)
+    void OnCollisionEnter(Collision col)
     {
         DamageReceiver cont = col.gameObject.GetComponent<DamageReceiver>();
         if (cont != null)
@@ -27,5 +27,6 @@ public class ProjectileController : MonoBehaviour
             cont.onDamageReceived(10f, transform.position);
         }
         Destroy(gameObject);
+        Destroy(Instantiate(collisionPrefab, col.contacts[0].point, transform.rotation), 5f);
     }
 }

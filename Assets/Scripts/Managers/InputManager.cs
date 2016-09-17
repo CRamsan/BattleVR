@@ -95,6 +95,12 @@ public class InputManager : MonoBehaviour
                 break;
             case CONTROLLER_ACTION.SHOOT_PRIMARY:
                 state = Input.GetButtonDown("CONTROLLER_BUTTON_5") ? 1f : 0f;
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+                if (state == 0)
+                {
+                    state = Input.GetKey(KeyCode.LeftControl) ? 1 : 0;
+                }
+#endif
                 break;
             case CONTROLLER_ACTION.SHOOT_SECONDARY:
                 state = Input.GetButtonDown("CONTROLLER_BUTTON_4") ? 1f : 0f;
@@ -121,7 +127,7 @@ public class InputManager : MonoBehaviour
             case CONTROLLER_ACTION.PAUSE:
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
                 input = "CONTROLLER_BUTTON_7";
-                // TODO Remove this hack to enable Pause in a keyboard
+                // TODO Remove this hack, it is here to enable Pause in a keyboard
                 if (Input.GetKeyUp("p"))
                 {
                     return true;
@@ -129,7 +135,6 @@ public class InputManager : MonoBehaviour
 #else
                 input = "CONTROLLER_BUTTON_10";
 #endif
-
                 break;
             case CONTROLLER_ACTION.ROTATE:
                 break;
@@ -137,7 +142,16 @@ public class InputManager : MonoBehaviour
                 input = "CONTROLLER_BUTTON_0";
                 break;
             case CONTROLLER_ACTION.SHOOT_PRIMARY:
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
                 input = "CONTROLLER_BUTTON_5";
+                // TODO Remove this hack, it is here to enable Pause in a keyboard
+                if (Input.GetKeyUp(KeyCode.LeftControl))
+                {
+                    return true;
+                }
+#else
+                input = "CONTROLLER_BUTTON_5";
+#endif
                 break;
             case CONTROLLER_ACTION.SHOOT_SECONDARY:
                 input = "CONTROLLER_BUTTON_4";
