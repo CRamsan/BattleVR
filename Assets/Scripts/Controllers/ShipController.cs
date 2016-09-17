@@ -270,8 +270,6 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
     //This nethod will be called when this ship takes some damage
     public virtual void onDamageReceived(float damage, Vector3 position)
     {
-        StartCoroutine(TakeDamageEnumerator());
-
         health -= damage;
         if (health <= 0)
         {
@@ -296,14 +294,5 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
     /// <param name="win"></param>
     public virtual void OnGameEnded(bool win)
     {
-    }
-
-    //Corouitine to flash the renderer when the ship takes damage.
-    IEnumerator TakeDamageEnumerator()
-    {
-        tempColor = gameRenderer.material.color;
-        gameRenderer.material.color = Color.blue;
-        yield return new WaitForSeconds(.1f);
-        gameRenderer.material.color = tempColor;
     }
 }
