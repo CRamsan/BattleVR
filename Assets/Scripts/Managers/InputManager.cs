@@ -145,7 +145,7 @@ public class InputManager : MonoBehaviour
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
                 input = "CONTROLLER_BUTTON_5";
                 // TODO Remove this hack, it is here to enable Pause in a keyboard
-                if (Input.GetKeyUp(KeyCode.LeftControl))
+                if (Input.GetKey(KeyCode.LeftControl))
                 {
                     return true;
                 }
