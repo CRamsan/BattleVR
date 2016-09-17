@@ -347,6 +347,8 @@ MonoBehaviour:
     type: 2}
   impactSound: {fileID: 8300000, guid: 592df79a021d14c1f89701af35e4ad14, type: 3}
   projectileSound: {fileID: 8300000, guid: f6cb1f581b7444b23a05b613a16420d5, type: 3}
+  canvasMenuPosition: {x: 0, y: 2, z: 1.4}
+  canvasMenuScale: {x: 0.005, y: 0.005, z: 0.005}
 --- !u!114 &11476506
 MonoBehaviour:
   m_ObjectHideFlags: 1

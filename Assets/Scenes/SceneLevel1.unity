@@ -181,7 +181,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 451bbc80b3a586e40b7f1ef30f00e398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  health: 1000
 --- !u!1 &112274678
 GameObject:
   m_ObjectHideFlags: 0
@@ -501,7 +501,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 451bbc80b3a586e40b7f1ef30f00e398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
+  health: 1000
 --- !u!4 &1249667368 stripped
 Transform:
   m_PrefabParentObject: {fileID: 472918, guid: d0fec0583df7a04459f293dfd52620a9, type: 2}

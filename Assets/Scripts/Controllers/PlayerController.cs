@@ -11,6 +11,8 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     public GameObject shipConfigCanvasPrefab;
     public AudioClip impactSound;
     public AudioClip projectileSound;
+    public Vector3 canvasMenuPosition;
+    public Vector3 canvasMenuScale;
 
     private GameLevelSceneManager sceneManager;
     private GameObject canvasGameObject;
@@ -58,7 +60,8 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
 
         if (canvasGameObject != null)
         {
-            canvasGameObject.transform.position = transform.TransformPoint(new Vector3(0, 2, 5));
+            canvasGameObject.transform.position = transform.TransformPoint(canvasMenuPosition);
+            canvasGameObject.transform.localScale = canvasMenuScale;
             canvasGameObject.transform.rotation = transform.rotation;
         }
 

@@ -17,7 +17,6 @@ public class GameLevelUIManager : MonoBehaviour
     public GameObject ShipSelectMenu;
     public GameObject TeamSelectMenu;
     public GameObject GameEndMenu;
-    public Vector3 canvasPosition;
 
     public GameLevelUIManagerDelegate uiManagerDelegate;
 
@@ -28,11 +27,11 @@ public class GameLevelUIManager : MonoBehaviour
         Assert.IsFalse(isInitialized);
         isInitialized = true;
 
-        if (PauseGameMenu) PauseGameMenu.transform.localPosition = canvasPosition;
-        if (ConfirmationMenu) ConfirmationMenu.transform.localPosition = canvasPosition;
-        if (ShipSelectMenu) ShipSelectMenu.transform.localPosition = canvasPosition;
-        if (TeamSelectMenu) TeamSelectMenu.transform.localPosition = canvasPosition;
-        if (GameEndMenu) GameEndMenu.transform.localPosition = canvasPosition;
+        if (PauseGameMenu) PauseGameMenu.transform.localPosition = Vector3.zero;
+        if (ConfirmationMenu) ConfirmationMenu.transform.localPosition = Vector3.zero;
+        if (ShipSelectMenu) ShipSelectMenu.transform.localPosition = Vector3.zero;
+        if (TeamSelectMenu) TeamSelectMenu.transform.localPosition = Vector3.zero;
+        if (GameEndMenu) GameEndMenu.transform.localPosition = Vector3.zero;
     }
 
     // Use this for initialization

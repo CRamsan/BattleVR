@@ -383,7 +383,6 @@ MonoBehaviour:
   ShipSelectMenu: {fileID: 122448}
   TeamSelectMenu: {fileID: 138546}
   GameEndMenu: {fileID: 0}
-  canvasPosition: {x: 0, y: 1, z: 5}
 --- !u!114 &11442640
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -973,7 +972,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 5.6, y: -0.6645844}
-  m_SizeDelta: {x: 600, y: 400}
+  m_SizeDelta: {x: 400, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22454520
 RectTransform:
