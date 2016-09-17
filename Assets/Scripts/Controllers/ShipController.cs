@@ -33,13 +33,13 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
 
     protected GunController gunController;
     protected GameObject rendererGameObject;
-    protected Renderer gameRenderer;
     protected GameObject gameLODGroup;
     protected Rigidbody gameRigidBody;
     protected TeamController teamController;
     protected float health;
     protected bool isAI;
     protected bool gameEnded;
+    protected Renderer[] rendererList;
 
     [SyncVar(hook = "SetTeam")]
     protected GameLevelSceneManager.TEAMTAG teamTag;
@@ -71,7 +71,7 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
         gunController.gunControllerDelegate = this;
 
         health = 100f;
-        gameRenderer = GetComponentInChildren<Renderer>();
+        rendererList = new Renderer[0];
         hasInit = true;
         gameEnded = false;
     }
@@ -119,7 +119,11 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
             default:
                 throw new UnityException();
         }
-        gameRenderer.material = teamMaterial;
+        Assert.IsTrue(rendererList.Length > 0);
+        foreach (Renderer rend in rendererList)
+        {
+            rend.material = teamMaterial;
+        }
     }
 
     // Get the team value
@@ -142,6 +146,13 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
     {
         if (!hasInit)
             Init();
+        if (gameLODGroup != null)
+        {
+            gameLODGroup.SetActive(false);
+            Destroy(gameLODGroup);
+            gameLODGroup = null;
+        }
+
         switch (this.type)
         {
             case ShipType.FIGHTER:
@@ -158,6 +169,7 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
                 throw new UnityException();
         }
         gameLODGroup.transform.SetParent(transform);
+        rendererList = (Renderer[])gameLODGroup.GetComponentsInChildren<Renderer>();
     }
 
     // Get the ShipType value
@@ -182,8 +194,8 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
         isReadyForGame = readyForGame;
         if (isReadyForGame)
         {
-            RefreshTeamState();
             RefreshShipType();
+            RefreshTeamState();
         }
     }
 

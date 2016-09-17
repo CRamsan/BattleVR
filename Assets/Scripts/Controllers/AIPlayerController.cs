@@ -22,8 +22,8 @@ public class AIPlayerController : ShipController
         // InvokeRepeating("ConfigureTarget", 1, 5);
         if (isReadyForGame)
         {
-            RefreshTeamState();
             RefreshShipType();
+            RefreshTeamState();
         }
     }
 

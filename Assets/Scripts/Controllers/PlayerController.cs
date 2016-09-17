@@ -107,7 +107,6 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         {
             gameLODGroup.SetActive(false);
         }
-        gameRenderer.enabled = false;
         canvasGameObject = Instantiate(shipConfigCanvasPrefab);
         sceneManager.SetUIManager(canvasGameObject.GetComponent<GameLevelUIManager>());
         sceneManager.SetDelegate(this);
@@ -129,7 +128,6 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         sceneManager.HideAllMenus();
         Destroy(canvasGameObject);
         canvasGameObject = null;
-        gameRenderer.enabled = true;
     }
 
     /// <summary>
