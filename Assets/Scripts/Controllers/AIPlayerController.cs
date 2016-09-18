@@ -82,7 +82,7 @@ public class AIPlayerController : ShipController
 
             if (targetDistance < shootDistance)
             {
-                //gunController.PressTriger();
+                gunController.PressTriger();
             }
 
 #if UNITY_EDITOR
