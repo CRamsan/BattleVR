@@ -1,5 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 /// <summary>
 /// Manager class to handle the UI during in-game. This script needs to have a uiManagerDelegate to delegate the actions.
@@ -47,6 +50,18 @@ public class GameLevelUIManager : MonoBehaviour
         if (ShipSelectMenu) ShipSelectMenu.SetActive(selectedMenu == MENUS.SHIPSELECT);
         if (TeamSelectMenu) TeamSelectMenu.SetActive(selectedMenu == MENUS.TEAMSELECT);
         if (GameEndMenu) GameEndMenu.SetActive(selectedMenu == MENUS.GAMEEND);
+
+        try
+        {
+            GameObject nextButton = GetComponentInChildren<Button>().gameObject;
+            EventSystem es = GetComponentInChildren<EventSystem>();
+            es.SetSelectedGameObject(null);
+            es.SetSelectedGameObject(nextButton);
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e.Message);
+        }
     }
 
     public void PauseMenuResume()

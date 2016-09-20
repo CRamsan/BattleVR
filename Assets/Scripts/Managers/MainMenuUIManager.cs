@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Assertions;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Manager class to handle the Main Menu UI.
@@ -23,14 +25,11 @@ public class MainMenuUIManager : MonoBehaviour
         Assert.IsFalse(isInitialized);
         isInitialized = true;
 
-        StartGameMenu.SetActive(true);
         StartGameMenu.transform.position = Vector3.zero;
-        JoinGameMenu.SetActive(false);
         JoinGameMenu.transform.position = Vector3.zero;
-        SelectLevelMenu.SetActive(false);
         SelectLevelMenu.transform.position = Vector3.zero;
-        ConfirmationMenu.SetActive(false);
         ConfirmationMenu.transform.position = Vector3.zero;
+        SetActiveMenu(MENUS.MAINMENU);
     }
 
     // Use this for initialization
@@ -45,5 +44,17 @@ public class MainMenuUIManager : MonoBehaviour
         JoinGameMenu.SetActive(selectedMenu == MENUS.LOCALGAMES);
         SelectLevelMenu.SetActive(selectedMenu == MENUS.SELECTLEVEL);
         ConfirmationMenu.SetActive(selectedMenu == MENUS.CONFIRMATION);
+
+        //TODO I am using this hack to set the first selected item after changing
+        // menus. There must be a better way to do this.
+        try
+        {
+            GameObject nextButton = GetComponentInChildren<Button>().gameObject;
+            EventSystem es = GetComponentInChildren<EventSystem>();
+            es.SetSelectedGameObject(null);
+            es.SetSelectedGameObject(nextButton);
+        }
+        catch
+        { }
     }
 }
