@@ -13,7 +13,7 @@ SceneSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 6
+  serializedVersion: 7
   m_Fog: 0
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
@@ -37,12 +37,12 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1630932269}
+  m_IndirectSpecularColor: {r: 0.11931332, g: 0.15441245, b: 0.11660387, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 6
+  serializedVersion: 7
   m_GIWorkflowMode: 1
-  m_LightmapsMode: 0
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -53,17 +53,22 @@ LightmapSettings:
     m_EnableBakedLightmaps: 0
     m_EnableRealtimeLightmaps: 0
   m_LightmapEditorSettings:
-    serializedVersion: 3
+    serializedVersion: 4
     m_Resolution: 2
     m_BakeResolution: 40
     m_TextureWidth: 1024
     m_TextureHeight: 1024
+    m_AO: 0
     m_AOMaxDistance: 1
-    m_Padding: 2
     m_CompAOExponent: 0
+    m_CompAOExponentDirect: 0
+    m_Padding: 2
     m_LightmapParameters: {fileID: 0}
+    m_LightmapsBakeMode: 0
     m_TextureCompression: 1
+    m_DirectLightInLightProbes: 1
     m_FinalGather: 0
+    m_FinalGatherFiltering: 1
     m_FinalGatherRayCount: 1024
     m_ReflectionCompression: 2
   m_LightingDataAsset: {fileID: 112000001, guid: c5f291b40c2f9df4a9034d1570323f16,
@@ -273,6 +278,14 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 45
       objectReference: {fileID: 0}
+    - target: {fileID: 20513706, guid: 60d2382fdbc1b6a43a1fbb5989412aaf, type: 2}
+      propertyPath: m_LODs.Array.data[0].screenRelativeHeight
+      value: 0.29866228
+      objectReference: {fileID: 0}
+    - target: {fileID: 20513706, guid: 60d2382fdbc1b6a43a1fbb5989412aaf, type: 2}
+      propertyPath: m_LODs.Array.data[1].screenRelativeHeight
+      value: 0.04906225
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 60d2382fdbc1b6a43a1fbb5989412aaf, type: 2}
   m_IsPrefabParent: 0
@@ -427,15 +440,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 475170, guid: 6aaeea9f2dc7c4f41ae59226cd3a0f10, type: 2}
       propertyPath: m_LocalRotation.y
-      value: -0.00000017881393
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 475170, guid: 6aaeea9f2dc7c4f41ae59226cd3a0f10, type: 2}
       propertyPath: m_LocalRotation.z
-      value: 1
+      value: -0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 475170, guid: 6aaeea9f2dc7c4f41ae59226cd3a0f10, type: 2}
       propertyPath: m_LocalRotation.w
-      value: -0.00000017881393
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 475170, guid: 6aaeea9f2dc7c4f41ae59226cd3a0f10, type: 2}
       propertyPath: m_RootOrder
@@ -459,7 +472,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 475170, guid: 6aaeea9f2dc7c4f41ae59226cd3a0f10, type: 2}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 2348644, guid: 6aaeea9f2dc7c4f41ae59226cd3a0f10, type: 2}
       propertyPath: m_Materials.Array.data[0]
@@ -617,7 +630,7 @@ Light:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1630932268}
   m_Enabled: 1
-  serializedVersion: 6
+  serializedVersion: 7
   m_Type: 1
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
   m_Intensity: 1
@@ -627,6 +640,7 @@ Light:
   m_Shadows:
     m_Type: 1
     m_Resolution: -1
+    m_CustomResolution: -1
     m_Strength: 1
     m_Bias: 0.05
     m_NormalBias: 0.4
@@ -639,10 +653,10 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_Lightmapping: 4
+  m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
-  m_AreaSize: {x: 1, y: 1}
 --- !u!4 &1630932270
 Transform:
   m_ObjectHideFlags: 0
@@ -706,10 +720,10 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1810740828}
-  m_LocalRotation: {x: -0.5, y: -0.5, z: -0.5000001, w: 0.49999994}
+  m_LocalRotation: {x: 0.7071068, y: -0, z: 0.7071068, w: 0}
   m_LocalPosition: {x: -750, y: 0, z: 0}
   m_LocalScale: {x: 30, y: 30, z: 30}
-  m_LocalEulerAnglesHint: {x: -90, y: -90, z: 0}
+  m_LocalEulerAnglesHint: {x: 180, y: -90, z: 0}
   m_Children:
   - {fileID: 5765541}
   m_Father: {fileID: 0}

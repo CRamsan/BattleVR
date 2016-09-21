@@ -214,7 +214,7 @@ public class GameLevelSceneManager : MonoBehaviour, GameLevelUIManagerDelegate
         }
 
         // This is just a hack to get spawn points in a spherical shape around the capital ship
-        return (capitalShip.transform.position) + (new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1) * 200));
+        return (capitalShip.transform.position) + (Vector3.up * 100);
     }
 
     public TeamController GetTeamController(TEAMTAG tag)
