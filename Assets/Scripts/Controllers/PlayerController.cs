@@ -102,6 +102,7 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     /// </summary>
     private void DisplayShipConfigMenu()
     {
+        isPause = true;
         // This can be null and it is not an issue. LODGroup will not be set until the player selects a ship.
         if (gameLODGroup != null)
         {
@@ -125,6 +126,7 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     /// </summary>
     private void DismissShipConfigMenu()
     {
+        isPause = true;
         sceneManager.HideAllMenus();
         Destroy(canvasGameObject);
         canvasGameObject = null;
@@ -153,6 +155,7 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         DismissShipConfigMenu();
         transform.position = sceneManager.GetSpawnPosition(teamTag);
         CmdDoSetReadyForGame(true);
+        isPause = false;
     }
 
     /// <summary>
