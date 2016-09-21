@@ -127,4 +127,12 @@ public class GameLevelUIManager : MonoBehaviour
             uiManagerDelegate.OnShipConfigMenuFrigateSelected();
         }
     }
+
+    public void ShipConfigMenuDestroyer()
+    {
+        if (uiManagerDelegate != null)
+        {
+            uiManagerDelegate.OnShipConfigMenuDestroyerSelected();
+        }
+    }
 }

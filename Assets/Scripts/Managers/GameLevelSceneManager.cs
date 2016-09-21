@@ -151,6 +151,14 @@ public class GameLevelSceneManager : MonoBehaviour, GameLevelUIManagerDelegate
         }
     }
 
+    public void OnShipConfigMenuDestroyerSelected()
+    {
+        if (sceneManagerDelegate != null)
+        {
+            sceneManagerDelegate.OnShipConfigMenuShipSelected(ShipController.ShipType.DESTROYER);
+        }
+    }
+    
     /// <summary>
     /// Set the target gameObject as the capital ship of the specified team.
     /// </summary>

@@ -2,6 +2,7 @@
 using UnityEngine.Assertions;
 using UnityEngine.Networking;
 using System.Collections;
+using UnityEngine.VR;
 
 /// <summary>
 /// This controller is the base controller for any ship, either AI or human controlled. It is independant from the
@@ -18,7 +19,7 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
         NONE,
         FIGHTER,
         FRIGATE,
-        BATTLECRUISER
+        DESTROYER
     }
 
     // This should be moved out of here and into the GunController
@@ -165,6 +166,11 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
                     transform.position,
                     transform.rotation);
                 break;
+            case ShipType.DESTROYER:
+                gameLODGroup = (GameObject)Instantiate(AssetManager.instance.GetAsset(AssetManager.ASSET.FRIGATE_LODGROUP),
+                    transform.position,
+                    transform.rotation);
+                break;
             default:
                 throw new UnityException();
         }
@@ -237,7 +243,22 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
     //Method that will fire a bullet.
     private void DoFire(Vector3 projectileOrigin)
     {
-        Quaternion bulletOrientation = transform.rotation;
+        Quaternion bulletOrientation;
+        if (ShipType.DESTROYER == type && isLocalPlayer)
+        {
+            if (VRSettings.enabled)
+            {
+                bulletOrientation = InputTracking.GetLocalRotation(VRNode.CenterEye);
+            }
+            else
+            {
+                bulletOrientation = Camera.main.transform.rotation;
+            }
+        }
+        else
+        {
+            bulletOrientation = transform.rotation;
+        }
         Vector3 bulletOrigin = transform.TransformPoint(projectileOrigin);
         GameObject bullet = (GameObject)Instantiate(projectilePrefab, bulletOrigin, bulletOrientation);
         if (isLocalPlayer)

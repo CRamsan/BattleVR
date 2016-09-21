@@ -30,6 +30,7 @@ GameObject:
   - 81: {fileID: 8161178}
   - 114: {fileID: 11441700}
   - 82: {fileID: 8268778}
+  - 114: {fileID: 114000011151302778}
   m_Layer: 8
   m_Name: MainPlayerCamera
   m_TagString: MainCamera
@@ -80,7 +81,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 198766}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -771.4556, y: 92.47274, z: 349.6614}
+  m_LocalPosition: {x: -3.6913567, y: 1.2799044, z: 1.5310569}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
@@ -270,12 +271,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultReserveSize: 100
-  defaultMagSize: 25
+  defaultMagSize: 45
   rechamberTime: 0.25
   reloadTime: 0.1
   projectileOrigins:
   - {x: -8, y: 0, z: 15}
   - {x: 8, y: 0, z: 15}
+  - {x: 0, y: 0, z: 35}
 --- !u!114 &11453346
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -299,7 +301,7 @@ MonoBehaviour:
     type: 2}
   impactSound: {fileID: 8300000, guid: 592df79a021d14c1f89701af35e4ad14, type: 3}
   projectileSound: {fileID: 8300000, guid: f6cb1f581b7444b23a05b613a16420d5, type: 3}
-  canvasMenuPosition: {x: 0, y: 2, z: 1.4}
+  canvasMenuPosition: {x: 0, y: 2, z: 2}
   canvasMenuScale: {x: 0.005, y: 0.005, z: 0.005}
 --- !u!114 &11476506
 MonoBehaviour:
@@ -451,3 +453,21 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 198766}
   m_IsPrefabParent: 1
+--- !u!114 &114000011151302778
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 134296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41e746db511c39a499ea33cb19b6e491, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  axes: 0
+  sensitivityX: 15
+  sensitivityY: 15
+  minimumX: -360
+  maximumX: 360
+  minimumY: -60
+  maximumY: 60

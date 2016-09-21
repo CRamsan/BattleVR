@@ -14,4 +14,5 @@ public interface GameLevelUIManagerDelegate
     void OnTeamSelectMenuRedSelected();
     void OnShipConfigMenuFigtherSelected();
     void OnShipConfigMenuFrigateSelected();
+    void OnShipConfigMenuDestroyerSelected();
 }
