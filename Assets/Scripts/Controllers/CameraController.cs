@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.VR;
 
 /// <summary>
@@ -12,6 +14,7 @@ public class CameraController : MonoBehaviour
 
     private Camera playerCamera;
     private GameObject reticleOject;
+    private GameObject lastSelected;
     private RaycastHit hit;
 
     // Use this for initialization
@@ -44,6 +47,24 @@ public class CameraController : MonoBehaviour
 
         float reticleDistance = reticleHit ? hit.distance : reticleMaxDistance;
         reticleOject.transform.position = transform.TransformPoint(new Vector3(0, 0, reticleDistance));
+
+        EventSystem eventSystem = EventSystem.current;
+
+        if (eventSystem != null)
+        {
+            if (eventSystem.currentSelectedGameObject != null)
+            {
+                lastSelected = EventSystem.current.currentSelectedGameObject;
+            }
+
+            if (InputManager.WasActionPressed(InputManager.CONTROLLER_ACTION.SELECT))
+            {
+                if (eventSystem.currentSelectedGameObject == null)
+                {
+                    eventSystem.SetSelectedGameObject(lastSelected);
+                }
+            }
+        }
 
 #if UNITY_EDITOR
         if (reticleHit)

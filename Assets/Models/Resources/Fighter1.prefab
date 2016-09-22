@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 453394}
   - 205: {fileID: 20528356}
   - 64: {fileID: 6452586}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Fighter1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,7 +27,7 @@ GameObject:
   - 4: {fileID: 481354}
   - 33: {fileID: 3385698}
   - 23: {fileID: 2340466}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Fighter_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - 4: {fileID: 465094}
   - 33: {fileID: 3313478}
   - 23: {fileID: 2331434}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Fighter_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -61,7 +61,7 @@ GameObject:
   - 4: {fileID: 481986}
   - 33: {fileID: 3371164}
   - 23: {fileID: 2329508}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Fighter_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
