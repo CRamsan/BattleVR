@@ -10,5 +10,5 @@ public interface DamageReceiver
     /// </summary>
     /// <param name="damage"></param>
     /// <param name="location"></param>
-    void onDamageReceived(float damage, Vector3 location);
+    void OnDamageReceived(float damage, Vector3 location);
 }

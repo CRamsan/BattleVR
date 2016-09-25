@@ -21,8 +21,6 @@ public class GameLevelUIManager : MonoBehaviour
     public GameObject TeamSelectMenu;
     public GameObject GameEndMenu;
 
-    public GameLevelUIManagerDelegate uiManagerDelegate;
-
     private bool isInitialized = false;
 
     private void Setup()
@@ -53,10 +51,13 @@ public class GameLevelUIManager : MonoBehaviour
 
         try
         {
-            GameObject nextButton = GetComponentInChildren<Button>().gameObject;
-            EventSystem es = GetComponentInChildren<EventSystem>();
-            es.SetSelectedGameObject(null);
-            es.SetSelectedGameObject(nextButton);
+            if (MENUS.NONE != selectedMenu)
+            {
+                GameObject nextButton = GetComponentInChildren<Button>().gameObject;
+                EventSystem es = GetComponentInChildren<EventSystem>();
+                es.SetSelectedGameObject(null);
+                es.SetSelectedGameObject(nextButton);
+            }
         }
         catch (Exception e)
         {
@@ -66,73 +67,46 @@ public class GameLevelUIManager : MonoBehaviour
 
     public void PauseMenuResume()
     {
-        if (uiManagerDelegate != null)
-        {
-            uiManagerDelegate.OnPauseMenuResumeSelected();
-        }
+        GameLevelEventManager.OnPauseMenuResumeSelected();
     }
 
     public void PauseMenuQuit()
     {
-        if (uiManagerDelegate != null)
-        {
-            uiManagerDelegate.OnPauseMenuQuitSelected();
-        }
+        SetActiveMenu(GameLevelUIManager.MENUS.CONFIRMATION);
     }
 
     public void PauseMenuConfirmBack()
     {
-        if (uiManagerDelegate != null)
-        {
-            uiManagerDelegate.OnPauseMenuConfirmBackSelected();
-        }
+        SetActiveMenu(GameLevelUIManager.MENUS.PAUSEMENU);
     }
 
     public void PauseMenuConfirmQuit()
     {
-        if (uiManagerDelegate != null)
-        {
-            uiManagerDelegate.OnPauseMenuConfirmQuitSelected();
-        }
+        GameLevelEventManager.OnPauseMenuConfirmQuitSelected();
     }
 
     public void TeamSelectMenuBlue()
     {
-        if (uiManagerDelegate != null)
-        {
-            uiManagerDelegate.OnTeamSelectMenuBlueSelected();
-        }
+        GameLevelEventManager.OnTeamSelectMenuTeamSelected(GameLevelSceneManager.TEAMTAG.BLUE);
     }
 
     public void TeamSelectMenuRed()
     {
-        if (uiManagerDelegate != null)
-        {
-            uiManagerDelegate.OnTeamSelectMenuRedSelected();
-        }
+        GameLevelEventManager.OnTeamSelectMenuTeamSelected(GameLevelSceneManager.TEAMTAG.RED);
     }
 
     public void ShipConfigMenuFigther()
     {
-        if (uiManagerDelegate != null)
-        {
-            uiManagerDelegate.OnShipConfigMenuFigtherSelected();
-        }
+        GameLevelEventManager.OnShipConfigMenuShipSelected(ShipController.ShipType.FIGHTER);
     }
 
     public void ShipConfigMenuFrigate()
     {
-        if (uiManagerDelegate != null)
-        {
-            uiManagerDelegate.OnShipConfigMenuFrigateSelected();
-        }
+        GameLevelEventManager.OnShipConfigMenuShipSelected(ShipController.ShipType.FRIGATE);
     }
 
     public void ShipConfigMenuDestroyer()
     {
-        if (uiManagerDelegate != null)
-        {
-            uiManagerDelegate.OnShipConfigMenuDestroyerSelected();
-        }
+        GameLevelEventManager.OnShipConfigMenuShipSelected(ShipController.ShipType.DESTROYER);
     }
 }

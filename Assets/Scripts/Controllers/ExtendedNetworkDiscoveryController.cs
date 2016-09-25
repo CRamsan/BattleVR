@@ -7,11 +7,13 @@ using UnityEngine.Networking;
 /// </summary>
 public class ExtendedNetworkDiscoveryController : NetworkDiscovery
 {
-
     /// <summary>
-    /// Public delegate that will be called whenever OnReceivedBroadcast is called.
+    /// This delegate is called when a new game was discovered in the local network.
     /// </summary>
-    public NetworkDiscoveryDelegate discoveryDelegate;
+    /// <param name="fromAddress"></param>
+    /// <param name="data"></param>
+    public delegate void GameFound(string fromAddress, string data);
+    public static event GameFound OnGameFound;
 
     /// <summary>
     /// This method is called whenever a new game is discovered.
@@ -20,13 +22,10 @@ public class ExtendedNetworkDiscoveryController : NetworkDiscovery
     /// <param name="data"></param>
     public override void OnReceivedBroadcast(string fromAddress, string data)
     {
-#if UNITY_EDITOR
-        Assert.IsNotNull(discoveryDelegate);
-        if (discoveryDelegate == null)
+        Assert.IsNotNull(OnGameFound);
+        if (OnGameFound != null)
         {
-            return;
+            OnGameFound(fromAddress, data);
         }
-#endif
-        discoveryDelegate.OnReceivedBroadcast(fromAddress, data);
     }
 }

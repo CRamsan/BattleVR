@@ -71,7 +71,7 @@ public class GunController : MonoBehaviour
             {
                 if (projectileOrigins.Count > 0)
                 {
-                    gunControllerDelegate.onShootProjectile(projectileOrigins[originCounter++]);
+                    gunControllerDelegate.OnShootProjectile(projectileOrigins[originCounter++]);
                     if (originCounter >= projectileOrigins.Count)
                     {
                         originCounter = 0;
@@ -79,14 +79,14 @@ public class GunController : MonoBehaviour
                 }
                 else
                 {
-                    gunControllerDelegate.onShootProjectile(Vector3.zero);
+                    gunControllerDelegate.OnShootProjectile(Vector3.zero);
                 }
                 firing = GUN_MODE.FIRING;
                 currentMagsize--;
             }
             else
             {
-                gunControllerDelegate.onStartReloading();
+                gunControllerDelegate.OnStartReloading();
                 firing = GUN_MODE.RELOADING;
             }
             counter = 0f;

@@ -143,9 +143,9 @@ public class AIPlayerController : ShipController
     }
 
     //This nethod will be called when this ship takes some damage
-    public override void onDamageReceived(float damage, Vector3 position)
+    public override void OnDamageReceived(float damage, Vector3 position)
     {
-        base.onDamageReceived(damage, position);
+        base.OnDamageReceived(damage, position);
         if (health <= 0)
         {
             Destroy(gameObject);

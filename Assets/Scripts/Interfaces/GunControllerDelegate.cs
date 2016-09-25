@@ -8,9 +8,9 @@ public interface GunControllerDelegate
     /// This method will be called when the GunController fires a projectile.
     /// </summary>
     /// <param name="origin"></param>
-    void onShootProjectile(Vector3 origin);
+    void OnShootProjectile(Vector3 origin);
     /// <summary>
     /// This method will be called when the GunController starts the reloading process.
     /// </summary>
-    void onStartReloading();
+    void OnStartReloading();
 }

@@ -17,7 +17,7 @@ public class CapitalShipController : MonoBehaviour, DamageReceiver
 	
 	}
 
-    public virtual void onDamageReceived(float damage, Vector3 location)
+    public virtual void OnDamageReceived(float damage, Vector3 location)
     {
         health -= damage;
         Debug.Log("Capital ship damged: " + health);

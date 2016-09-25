@@ -289,19 +289,19 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
     }
 
     //Shoot a projectile locally and send a message to the server to trigger a shot on the other clients.
-    public virtual void onShootProjectile(Vector3 projectileOrigin)
+    public virtual void OnShootProjectile(Vector3 projectileOrigin)
     {
         DoFire(projectileOrigin);
         CmdDoFire(projectileOrigin);
     }
 
     // This method will be called when the gun needs to start reloading.
-    public virtual void onStartReloading()
+    public virtual void OnStartReloading()
     {
     }
 
     //This nethod will be called when this ship takes some damage
-    public virtual void onDamageReceived(float damage, Vector3 position)
+    public virtual void OnDamageReceived(float damage, Vector3 position)
     {
         health -= damage;
         if (health <= 0)

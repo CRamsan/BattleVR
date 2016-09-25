@@ -8,7 +8,7 @@ using UnityEngine.UI;
 /// This controller implements the NetworkDiscoveryDelegate and can be set as the delegate for the ExtendedNetworkDiscoveryController.
 /// When the ExtendedNetworkDiscoveryController find a new game then OnReceivedBroadcast will be called.
 /// </summary>
-public class DiscoveredGamesController : MonoBehaviour, NetworkDiscoveryDelegate
+public class DiscoveredGamesController : MonoBehaviour
 {
 
     public GameObject uiLayout;
@@ -53,7 +53,7 @@ public class DiscoveredGamesController : MonoBehaviour, NetworkDiscoveryDelegate
         }
 
         networkDiscovery.Initialize();
-        networkDiscovery.discoveryDelegate = this;
+        ExtendedNetworkDiscoveryController.OnGameFound += OnReceivedBroadcast;
         //Refresh the UI every 5 seconds starting 5 seconds from now
         InvokeRepeating("RefreshUI", 5, 5);
         networkDiscovery.StartAsClient();
@@ -63,7 +63,7 @@ public class DiscoveredGamesController : MonoBehaviour, NetworkDiscoveryDelegate
     {
         networkDiscovery.StopBroadcast();
         CancelInvoke("RefreshUI");
-        networkDiscovery.discoveryDelegate = null;
+        ExtendedNetworkDiscoveryController.OnGameFound -= OnReceivedBroadcast;
     }
 
     /// <summary>

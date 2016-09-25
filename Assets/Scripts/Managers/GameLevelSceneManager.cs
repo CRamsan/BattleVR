@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 /// This manager will take care of several kinds of UI and network related code. There should only be one instance of
 /// this script for each Game Level Scene. 
 /// </summary>
-public class GameLevelSceneManager : MonoBehaviour, GameLevelUIManagerDelegate
+public class GameLevelSceneManager : MonoBehaviour
 {
     public enum TEAMTAG { NONE, RED, BLUE };
 
@@ -18,7 +18,6 @@ public class GameLevelSceneManager : MonoBehaviour, GameLevelUIManagerDelegate
 
     private GameLevelUIManager uiManager;
     private ExtendedNetworkManager networkManager;
-    private GameLevelSceneManagerDelegate sceneManagerDelegate;
     private NetworkDiscovery networkDiscovery;
 
     //
@@ -26,7 +25,6 @@ public class GameLevelSceneManager : MonoBehaviour, GameLevelUIManagerDelegate
     {
         Assert.IsNotNull(uiManager);
         this.uiManager = uiManager;
-        this.uiManager.uiManagerDelegate = this;
     }
 
     private void SetGameVisibility(bool visible)
@@ -57,11 +55,6 @@ public class GameLevelSceneManager : MonoBehaviour, GameLevelUIManagerDelegate
         GameLevelSceneManager.instance = null;
     }
 
-    public void SetDelegate(GameLevelSceneManagerDelegate sceneManagerDelegate)
-    {
-        this.sceneManagerDelegate = sceneManagerDelegate;
-    }
-
     public void HideAllMenus()
     {
         uiManager.SetActiveMenu(GameLevelUIManager.MENUS.NONE);
@@ -85,29 +78,13 @@ public class GameLevelSceneManager : MonoBehaviour, GameLevelUIManagerDelegate
 
     public void DisplayGameEndMenu()
     {
+        GameLevelEventManager.PauseMenuConfirmQuitSelectedEvent += QuitGame;
         uiManager.SetActiveMenu(GameLevelUIManager.MENUS.GAMEEND);
     }
 
-    public void OnPauseMenuResumeSelected()
+    public void QuitGame()
     {
-        if (sceneManagerDelegate != null)
-        {
-            sceneManagerDelegate.OnPauseMenuResumeSelected();
-        }
-    }
-
-    public void OnPauseMenuQuitSelected()
-    {
-        uiManager.SetActiveMenu(GameLevelUIManager.MENUS.CONFIRMATION);
-    }
-
-    public void OnPauseMenuConfirmBackSelected()
-    {
-        uiManager.SetActiveMenu(GameLevelUIManager.MENUS.PAUSEMENU);
-    }
-
-    public void OnPauseMenuConfirmQuitSelected()
-    {
+        GameLevelEventManager.PauseMenuConfirmQuitSelectedEvent -= QuitGame;
         if (ExtendedNetworkManager.isHost)
         {
             ExtendedNetworkManager.isHost = false;
@@ -119,46 +96,6 @@ public class GameLevelSceneManager : MonoBehaviour, GameLevelUIManagerDelegate
         }
     }
 
-    public void OnTeamSelectMenuBlueSelected()
-    {
-        if (sceneManagerDelegate != null)
-        {
-            sceneManagerDelegate.OnTeamSelectMenuTeamSelected(GameLevelSceneManager.TEAMTAG.BLUE);
-        }
-    }
-
-    public void OnTeamSelectMenuRedSelected()
-    {
-        if (sceneManagerDelegate != null)
-        {
-            sceneManagerDelegate.OnTeamSelectMenuTeamSelected(GameLevelSceneManager.TEAMTAG.RED);
-        }
-    }
-
-    public void OnShipConfigMenuFigtherSelected()
-    {
-        if (sceneManagerDelegate != null)
-        {
-            sceneManagerDelegate.OnShipConfigMenuShipSelected(ShipController.ShipType.FIGHTER);
-        }
-    }
-
-    public void OnShipConfigMenuFrigateSelected()
-    {
-        if (sceneManagerDelegate != null)
-        {
-            sceneManagerDelegate.OnShipConfigMenuShipSelected(ShipController.ShipType.FRIGATE);
-        }
-    }
-
-    public void OnShipConfigMenuDestroyerSelected()
-    {
-        if (sceneManagerDelegate != null)
-        {
-            sceneManagerDelegate.OnShipConfigMenuShipSelected(ShipController.ShipType.DESTROYER);
-        }
-    }
-    
     /// <summary>
     /// Set the target gameObject as the capital ship of the specified team.
     /// </summary>

@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 /// <summary>
 /// This controller will provide the input management for movement and UI for an agent controlled by a human player.
 /// </summary>
-public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
+public class PlayerController : ShipController {
 
     public GameObject pauseCanvasPrefab;
     public GameObject shipConfigCanvasPrefab;
@@ -110,13 +110,14 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         }
         canvasGameObject = Instantiate(shipConfigCanvasPrefab);
         sceneManager.SetUIManager(canvasGameObject.GetComponent<GameLevelUIManager>());
-        sceneManager.SetDelegate(this);
         if (!isTeamSelected)
         {
+            GameLevelEventManager.TeamSelectMenuTeamSelectedEvent += OnTeamSelectMenuTeamSelected;
             sceneManager.DisplayTeamSelectMenu();
         }
         else
         {
+            GameLevelEventManager.ShipConfigMenuShipSelectedEvent += OnShipConfigMenuShipSelected;
             sceneManager.DisplayShipSelectMenu();
         }
     }
@@ -138,10 +139,12 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     /// <param name="teamTag"></param>
     public void OnTeamSelectMenuTeamSelected(GameLevelSceneManager.TEAMTAG teamTag)
     {
+        GameLevelEventManager.TeamSelectMenuTeamSelectedEvent -= OnTeamSelectMenuTeamSelected;
         CmdDoSetTeam(teamTag);
         isTeamSelected = true;
         TeamController controller = sceneManager.GetTeamController(teamTag);
         controller.RegisterUnit(gameObject);
+        GameLevelEventManager.ShipConfigMenuShipSelectedEvent += OnShipConfigMenuShipSelected;
         sceneManager.DisplayShipSelectMenu();
     }
 
@@ -151,6 +154,7 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     /// </summary>
     public void OnShipConfigMenuShipSelected(ShipController.ShipType type)
     {
+        GameLevelEventManager.ShipConfigMenuShipSelectedEvent -= OnShipConfigMenuShipSelected;
         CmdDoSetShipType(type);
         DismissShipConfigMenu();
         transform.position = sceneManager.GetSpawnPosition(teamTag);
@@ -197,6 +201,8 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     {
         if (isPause)
         {
+            GameLevelEventManager.PauseMenuResumeSelectedEvent -= OnPauseMenuResumeSelected;
+            GameLevelEventManager.PauseMenuConfirmQuitSelectedEvent -= sceneManager.QuitGame;
             sceneManager.HideAllMenus();
             Destroy(canvasGameObject);
             canvasGameObject = null;
@@ -206,8 +212,9 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         {
             Physics.IgnoreLayerCollision(8, 5, true);
             canvasGameObject = Instantiate(pauseCanvasPrefab);
+            GameLevelEventManager.PauseMenuResumeSelectedEvent += OnPauseMenuResumeSelected;
+            GameLevelEventManager.PauseMenuConfirmQuitSelectedEvent += sceneManager.QuitGame;
             sceneManager.SetUIManager(canvasGameObject.GetComponent<GameLevelUIManager>());
-            sceneManager.SetDelegate(this);
             sceneManager.DisplayPauseMenu();
         }
         isPause = !isPause;
@@ -218,28 +225,29 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
     /// </summary>
     public void OnPauseMenuResumeSelected()
     {
+        GameLevelEventManager.PauseMenuResumeSelectedEvent -= OnPauseMenuResumeSelected;
         Assert.IsTrue(isPause);
         Assert.IsNotNull(canvasGameObject);
         TogglePauseMenu();
     }
 
     // Override the onShooProjectile to provide sounds when shots are fired.
-    public override void onShootProjectile(Vector3 projectileOrigin)
+    public override void OnShootProjectile(Vector3 projectileOrigin)
     {
-        base.onShootProjectile(projectileOrigin);
+        base.OnShootProjectile(projectileOrigin);
         AudioSource.PlayClipAtPoint(projectileSound, transform.TransformPoint(projectileOrigin));
     }
 
     // Override onStartReloading to provide reload sounds
-    public override void onStartReloading()
+    public override void OnStartReloading()
     {
-        base.onStartReloading();
+        base.OnStartReloading();
     }
 
     // Override onDamageRecieved to provide positional audio of the impact
-    public override void onDamageReceived(float damage, Vector3 position)
+    public override void OnDamageReceived(float damage, Vector3 position)
     {
-        base.onDamageReceived(damage, position);
+        base.OnDamageReceived(damage, position);
         AudioSource.PlayClipAtPoint(impactSound, position);
         if (health <= 0)
         {
@@ -258,7 +266,6 @@ public class PlayerController : ShipController, GameLevelSceneManagerDelegate {
         Physics.IgnoreLayerCollision(8, 5, true);
         canvasGameObject = Instantiate(pauseCanvasPrefab);
         sceneManager.SetUIManager(canvasGameObject.GetComponent<GameLevelUIManager>());
-        sceneManager.SetDelegate(this);
         sceneManager.DisplayGameEndMenu();
     }
 

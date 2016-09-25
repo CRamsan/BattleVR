@@ -24,7 +24,7 @@ public class ProjectileController : MonoBehaviour
         DamageReceiver cont = col.gameObject.GetComponent<DamageReceiver>();
         if (cont != null)
         {
-            cont.onDamageReceived(10f, transform.position);
+            cont.OnDamageReceived(10f, transform.position);
         }
         Destroy(gameObject);
         Destroy(Instantiate(collisionPrefab, col.contacts[0].point, transform.rotation), 5f);
