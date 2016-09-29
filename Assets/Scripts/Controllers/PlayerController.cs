@@ -142,8 +142,6 @@ public class PlayerController : ShipController {
         GameLevelEventManager.TeamSelectMenuTeamSelectedEvent -= OnTeamSelectMenuTeamSelected;
         CmdDoSetTeam(teamTag);
         isTeamSelected = true;
-        TeamController controller = sceneManager.GetTeamController(teamTag);
-        controller.RegisterUnit(gameObject);
         GameLevelEventManager.ShipConfigMenuShipSelectedEvent += OnShipConfigMenuShipSelected;
         sceneManager.DisplayShipSelectMenu();
     }

@@ -48,7 +48,7 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
     [SyncVar(hook = "SetShipType")]
     protected ShipType type;
 
-    [SyncVar(hook = "onReadyForGameChanged")]
+    [SyncVar(hook = "SetReadyForGame")]
     protected bool isReadyForGame;
 
     private Color tempColor;
@@ -125,6 +125,9 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
         {
             rend.material = teamMaterial;
         }
+
+        TeamController controller = GameLevelSceneManager.instance.GetTeamController(teamTag);
+        controller.RegisterUnit(gameObject);
     }
 
     // Get the team value
@@ -189,13 +192,8 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
         return isReadyForGame;
     }
 
-    public void SetReadyForGame(bool readyForGame)
-    {
-        isReadyForGame = readyForGame;
-    }
-
     // This method will be called when the isReadyForGame variable changes.
-    public void onReadyForGameChanged(bool readyForGame)
+    public void SetReadyForGame(bool readyForGame)
     {
         isReadyForGame = readyForGame;
         if (isReadyForGame)
