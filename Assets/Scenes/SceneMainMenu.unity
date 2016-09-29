@@ -103,7 +103,7 @@ GameObject:
   - 114: {fileID: 26288101}
   - 114: {fileID: 26288100}
   m_Layer: 5
-  m_Name: BackButton
+  m_Name: ConfirmationBackButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -167,7 +167,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 672033216}
+      - m_Target: {fileID: 672033217}
         m_MethodName: CancelStartGame
         m_Mode: 1
         m_Arguments:
@@ -521,7 +521,8 @@ MonoBehaviour:
   uiLayout: {fileID: 65082535}
   buttonPrefab: {fileID: 101032, guid: 86fb9b26050d8054286078d2197adfd8, type: 2}
   waitingLabel: {fileID: 998058231}
-  menuManager: {fileID: 672033216}
+  uiManager: {fileID: 672033217}
+  networkDiscovery: {fileID: 1259858163}
 --- !u!1 &392334106
 GameObject:
   m_ObjectHideFlags: 0
@@ -598,7 +599,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 672033216}
+      - m_Target: {fileID: 672033217}
         m_MethodName: DisplayLocalGame
         m_Mode: 1
         m_Arguments:
@@ -776,8 +777,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 672033216}
-        m_MethodName: DisplayCredits
+      - m_Target: {fileID: 672033217}
+        m_MethodName: DisplayMainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -898,7 +899,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 672033216}
+      - m_Target: {fileID: 672033217}
         m_MethodName: ConfirmStartGame
         m_Mode: 1
         m_Arguments:
@@ -955,7 +956,6 @@ GameObject:
   - 223: {fileID: 672033213}
   - 114: {fileID: 672033212}
   - 114: {fileID: 672033211}
-  - 114: {fileID: 672033216}
   - 114: {fileID: 672033217}
   - 222: {fileID: 672033221}
   - 114: {fileID: 672033220}
@@ -1046,18 +1046,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 600, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &672033216
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 672033210}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4ddb983541d1c2d4c90da4efebe6397e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  uiManager: {fileID: 672033217}
 --- !u!114 &672033217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1194,7 +1182,7 @@ GameObject:
   - 114: {fileID: 804057192}
   - 114: {fileID: 804057191}
   m_Layer: 5
-  m_Name: BackButton
+  m_Name: SelectLevelBackButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1258,7 +1246,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 672033216}
+      - m_Target: {fileID: 672033217}
         m_MethodName: DisplayMainMenu
         m_Mode: 1
         m_Arguments:
@@ -1392,7 +1380,7 @@ GameObject:
   - 114: {fileID: 1090084288}
   - 114: {fileID: 1090084287}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Level1Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1456,7 +1444,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 672033216}
+      - m_Target: {fileID: 672033217}
         m_MethodName: DisplayConfirmation
         m_Mode: 1
         m_Arguments:
@@ -1654,8 +1642,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 672033216}
-        m_MethodName: DisplaySettings
+      - m_Target: {fileID: 672033217}
+        m_MethodName: DisplayMainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1897,7 +1885,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 672033216}
+      - m_Target: {fileID: 672033217}
         m_MethodName: DisplaySelectLevel
         m_Mode: 1
         m_Arguments:
@@ -2029,7 +2017,7 @@ GameObject:
   - 114: {fileID: 1309374102}
   - 114: {fileID: 1309374101}
   m_Layer: 5
-  m_Name: BackButton
+  m_Name: JoinGameBackButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2093,7 +2081,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 672033216}
+      - m_Target: {fileID: 672033217}
         m_MethodName: DisplayMainMenu
         m_Mode: 1
         m_Arguments:

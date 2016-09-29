@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 using UnityEngine.Assertions;
 using UnityEngine.EventSystems;
 
@@ -18,6 +19,8 @@ public class MainMenuUIManager : MonoBehaviour
     public GameObject SelectLevelMenu;
     public GameObject ConfirmationMenu;
 
+    private NetworkManager networkManager;
+    private bool inJoinFlow = false;
     private bool isInitialized = false;
 
     private void Setup()
@@ -36,6 +39,7 @@ public class MainMenuUIManager : MonoBehaviour
     void Start()
     {
         Setup();
+        networkManager = NetworkManager.singleton;
     }
 
     public void SetActiveMenu(MENUS selectedMenu)
@@ -56,5 +60,64 @@ public class MainMenuUIManager : MonoBehaviour
         }
         catch
         { }
+    }
+
+    //Methods that will be called by the buttons in the MainMenu
+
+    public void DisplayMainMenu()
+    {
+        SetActiveMenu(MainMenuUIManager.MENUS.MAINMENU);
+    }
+
+    public void DisplayLocalGame()
+    {
+        SetActiveMenu(MainMenuUIManager.MENUS.LOCALGAMES);
+    }
+
+    public void CancelStartGame()
+    {
+        if (!inJoinFlow)
+        {
+            DisplaySelectLevel();
+        }
+        else
+        {
+            DisplayLocalGame();
+        }
+    }
+
+    public void DisplaySelectLevel()
+    {
+        SetActiveMenu(MainMenuUIManager.MENUS.SELECTLEVEL);
+    }
+
+    public void DisplayConfirmation()
+    {
+        inJoinFlow = false;
+        SetActiveMenu(MainMenuUIManager.MENUS.CONFIRMATION);
+    }
+
+    public void DisplayJoinConfirmation()
+    {
+        inJoinFlow = true;
+        SetActiveMenu(MainMenuUIManager.MENUS.CONFIRMATION);
+    }
+
+    public void DisplaySettings() { }
+
+    public void DisplayCredits() { }
+
+    public void ConfirmStartGame()
+    {
+        SetActiveMenu(MainMenuUIManager.MENUS.NONE);
+        if (inJoinFlow)
+        {
+            networkManager.StartClient();
+        }
+        else
+        {
+            networkManager.StartHost();
+        }
+        ExtendedNetworkManager.isHost = !inJoinFlow;
     }
 }

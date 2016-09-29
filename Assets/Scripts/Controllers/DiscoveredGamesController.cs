@@ -14,9 +14,9 @@ public class DiscoveredGamesController : MonoBehaviour
     public GameObject uiLayout;
     public GameObject buttonPrefab;
     public GameObject waitingLabel;
-    public MainMenuSceneManager menuManager;
+    public MainMenuUIManager uiManager;
+    public ExtendedNetworkDiscoveryController networkDiscovery;
 
-    private ExtendedNetworkDiscoveryController networkDiscovery;
     private ArrayList roomList;
     private bool isInitialized = false;
 
@@ -24,9 +24,9 @@ public class DiscoveredGamesController : MonoBehaviour
     {
         Assert.IsFalse(isInitialized);
         isInitialized = true;
-        ExtendedNetworkManager networkManager = (ExtendedNetworkManager)NetworkManager.singleton;
-        networkDiscovery = networkManager.networkDiscovery;
         roomList = new ArrayList();
+        Assert.IsNotNull(uiManager);
+        Assert.IsNotNull(networkDiscovery);
     }
 
     // Use this for initialization
@@ -105,9 +105,8 @@ public class DiscoveredGamesController : MonoBehaviour
     /// <param name="fromAddress"></param>
     private void SetNetworkManagerAddress(string fromAddress)
     {
-        ExtendedNetworkManager networkManager = (ExtendedNetworkManager)NetworkManager.singleton;
-        networkManager.networkAddress = fromAddress;
-        menuManager.DisplayJoinConfirmation();
+        NetworkManager.singleton.networkAddress = fromAddress;
+        uiManager.DisplayJoinConfirmation();
     }
 
     /// <summary>
