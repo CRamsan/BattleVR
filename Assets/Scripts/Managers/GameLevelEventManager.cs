@@ -18,6 +18,9 @@ public class GameLevelEventManager : MonoBehaviour
     public delegate void PauseMenuConfirmQuitSelected();
     public static event PauseMenuConfirmQuitSelected PauseMenuConfirmQuitSelectedEvent;
 
+    public delegate void PlayerProjectileHit();
+    public static event PlayerProjectileHit PlayerProjectileHitEvent;
+
     /// <summary>
     /// This method will be called when the user selects a UI elements that will dismiss the pause menu.
     /// </summary>
@@ -64,6 +67,15 @@ public class GameLevelEventManager : MonoBehaviour
         if (PauseMenuConfirmQuitSelectedEvent != null)
         {
             PauseMenuConfirmQuitSelectedEvent();
+        }
+    }
+
+    public static void OnPlayerProjectileHit()
+    {
+        Assert.IsNotNull(PlayerProjectileHitEvent);
+        if (PlayerProjectileHitEvent != null)
+        {
+            PlayerProjectileHitEvent();
         }
     }
 }
