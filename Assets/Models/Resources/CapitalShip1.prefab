@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 450974}
   - 33: {fileID: 3346016}
   - 23: {fileID: 2376836}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: CapitalShip_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,7 +27,7 @@ GameObject:
   - 4: {fileID: 434982}
   - 33: {fileID: 3348600}
   - 23: {fileID: 2348644}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: CapitalShip_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - 4: {fileID: 475170}
   - 205: {fileID: 20563924}
   - 64: {fileID: 6488814}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: CapitalShip1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

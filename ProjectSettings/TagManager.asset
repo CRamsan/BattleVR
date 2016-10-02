@@ -14,8 +14,8 @@ TagManager:
   - 
   - 
   - PlayerCollider
-  - 
-  - 
+  - ProjectileCollider
+  - RadarCollider
   - 
   - 
   - 

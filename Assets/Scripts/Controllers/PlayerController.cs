@@ -1,11 +1,17 @@
 ﻿using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Networking;
+using System.Collections;
+using System.Collections.Generic;
 
 /// <summary>
 /// This controller will provide the input management for movement and UI for an agent controlled by a human player.
 /// </summary>
+[RequireComponent(typeof(SphereCollider))]
 public class PlayerController : ShipController {
+
+    public GameObject hudGameObject;
+    public GameObject enemyMarkerPrefab;
 
     public GameObject pauseCanvasPrefab;
     public GameObject shipConfigCanvasPrefab;
@@ -16,8 +22,11 @@ public class PlayerController : ShipController {
 
     private GameLevelSceneManager sceneManager;
     private GameObject canvasGameObject;
+    private SphereCollider sphereCollider;
+
     private bool isPause;
     private bool isTeamSelected;
+    private Dictionary<ShipController, GameObject> enemyMap;
 
     // Use this for initialization
     void Start()
@@ -30,9 +39,13 @@ public class PlayerController : ShipController {
             isReadyForGame = false;
             sceneManager = GameLevelSceneManager.instance;
             DisplayShipConfigMenu();
+            sphereCollider = GetComponent<SphereCollider>();
+            enemyMap = new Dictionary<ShipController, GameObject>();
         }
         else
         {
+            GetComponent<SphereCollider>().enabled = false;
+
             //TODO Investigate this and lets make it compact
             foreach (Transform child in transform)
             {
@@ -93,6 +106,19 @@ public class PlayerController : ShipController {
 
         HandleInput(leftStickVector.magnitude >= 0.2 ? leftStickVector : Vector3.zero,
                     rotationStickVector.magnitude >= 0.2 ? rotationStickVector : Vector3.zero);
+    }
+
+    /// <summary>
+    /// Logic that needs to be called after the update method. Here I am adding the 
+    /// logic for setting the marker positions.
+    /// </summary>
+    void LateUpdate()
+    {
+        foreach (KeyValuePair<ShipController, GameObject> entry in enemyMap)
+        {
+            Vector3 enemyDirection = (entry.Key.transform.position - Camera.main.transform.position).normalized;
+            entry.Value.transform.position = Camera.main.transform.position + (enemyDirection * 10f);
+        }
     }
 
     /// <summary>
@@ -204,11 +230,9 @@ public class PlayerController : ShipController {
             sceneManager.HideAllMenus();
             Destroy(canvasGameObject);
             canvasGameObject = null;
-            Physics.IgnoreLayerCollision(8, 5, false);
         }
         else
         {
-            Physics.IgnoreLayerCollision(8, 5, true);
             canvasGameObject = Instantiate(pauseCanvasPrefab);
             GameLevelEventManager.PauseMenuResumeSelectedEvent += OnPauseMenuResumeSelected;
             GameLevelEventManager.PauseMenuConfirmQuitSelectedEvent += sceneManager.QuitGame;
@@ -261,7 +285,6 @@ public class PlayerController : ShipController {
     public override void OnGameEnded(bool win)
     {
         gameEnded = true;
-        Physics.IgnoreLayerCollision(8, 5, true);
         canvasGameObject = Instantiate(pauseCanvasPrefab);
         sceneManager.SetUIManager(canvasGameObject.GetComponent<GameLevelUIManager>());
         sceneManager.DisplayGameEndMenu();
@@ -270,6 +293,60 @@ public class PlayerController : ShipController {
     // Override this method to provide extra functionality when the player enters a trigger.
     public override void OnTriggerEnter(Collider other)
     {
-        base.OnTriggerEnter(other);
+        ShipController controller = other.transform.parent.GetComponent<ShipController>();
+        // When a shipController enters the radar collider
+        if (controller != null)
+        {
+            Assert.IsTrue(isLocalPlayer);
+            Assert.IsFalse(Network.isServer);
+            HandleShipEnterVecinity(controller);
+        }
+        else 
+        {
+            base.OnTriggerEnter(other);
+        }
+    }
+
+    // Override this method to provide extra functionality when the player enters a trigger.
+    public void OnTriggerExit(Collider other)
+    {
+        ShipController controller = other.transform.parent.GetComponent<ShipController>();
+        // When a shipController enters the radar collider
+        if (controller != null)
+        {
+            Assert.IsTrue(isLocalPlayer);
+            Assert.IsFalse(Network.isServer);
+            HandleShipExitVecinity(controller);
+        }
+        else
+        {
+        }
+    }
+
+    // This method will check if the enemy ship is already a know one. 
+    // If it is not we will create a marker for it and add it to the map.
+    private void HandleShipEnterVecinity(ShipController ship)
+    {
+        if (!enemyMap.ContainsKey(ship))
+        {
+            GameObject EnemyMarker = (GameObject)Instantiate(enemyMarkerPrefab, hudGameObject.transform);
+            EnemyMarker.transform.localScale = new Vector3(1, 1, 1);
+            enemyMap.Add(ship, EnemyMarker);
+        }
+    }
+
+    // When a ship leaves the vecinity then remove the marker and the ship from the map.
+    private void HandleShipExitVecinity(ShipController ship)
+    {
+        if (enemyMap.ContainsKey(ship))
+        {
+            GameObject EnemyMarker = enemyMap[ship];
+            enemyMap.Remove(ship);
+            Destroy(EnemyMarker);
+        }
+        else
+        {
+            Assert.IsTrue(false);
+        }
     }
 }
