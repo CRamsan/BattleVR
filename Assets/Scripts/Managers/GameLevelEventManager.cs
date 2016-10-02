@@ -21,6 +21,9 @@ public class GameLevelEventManager : MonoBehaviour
     public delegate void PlayerProjectileHit();
     public static event PlayerProjectileHit PlayerProjectileHitEvent;
 
+    public delegate void ShipDestroyed(ShipController ship);
+    public static event ShipDestroyed ShipDestroyedEvent;
+
     /// <summary>
     /// This method will be called when the user selects a UI elements that will dismiss the pause menu.
     /// </summary>
@@ -78,4 +81,13 @@ public class GameLevelEventManager : MonoBehaviour
             PlayerProjectileHitEvent();
         }
     }
+
+    public static void OnShipDestroyed(ShipController ship)
+    {
+        if (ShipDestroyedEvent != null)
+        {
+            ShipDestroyedEvent(ship);
+        }
+    }
+
 }

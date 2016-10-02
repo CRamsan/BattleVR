@@ -323,4 +323,28 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
     public virtual void OnGameEnded(bool win)
     {
     }
+
+    /// <summary>
+    /// This method is called when a new ship is created for this team
+    /// </summary>
+    /// <param name="ship"></param>
+    public virtual void OnFriendlyShipSpawned(ShipController ship)
+    {
+    }
+
+    /// <summary>
+    /// This method is called when a friendly ship is destroyed
+    /// </summary>
+    /// <param name="ship"></param>
+    public virtual void OnFriendlyShipDestroyed(ShipController ship)
+    {
+    }
+
+    /// <summary>
+    /// This method is called when this script is about to be destroyed
+    /// </summary>
+    void OnDestroy()
+    {
+        GameLevelEventManager.OnShipDestroyed(this);
+    }
 }

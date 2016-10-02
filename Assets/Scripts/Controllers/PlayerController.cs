@@ -12,6 +12,7 @@ public class PlayerController : ShipController {
 
     public GameObject hudGameObject;
     public GameObject enemyMarkerPrefab;
+    public GameObject friendlyMarkerPrefab;
 
     public GameObject pauseCanvasPrefab;
     public GameObject shipConfigCanvasPrefab;
@@ -26,7 +27,8 @@ public class PlayerController : ShipController {
 
     private bool isPause;
     private bool isTeamSelected;
-    private Dictionary<ShipController, GameObject> enemyMap;
+    private Dictionary<ShipController, GameObject> enemyShipMap;
+    private Dictionary<ShipController, GameObject> allyShipMap;
 
     // Use this for initialization
     void Start()
@@ -40,7 +42,9 @@ public class PlayerController : ShipController {
             sceneManager = GameLevelSceneManager.instance;
             DisplayShipConfigMenu();
             sphereCollider = GetComponent<SphereCollider>();
-            enemyMap = new Dictionary<ShipController, GameObject>();
+            enemyShipMap = new Dictionary<ShipController, GameObject>();
+            allyShipMap = new Dictionary<ShipController, GameObject>();
+            GameLevelEventManager.ShipDestroyedEvent += HandleShipExitVecinity;
         }
         else
         {
@@ -109,15 +113,41 @@ public class PlayerController : ShipController {
     }
 
     /// <summary>
+    /// Method called when this script becomes active
+    /// </summary>
+    void OnEnable()
+    {
+
+    }
+
+    /// <summary>
+    /// Method that gets called when this script gets disabled
+    /// </summary>
+    void OnDisable()
+    {
+        if (isLocalPlayer)
+        {
+            GameLevelEventManager.ShipDestroyedEvent -= HandleShipExitVecinity;
+        }
+    }
+
+    /// <summary>
     /// Logic that needs to be called after the update method. Here I am adding the 
     /// logic for setting the marker positions.
     /// </summary>
     void LateUpdate()
     {
-        foreach (KeyValuePair<ShipController, GameObject> entry in enemyMap)
+        foreach (KeyValuePair<ShipController, GameObject> entry in enemyShipMap)
         {
             Vector3 enemyDirection = (entry.Key.transform.position - Camera.main.transform.position).normalized;
             entry.Value.transform.position = Camera.main.transform.position + (enemyDirection * 10f);
+            entry.Value.transform.LookAt(Camera.main.transform);
+        }
+        foreach (KeyValuePair<ShipController, GameObject> entry in allyShipMap)
+        {
+            Vector3 allyDirection = (entry.Key.transform.position - Camera.main.transform.position).normalized;
+            entry.Value.transform.position = Camera.main.transform.position + (allyDirection * 10f);
+            entry.Value.transform.LookAt(Camera.main.transform);
         }
     }
 
@@ -327,26 +357,50 @@ public class PlayerController : ShipController {
     // If it is not we will create a marker for it and add it to the map.
     private void HandleShipEnterVecinity(ShipController ship)
     {
-        if (!enemyMap.ContainsKey(ship))
+        if (ship.GetTeam() != GetTeam() && !enemyShipMap.ContainsKey(ship))
         {
             GameObject EnemyMarker = (GameObject)Instantiate(enemyMarkerPrefab, hudGameObject.transform);
             EnemyMarker.transform.localScale = new Vector3(1, 1, 1);
-            enemyMap.Add(ship, EnemyMarker);
+            enemyShipMap.Add(ship, EnemyMarker);
         }
     }
 
     // When a ship leaves the vecinity then remove the marker and the ship from the map.
     private void HandleShipExitVecinity(ShipController ship)
     {
-        if (enemyMap.ContainsKey(ship))
+        if (ship.GetTeam() != GetTeam())
         {
-            GameObject EnemyMarker = enemyMap[ship];
-            enemyMap.Remove(ship);
-            Destroy(EnemyMarker);
+            Dictionary<ShipController, GameObject> shipMap;
+            shipMap = enemyShipMap;
+            if (shipMap.ContainsKey(ship))
+            {
+                GameObject shipMarker = shipMap[ship];
+                shipMap.Remove(ship);
+                Destroy(shipMarker);
+            }
         }
-        else
-        {
-            Assert.IsTrue(false);
-        }
+    }
+
+    /// <summary>
+    /// This method is called when a new ship is created for this team
+    /// </summary>
+    /// <param name="ship"></param>
+    public override void OnFriendlyShipSpawned(ShipController ship)
+    {
+        GameObject FriendlyMarker = (GameObject)Instantiate(friendlyMarkerPrefab, hudGameObject.transform);
+        FriendlyMarker.transform.localScale = new Vector3(1, 1, 1);
+        allyShipMap.Add(ship, FriendlyMarker);
+    }
+
+    /// <summary>
+    /// This method is called when a friendly ship is destroyed
+    /// </summary>
+    /// <param name="ship"></param>
+    public override void OnFriendlyShipDestroyed(ShipController ship)
+    {
+        Assert.IsTrue(allyShipMap.ContainsKey(ship));
+        GameObject shipMarker = allyShipMap[ship];
+        allyShipMap.Remove(ship);
+        Destroy(shipMarker);
     }
 }

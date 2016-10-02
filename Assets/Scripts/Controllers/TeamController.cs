@@ -29,15 +29,28 @@ public class TeamController : MonoBehaviour {
     // Add this unit to this team so we can track it
     public void RegisterUnit(GameObject newUnit)
     {
-        ShipController controller = newUnit.GetComponent<ShipController>();
-        newUnit.transform.SetParent(transform);
-        Assert.IsNotNull(controller);
-        if (controller != null)
+        if (!teamUnits.Contains(newUnit))
         {
-            controller.SetTeam(team);
-            controller.SetTeamController(this);
+            ShipController controller = newUnit.GetComponent<ShipController>();
+            newUnit.transform.SetParent(transform);
+            Assert.IsNotNull(controller);
+            if (controller != null)
+            {
+                controller.SetTeam(team);
+                controller.SetTeamController(this);
+            }
+            // Notify the new unit about all existing units
+            foreach (GameObject teamUnit in teamUnits)
+            {
+                newUnit.GetComponent<ShipController>().OnFriendlyShipSpawned(teamUnit.GetComponent<ShipController>());
+            }
+            // Now notify the existing units about this new unit
+            foreach (GameObject teamUnit in teamUnits)
+            {
+                teamUnit.GetComponent<ShipController>().OnFriendlyShipSpawned(controller);
+            }
+            teamUnits.Add(newUnit);
         }
-        teamUnits.Add(newUnit);
     }
 
     /// <summary>
@@ -48,7 +61,13 @@ public class TeamController : MonoBehaviour {
     {
         if (unit.GetComponent<ShipController>() != null)
         {
+            Assert.IsTrue(teamUnits.Contains(unit));
+            teamUnits.Remove(unit);
             Debug.Log("Ship of team " + team + " was destroyed");
+            foreach (GameObject teamUnit in teamUnits)
+            {
+                teamUnit.GetComponent<ShipController>().OnFriendlyShipDestroyed(unit.GetComponent<ShipController>());
+            }
         }
         else if (unit.GetComponent<CapitalShipController>() != null)
         {

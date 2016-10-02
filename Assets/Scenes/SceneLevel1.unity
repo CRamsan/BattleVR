@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 1630932269}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.11931332, g: 0.15441245, b: 0.11660387, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -579,7 +579,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aiShipPrefab: {fileID: 198766, guid: 334be976b0bb55b41a24ffe2d5f0ad15, type: 2}
   timeWait: 5
-  maxTeamCount: 10
+  maxTeamCount: 15
 --- !u!114 &1410178386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -700,7 +700,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   aiShipPrefab: {fileID: 198766, guid: 334be976b0bb55b41a24ffe2d5f0ad15, type: 2}
   timeWait: 5
-  maxTeamCount: 10
+  maxTeamCount: 15
 --- !u!114 &1810740830
 MonoBehaviour:
   m_ObjectHideFlags: 0

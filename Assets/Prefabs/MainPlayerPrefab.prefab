@@ -302,6 +302,8 @@ MonoBehaviour:
   hudGameObject: {fileID: 1000010460651676}
   enemyMarkerPrefab: {fileID: 1000011653553792, guid: 38d7333ed4e4fee4e853af87a6aecc9c,
     type: 2}
+  friendlyMarkerPrefab: {fileID: 1000012511701946, guid: 5e54918f7ed004c4b8e970bcd09a629d,
+    type: 2}
   pauseCanvasPrefab: {fileID: 184896, guid: a5ae5fa97550bf04397cd38067f3333a, type: 2}
   shipConfigCanvasPrefab: {fileID: 157150, guid: 7d03a5d9abf706b45a6fc6dec029a6a4,
     type: 2}
@@ -573,7 +575,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 80
+  m_Radius: 250
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!222 &222000013710289628
 CanvasRenderer:
