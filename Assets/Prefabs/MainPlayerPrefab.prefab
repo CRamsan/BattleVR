@@ -311,6 +311,8 @@ MonoBehaviour:
   projectileSound: {fileID: 8300000, guid: f6cb1f581b7444b23a05b613a16420d5, type: 3}
   canvasMenuPosition: {x: 0, y: 2, z: 2}
   canvasMenuScale: {x: 0.005, y: 0.005, z: 0.005}
+  headGameObject: {fileID: 134296}
+  cameraAnchor: {x: 0, y: 2, z: 0}
 --- !u!114 &11476506
 MonoBehaviour:
   m_ObjectHideFlags: 1

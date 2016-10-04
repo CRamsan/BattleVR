@@ -20,6 +20,8 @@ public class PlayerController : ShipController {
     public AudioClip projectileSound;
     public Vector3 canvasMenuPosition;
     public Vector3 canvasMenuScale;
+    public GameObject headGameObject;
+    public Vector3 cameraAnchor;
 
     private GameLevelSceneManager sceneManager;
     private GameObject canvasGameObject;
@@ -29,6 +31,7 @@ public class PlayerController : ShipController {
     private bool isTeamSelected;
     private Dictionary<ShipController, GameObject> enemyShipMap;
     private Dictionary<ShipController, GameObject> allyShipMap;
+    private Vector3 lastSpeedVector;
 
     // Use this for initialization
     void Start()
@@ -110,6 +113,21 @@ public class PlayerController : ShipController {
 
         HandleInput(leftStickVector.magnitude >= 0.2 ? leftStickVector : Vector3.zero,
                     rotationStickVector.magnitude >= 0.2 ? rotationStickVector : Vector3.zero);
+    }
+
+    void FixedUpdate()
+    {
+        // Function is (arctan(x)) / (pi/2), x = speed
+        Vector3 localVelocity = gameRigidBody.velocity;
+        float inertiaMagnitude = Mathf.Atan(localVelocity.magnitude / 100) / (Mathf.PI / 2f);
+        Vector3 inertia = localVelocity.normalized * (-1f) * inertiaMagnitude;
+        Vector3 cameraLocalAnchor = transform.TransformPoint(cameraAnchor);
+#if UNITY_EDITOR
+        Debug.DrawLine(cameraLocalAnchor, cameraLocalAnchor + (inertia * 10), Color.red);
+        Debug.DrawLine(cameraLocalAnchor, cameraLocalAnchor + gameRigidBody.velocity, Color.blue);
+#endif
+        headGameObject.transform.position = cameraLocalAnchor + inertia;
+        lastSpeedVector = localVelocity;
     }
 
     /// <summary>
