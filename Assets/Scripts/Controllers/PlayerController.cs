@@ -31,6 +31,8 @@ public class PlayerController : ShipController {
     private bool isTeamSelected;
     private Dictionary<ShipController, GameObject> enemyShipMap;
     private Dictionary<ShipController, GameObject> allyShipMap;
+    private Dictionary<GameObject, GameObject> objectiveMap;
+
     private Vector3 lastSpeedVector;
 
     // Use this for initialization
