@@ -181,4 +181,21 @@ public class GameLevelSceneManager : MonoBehaviour
         Assert.IsNotNull(controller);
         return controller;
     }
+
+    public GameObject GetCapitalShip(TEAMTAG team)
+    {
+        GameObject capitalShip;
+        switch (team)
+        {
+            case TEAMTAG.RED:
+                capitalShip = capitalShipRed;
+                break;
+            case TEAMTAG.BLUE:
+                capitalShip = capitalShipBlue;
+                break;
+            default:
+                throw new UnityException();
+        }
+        return capitalShip;
+    }
 }

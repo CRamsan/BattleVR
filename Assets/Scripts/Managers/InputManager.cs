@@ -10,7 +10,8 @@ public class InputManager : MonoBehaviour
     {
         THRUSTER, STRAFE, SHOOT_PRIMARY, SHOOT_SECONDARY,
         LOOK_UP, LOOK_SIDE, ROTATE, BOOST,
-        PAUSE, SELECT
+        PAUSE, SELECT,
+        SCALE_UP, SCALE_DOWN
     }
 
     private enum CONTROLLER_ACTION_EVENT
@@ -159,6 +160,12 @@ public class InputManager : MonoBehaviour
             case CONTROLLER_ACTION.STRAFE:
                 break;
             case CONTROLLER_ACTION.THRUSTER:
+                break;
+            case CONTROLLER_ACTION.SCALE_UP:
+                input = "CONTROLLER_BUTTON_2";
+                break;
+            case CONTROLLER_ACTION.SCALE_DOWN:
+                input = "CONTROLLER_BUTTON_3";
                 break;
         }
 

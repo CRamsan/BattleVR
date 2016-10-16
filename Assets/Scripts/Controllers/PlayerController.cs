@@ -3,6 +3,7 @@ using UnityEngine.Assertions;
 using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 /// <summary>
 /// This controller will provide the input management for movement and UI for an agent controlled by a human player.
@@ -32,8 +33,6 @@ public class PlayerController : ShipController {
     private Dictionary<ShipController, GameObject> enemyShipMap;
     private Dictionary<ShipController, GameObject> allyShipMap;
     private Dictionary<GameObject, GameObject> objectiveMap;
-
-    private Vector3 lastSpeedVector;
 
     // Use this for initialization
     void Start()
@@ -111,6 +110,9 @@ public class PlayerController : ShipController {
 
             leftStickVector = new Vector3(dStrafe, 0, dForward);
             rotationStickVector = new Vector3(dLookUp, dLookSide, dRotate);
+
+            Vector3 cameraLocalAnchor = transform.TransformPoint(cameraAnchor);
+            headGameObject.transform.position = cameraLocalAnchor + transform.TransformVector(new Vector3(leftStickVector.x/-25, 0, leftStickVector.z/-25));
         }
 
         HandleInput(leftStickVector.magnitude >= 0.2 ? leftStickVector : Vector3.zero,
@@ -119,17 +121,6 @@ public class PlayerController : ShipController {
 
     void FixedUpdate()
     {
-        // Function is (arctan(x)) / (pi/2), x = speed
-        Vector3 localVelocity = gameRigidBody.velocity;
-        float inertiaMagnitude = Mathf.Atan(localVelocity.magnitude / 100) / (Mathf.PI / 2f);
-        Vector3 inertia = localVelocity.normalized * (-1f) * inertiaMagnitude;
-        Vector3 cameraLocalAnchor = transform.TransformPoint(cameraAnchor);
-#if UNITY_EDITOR
-        Debug.DrawLine(cameraLocalAnchor, cameraLocalAnchor + (inertia * 10), Color.red);
-        Debug.DrawLine(cameraLocalAnchor, cameraLocalAnchor + gameRigidBody.velocity, Color.blue);
-#endif
-        headGameObject.transform.position = cameraLocalAnchor + inertia;
-        lastSpeedVector = localVelocity;
     }
 
     /// <summary>
@@ -157,17 +148,22 @@ public class PlayerController : ShipController {
     /// </summary>
     void LateUpdate()
     {
+        float markerCount = enemyShipMap.Count;
         foreach (KeyValuePair<ShipController, GameObject> entry in enemyShipMap)
         {
             Vector3 enemyDirection = (entry.Key.transform.position - Camera.main.transform.position).normalized;
             entry.Value.transform.position = Camera.main.transform.position + (enemyDirection * 10f);
             entry.Value.transform.LookAt(Camera.main.transform);
+            float dist = 1f / ((Vector3.Distance(transform.position, entry.Value.transform.position) / 100f) + 1f);
+            entry.Value.transform.localScale = new Vector3(dist, dist, dist);
         }
         foreach (KeyValuePair<ShipController, GameObject> entry in allyShipMap)
         {
             Vector3 allyDirection = (entry.Key.transform.position - Camera.main.transform.position).normalized;
             entry.Value.transform.position = Camera.main.transform.position + (allyDirection * 10f);
             entry.Value.transform.LookAt(Camera.main.transform);
+            float dist = 1f / ((Vector3.Distance(transform.position, entry.Value.transform.position) / 100f) + 1f);
+            entry.Value.transform.localScale = new Vector3(dist, dist, dist);
         }
     }
 

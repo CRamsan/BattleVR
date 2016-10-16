@@ -100,6 +100,11 @@ PlayerSettings:
   metroEnableIndependentInputSource: 0
   xboxOneDisableKinectGpuReservation: 0
   singlePassStereoRendering: 0
+  vrSettings:
+    google:
+      depthFormat: 0
+      useSustainedPerformanceMode: 0
+  vrSplashScreenShouldntTagAlong: 0
   protectGraphicsMemory: 0
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 19
@@ -411,6 +416,10 @@ PlayerSettings:
   XboxOneSplashScreen: {fileID: 0}
   XboxOneAllowedProductIds: []
   XboxOnePersistentLocalStorageSize: 0
+  vrEditorSettings:
+    google:
+      daydreamIconForeground: {fileID: 0}
+      daydreamIconBackground: {fileID: 0}
   intPropertyNames:
   - Android::ScriptingBackend
   - Standalone::ScriptingBackend
@@ -494,6 +503,8 @@ PlayerSettings:
   - tvOS::VR::enabledDevices
   Android::VR::enabledDevices:
   - Oculus
+  - daydream
+  - cardboard
   Metro::VR::enabledDevices: []
   N3DS::VR::enabledDevices: []
   PS3::VR::enabledDevices: []

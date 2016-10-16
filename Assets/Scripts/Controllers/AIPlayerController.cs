@@ -12,18 +12,19 @@ public class AIPlayerController : ShipController
     public float shootDistance;
 
     private Vector3 targetPosition;
+    private bool tempTarget;
 
     // Use this for initialization
     void Start()
     {
         SafeInit();
         isAI = true;
-        // Lets disable this for now until we can improve the movement system
-        // InvokeRepeating("ConfigureTarget", 1, 5);
         if (isReadyForGame)
         {
             RefreshShipType();
             RefreshTeamState();
+            // Lets disable this for now until we can improve the movement system
+            InvokeRepeating("ConfigureTarget", 1, 5);
         }
     }
 
@@ -39,61 +40,54 @@ public class AIPlayerController : ShipController
 
         if (!gameEnded)
         {
+
             if (targetObject != null)
             {
                 targetPosition = targetObject.transform.position;
-            }
-            else
-            {
-                if (targetPosition.Equals(Vector3.zero) || Vector3.Distance(transform.position, targetPosition) < 15f)
+
+                //Get the normalized vector that points towards our target
+                Vector3 targetDirection = (targetPosition - transform.position).normalized;
+
+                // Get the direction on our local space
+                Vector3 aimDirection = transform.InverseTransformDirection(targetDirection);
+
+                // Only move forward when we are facing our target
+                float dForward = (aimDirection.z > 0.2f ? aimDirection.z : 0);
+
+                float dLookUp = aimDirection.y * -1;
+
+                float dLookSide = aimDirection.x;
+
+                float targetDistance = Vector3.Distance(targetPosition, transform.position);
+
+#if UNITY_EDITOR
+                Color targetRayColor;
+                if (targetObject == null)
+                    targetRayColor = Color.green;
+                else
+                    targetRayColor = Color.red;
+                Debug.DrawLine(transform.position, (transform.position + (targetDirection * targetDistance)), targetRayColor);
+#endif
+
+                if (targetDistance <= (safeDistance + (GetShipType() == ShipType.DESTROYER ? 200 : 0)))
                 {
-                    targetPosition = new Vector3(Random.Range(-400, 400), Random.Range(-100, 100), Random.Range(-250, 250));
+                    dForward = 0; ///= 1 + (safeDistance - targetDistance);
                 }
-            }
 
-            //Get the normalized vector that points towards our target
-            Vector3 targetDirection = (targetPosition - transform.position).normalized;
-
-            // Get the direction on our local space
-            Vector3 aimDirection = transform.InverseTransformDirection(targetDirection);
-
-            // Only move forward when we are facing our target
-            float dForward = (aimDirection.z > 0.2f ? aimDirection.z : 0);
-
-            float dLookUp = aimDirection.y * -1;
-
-            float dLookSide = aimDirection.x;
-
-            float targetDistance = Vector3.Distance(targetPosition, transform.position);
+                if (targetDistance < shootDistance)
+                {
+                    gunController.PressTriger();
+                }
 
 #if UNITY_EDITOR
-            Color targetRayColor;
-            if (targetObject == null)
-                targetRayColor = Color.green;
-            else
-                targetRayColor = Color.red;
-            Debug.DrawLine(transform.position, (transform.position + (targetDirection * targetDistance)), targetRayColor);
+                Debug.DrawLine(transform.position, transform.TransformPoint(new Vector3(0, 0, aimDirection.z + (dForward * 5))), Color.blue);
+                Debug.DrawLine(transform.position, transform.TransformPoint(new Vector3(0, aimDirection.y - (dLookUp * 5), 0)), Color.green);
+                Debug.DrawLine(transform.position, transform.TransformPoint(new Vector3(aimDirection.x + (dLookSide * 5), 0, 0)), Color.red);
 #endif
 
-            if (targetDistance <= safeDistance)
-            {
-                dForward /= 1 + (safeDistance - targetDistance);
+                leftStickVector = new Vector3(0, 0, dForward);
+                rotationStickVector = new Vector3(dLookUp, dLookSide, 0f);
             }
-
-            if (targetDistance < shootDistance)
-            {
-                gunController.PressTriger();
-            }
-
-#if UNITY_EDITOR
-            Debug.DrawLine(transform.position, transform.TransformPoint(new Vector3(0, 0, aimDirection.z + (dForward * 5))), Color.blue);
-            Debug.DrawLine(transform.position, transform.TransformPoint(new Vector3(0, aimDirection.y - (dLookUp * 5), 0)), Color.green);
-            Debug.DrawLine(transform.position, transform.TransformPoint(new Vector3(aimDirection.x + (dLookSide * 5), 0, 0)), Color.red);
-#endif
-
-            leftStickVector = new Vector3(0, 0, dForward);
-            rotationStickVector = new Vector3(dLookUp, dLookSide, 0f);
-
         }
 
         HandleInput(leftStickVector, rotationStickVector);
@@ -104,7 +98,7 @@ public class AIPlayerController : ShipController
     /// </summary>
     private void ConfigureTarget()
     {
-        if (targetObject == null)
+        if (targetObject == null || tempTarget)
         {
             targetObject = FindTarget(300f);
         }
@@ -118,28 +112,75 @@ public class AIPlayerController : ShipController
     /// <returns>The selected target</returns>
     private GameObject FindTarget(float radius)
     {
-        GameObject target = null, next = null;
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius);
-        List<GameObject> enemyList = new List<GameObject>();
-        int i = 0;
-        while (i < hitColliders.Length)
+        if (GetShipType() == ShipType.DESTROYER)
         {
-            next = hitColliders[i].gameObject;
-            if (next.CompareTag("Player"))
+            GameObject enemyCapitalShip;
+            switch (GetTeam())
             {
-                if (next.GetComponent<ShipController>().GetTeam() != this.GetTeam())
-                {
-                    enemyList.Add(next);
-                }
+                case GameLevelSceneManager.TEAMTAG.RED:
+                    enemyCapitalShip = GameLevelSceneManager.instance.GetCapitalShip(GameLevelSceneManager.TEAMTAG.BLUE);
+                    break;
+                case GameLevelSceneManager.TEAMTAG.BLUE:
+                    enemyCapitalShip = GameLevelSceneManager.instance.GetCapitalShip(GameLevelSceneManager.TEAMTAG.RED);
+                    break;
+                default:
+                    throw new UnityException();
             }
-            i++;
+
+            CancelInvoke("ConfigureTarget");
+            return enemyCapitalShip;
         }
-        if (enemyList.Count > 0)
+        else
         {
-            target = enemyList[0];
+            GameObject target = null, next = null;
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius);
+            List<GameObject> enemyList = new List<GameObject>();
+            int i = 0;
+            while (i < hitColliders.Length)
+            {
+                Transform parentTransform = hitColliders[i].gameObject.transform.parent;
+                // We need this because the collider from each ship is a child of the GameObject.
+                if (parentTransform != null)
+                {
+                    next = parentTransform.gameObject;
+                    if (next.CompareTag("Player"))
+                    {
+                        if (next.GetComponent<ShipController>().GetTeam() != this.GetTeam())
+                        {
+                            enemyList.Add(next);
+                        }
+                    }
+                }
+                i++;
+            }
+            if (enemyList.Count > 0)
+            {
+                target = enemyList[0];
+            }
+            // For now just return the first element found. Ideally the enemy we are going to target is the one that is closest to us.
+
+            tempTarget = target == null;
+            if (tempTarget)
+            {
+                //If no target is founf just approach the enemy Capital Ship
+                GameObject enemyCapitalShip;
+                switch (GetTeam())
+                {
+                    case GameLevelSceneManager.TEAMTAG.RED:
+                        enemyCapitalShip = GameLevelSceneManager.instance.GetCapitalShip(GameLevelSceneManager.TEAMTAG.BLUE);
+                        break;
+                    case GameLevelSceneManager.TEAMTAG.BLUE:
+                        enemyCapitalShip = GameLevelSceneManager.instance.GetCapitalShip(GameLevelSceneManager.TEAMTAG.RED);
+                        break;
+                    default:
+                        throw new UnityException();
+                }
+                target = enemyCapitalShip;
+                CancelInvoke("ConfigureTarget");
+                InvokeRepeating("ConfigureTarget", 1, 1);
+            }
+            return target;
         }
-        // For now just return the first element found. Ideally the enemy we are going to target is the one that is closest to us.
-        return target;
     }
 
     //This nethod will be called when this ship takes some damage

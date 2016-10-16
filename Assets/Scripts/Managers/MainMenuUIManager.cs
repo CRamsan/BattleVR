@@ -91,9 +91,10 @@ public class MainMenuUIManager : MonoBehaviour
         SetActiveMenu(MainMenuUIManager.MENUS.SELECTLEVEL);
     }
 
-    public void DisplayConfirmation()
+    public void DisplayConfirmation(int level)
     {
         inJoinFlow = false;
+        //networkManager.onlineScene = level.ToString();
         SetActiveMenu(MainMenuUIManager.MENUS.CONFIRMATION);
     }
 

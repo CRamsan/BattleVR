@@ -8,4 +8,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SceneMainMenu.unity
   - enabled: 1
+    path: Assets/Scenes/SceneLevel2.unity
+  - enabled: 1
     path: Assets/Scenes/SceneLevel1.unity

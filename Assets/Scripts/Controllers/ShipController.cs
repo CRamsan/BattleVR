@@ -161,18 +161,36 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
         {
             case ShipType.FIGHTER:
                 gameLODGroup = (GameObject)Instantiate(AssetManager.instance.GetAsset(AssetManager.ASSET.FIGHTER_LODGROUP),
-                    transform.position, 
-                    transform.rotation);
+                transform.position, 
+                transform.rotation);
+                roll = 10;
+                pitch = 10;
+                yawn = 10;
+                strafe = 5;
+                thrust = 700;
+                acceleration = 10;
                 break;
             case ShipType.FRIGATE:
                 gameLODGroup = (GameObject)Instantiate(AssetManager.instance.GetAsset(AssetManager.ASSET.FRIGATE_LODGROUP),
                     transform.position,
                     transform.rotation);
+                roll = 10;
+                pitch = 5;
+                yawn = 3;
+                strafe = 1;
+                thrust = 600;
+                acceleration = 5;
                 break;
             case ShipType.DESTROYER:
                 gameLODGroup = (GameObject)Instantiate(AssetManager.instance.GetAsset(AssetManager.ASSET.FRIGATE_LODGROUP),
                     transform.position,
                     transform.rotation);
+                roll = 5;
+                pitch = 5;
+                yawn = 3;
+                strafe = 3;
+                thrust = 200;
+                acceleration = 4;
                 break;
             default:
                 throw new UnityException();
@@ -213,11 +231,11 @@ public abstract class ShipController : NetworkBehaviour, GunControllerDelegate, 
 #if UNITY_EDITOR
         Assert.IsTrue(dTranslation.y == 0); //Currently there is no support for ascending and descending
         // Verify all other vectors are less or equal to 1f
-        Assert.IsTrue(Mathf.Abs(dTranslation.x) <= 1);
+        /*Assert.IsTrue(Mathf.Abs(dTranslation.x) <= 1);
         Assert.IsTrue(Mathf.Abs(dTranslation.z) <= 1);
         Assert.IsTrue(Mathf.Abs(dRotation.x) <= 1);
         Assert.IsTrue(Mathf.Abs(dRotation.y) <= 1);
-        Assert.IsTrue(Mathf.Abs(dRotation.z) <= 1);
+        Assert.IsTrue(Mathf.Abs(dRotation.z) <= 1);*/
 #endif
         // TODO Refactor this code to make it more organized and optimized.
         // This code was modified to quickly test the variables for 
